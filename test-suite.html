@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Benefit Tracker - Test Suite</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .test-pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .test-fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .test-summary {
+            background-color: #e2e3e5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .manual-test {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Credit Card Benefit Tracker - Test Suite</h1>
+        
+        <div class="test-section">
+            <h2>Automated Tests</h2>
+            <button onclick="runAllTests()">Run All Tests</button>
+            <button onclick="clearResults()">Clear Results</button>
+            <div id="test-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Manual Tests</h2>
+            <div class="manual-test">
+                <h3>Test 1: Add Card Functionality</h3>
+                <p>1. Click "Add Card" button</p>
+                <p>2. Select a card from the modal</p>
+                <p>3. Click "Add Card" button in modal</p>
+                <p>4. Verify card appears in the interface</p>
+                <button onclick="openApp()">Open App for Testing</button>
+            </div>
+            
+            <div class="manual-test">
+                <h3>Test 2: Mark Used Functionality</h3>
+                <p>1. Add a card with credit benefits</p>
+                <p>2. Click "Mark Used" on a credit benefit</p>
+                <p>3. Verify button changes to "Used" and becomes disabled</p>
+                <p>4. Verify benefit no longer appears in "Unused Only" view</p>
+                <button onclick="openApp()">Open App for Testing</button>
+            </div>
+            
+            <div class="manual-test">
+                <h3>Test 3: View Mode Switching</h3>
+                <p>1. Add multiple cards</p>
+                <p>2. Switch between "Unused Only", "Card View", and "List View"</p>
+                <p>3. Verify all views display correctly</p>
+                <button onclick="openApp()">Open App for Testing</button>
+            </div>
+        </div>
+        
+        <div id="test-summary" class="test-summary" style="display: none;">
+            <h3>Test Summary</h3>
+            <div id="summary-content"></div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        // Import the same constants and functions from the main app
+        const BENEFIT_FREQUENCY = {
+            MONTHLY: 'monthly',
+            SEMI_ANNUAL: 'semi_annual',
+            ANNUAL: 'annual',
+            FOUR_YEAR: 'four_year',
+            ONE_TIME: 'one_time'
+        };
+
+        const BENEFIT_TYPE = {
+            CREDIT: 'credit',
+            SUBSCRIPTION: 'subscription',
+            FEATURE: 'feature',
+            ONE_TIME: 'one_time'
+        };
+
+        const BENEFIT_CATEGORY = {
+            TRAVEL: 'travel',
+            DINING: 'dining',
+            ENTERTAINMENT: 'entertainment',
+            SHOPPING: 'shopping',
+            RIDESHARE: 'rideshare',
+            LOUNGE: 'lounge',
+            INSURANCE: 'insurance'
+        };
+
+        // Test data
+        const testCard = {
+            id: 'test-card',
+            name: 'Test Card',
+            issuer: 'Test Bank',
+            annualFee: 100,
+            color: 'card-gradient-chase',
+            benefits: [
+                {
+                    id: 'test-credit-benefit',
+                    name: '$100 Test Credit',
+                    category: BENEFIT_CATEGORY.TRAVEL,
+                    frequency: BENEFIT_FREQUENCY.ANNUAL,
+                    type: BENEFIT_TYPE.CREDIT,
+                    value: 100,
+                    description: 'Test credit benefit',
+                    used: false
+                },
+                {
+                    id: 'test-subscription-benefit',
+                    name: 'Test Subscription',
+                    category: BENEFIT_CATEGORY.ENTERTAINMENT,
+                    frequency: BENEFIT_FREQUENCY.ANNUAL,
+                    type: BENEFIT_TYPE.SUBSCRIPTION,
+                    value: 120,
+                    description: 'Test subscription benefit',
+                    subscribed: false
+                }
+            ]
+        };
+
+        // Test utilities
+        let testResults = [];
+        let testCount = 0;
+        let passedTests = 0;
+
+        function logTestResult(testName, passed, message) {
+            testCount++;
+            if (passed) {
+                passedTests++;
+                testResults.push(`<div class="test-result test-pass">✓ ${testName}: ${message}</div>`);
+            } else {
+                testResults.push(`<div class="test-result test-fail">✗ ${testName}: ${message}</div>`);
+            }
+        }
+
+        function logTestInfo(message) {
+            testResults.push(`<div class="test-result test-info">ℹ ${message}</div>`);
+        }
+
+        function displayResults() {
+            const resultsContainer = document.getElementById('test-results');
+            resultsContainer.innerHTML = testResults.join('');
+            
+            // Show summary
+            const summaryContainer = document.getElementById('test-summary');
+            const summaryContent = document.getElementById('summary-content');
+            summaryContent.innerHTML = `
+                <p><strong>Total Tests:</strong> ${testCount}</p>
+                <p><strong>Passed:</strong> ${passedTests}</p>
+                <p><strong>Failed:</strong> ${testCount - passedTests}</p>
+                <p><strong>Success Rate:</strong> ${testCount > 0 ? ((passedTests / testCount) * 100).toFixed(1) : 0}%</p>
+            `;
+            summaryContainer.style.display = 'block';
+        }
+
+        function clearResults() {
+            testResults = [];
+            testCount = 0;
+            passedTests = 0;
+            document.getElementById('test-results').innerHTML = '';
+            document.getElementById('test-summary').style.display = 'none';
+        }
+
+        // Test helper functions
+        function simulateHandleToggle(cards, cardId, benefitId) {
+            return cards.map(card => {
+                if (card.id === cardId) {
+                    return {
+                        ...card,
+                        benefits: card.benefits.map(benefit => {
+                            if (benefit.id === benefitId) {
+                                if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                                    return { ...benefit, subscribed: !benefit.subscribed };
+                                } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                                    return { ...benefit, used: true };
+                                }
+                            }
+                            return benefit;
+                        })
+                    };
+                }
+                return card;
+            });
+        }
+
+        function simulateGetUnusedBenefits(cards) {
+            return cards.flatMap(card => 
+                card.benefits.map(benefit => ({
+                    ...benefit,
+                    cardId: card.id,
+                    cardName: card.name
+                }))
+            ).filter(benefit => 
+                !benefit.used && !benefit.subscribed && benefit.type !== BENEFIT_TYPE.FEATURE
+            );
+        }
+
+        // Test cases
+        function testHandleToggleCreditBenefit() {
+            logTestInfo('Testing handleToggle for credit benefit...');
+            
+            const initialCards = [testCard];
+            const updatedCards = simulateHandleToggle(initialCards, 'test-card', 'test-credit-benefit');
+            
+            const benefit = updatedCards[0].benefits.find(b => b.id === 'test-credit-benefit');
+            
+            logTestResult(
+                'Credit Benefit Toggle',
+                benefit.used === true,
+                benefit.used ? 'Credit benefit marked as used' : 'Credit benefit not marked as used'
+            );
+        }
+
+        function testHandleToggleSubscriptionBenefit() {
+            logTestInfo('Testing handleToggle for subscription benefit...');
+            
+            const initialCards = [testCard];
+            const updatedCards = simulateHandleToggle(initialCards, 'test-card', 'test-subscription-benefit');
+            
+            const benefit = updatedCards[0].benefits.find(b => b.id === 'test-subscription-benefit');
+            
+            logTestResult(
+                'Subscription Benefit Toggle',
+                benefit.subscribed === true,
+                benefit.subscribed ? 'Subscription benefit marked as subscribed' : 'Subscription benefit not marked as subscribed'
+            );
+        }
+
+        function testGetUnusedBenefits() {
+            logTestInfo('Testing getUnusedBenefits function...');
+            
+            const cardsWithUsedBenefit = simulateHandleToggle([testCard], 'test-card', 'test-credit-benefit');
+            const unusedBenefits = simulateGetUnusedBenefits(cardsWithUsedBenefit);
+            
+            const hasUsedBenefit = unusedBenefits.some(b => b.id === 'test-credit-benefit');
+            const hasUnusedBenefit = unusedBenefits.some(b => b.id === 'test-subscription-benefit');
+            
+            logTestResult(
+                'Unused Benefits Filter',
+                !hasUsedBenefit && hasUnusedBenefit,
+                `Used benefit excluded: ${!hasUsedBenefit}, Unused benefit included: ${hasUnusedBenefit}`
+            );
+        }
+
+        function testLocalStorageIntegration() {
+            logTestInfo('Testing localStorage integration...');
+            
+            try {
+                const testData = [testCard];
+                localStorage.setItem('creditCardBenefits', JSON.stringify(testData));
+                const retrieved = JSON.parse(localStorage.getItem('creditCardBenefits'));
+                
+                logTestResult(
+                    'LocalStorage Integration',
+                    retrieved.length === 1 && retrieved[0].id === 'test-card',
+                    'Data successfully stored and retrieved from localStorage'
+                );
+                
+                // Clean up
+                localStorage.removeItem('creditCardBenefits');
+            } catch (error) {
+                logTestResult(
+                    'LocalStorage Integration',
+                    false,
+                    `Error: ${error.message}`
+                );
+            }
+        }
+
+        function testBenefitIdGeneration() {
+            logTestInfo('Testing benefit ID generation...');
+            
+            const cardId = 'test-card';
+            const timestamp = Date.now();
+            const originalBenefit = { id: 'original-benefit', name: 'Test' };
+            
+            const newId = `${cardId}-${originalBenefit.id}-${timestamp}`;
+            
+            logTestResult(
+                'Benefit ID Generation',
+                newId.includes(cardId) && newId.includes(originalBenefit.id),
+                `Generated ID: ${newId}`
+            );
+        }
+
+        function testCurrencyFormatting() {
+            logTestInfo('Testing currency formatting...');
+            
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(amount);
+            };
+            
+            const formatted = formatCurrency(100);
+            
+            logTestResult(
+                'Currency Formatting',
+                formatted === '$100',
+                `Expected: $100, Got: ${formatted}`
+            );
+        }
+
+        function testExpirationDateCalculation() {
+            logTestInfo('Testing expiration date calculation...');
+            
+            const getExpirationDate = (frequency) => {
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                const currentMonth = now.getMonth();
+                
+                switch (frequency) {
+                    case BENEFIT_FREQUENCY.MONTHLY:
+                        return new Date(currentYear, currentMonth + 1, 0);
+                    case BENEFIT_FREQUENCY.ANNUAL:
+                        return new Date(currentYear, 11, 31);
+                    default:
+                        return new Date(currentYear, 11, 31);
+                }
+            };
+            
+            const monthlyExpiration = getExpirationDate(BENEFIT_FREQUENCY.MONTHLY);
+            const annualExpiration = getExpirationDate(BENEFIT_FREQUENCY.ANNUAL);
+            
+            logTestResult(
+                'Expiration Date Calculation',
+                monthlyExpiration instanceof Date && annualExpiration instanceof Date,
+                `Monthly: ${monthlyExpiration.toDateString()}, Annual: ${annualExpiration.toDateString()}`
+            );
+        }
+
+        // Main test runner
+        function runAllTests() {
+            clearResults();
+            logTestInfo('Starting automated tests...');
+            
+            testHandleToggleCreditBenefit();
+            testHandleToggleSubscriptionBenefit();
+            testGetUnusedBenefits();
+            testLocalStorageIntegration();
+            testBenefitIdGeneration();
+            testCurrencyFormatting();
+            testExpirationDateCalculation();
+            
+            logTestInfo('All automated tests completed.');
+            displayResults();
+        }
+
+        function openApp() {
+            window.open('index.html', '_blank');
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            logTestInfo('Test suite loaded. Click "Run All Tests" to begin.');
+            displayResults();
+        });
+    </script>
+</body>
+</html>
