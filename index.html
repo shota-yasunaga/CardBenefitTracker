@@ -61,8 +61,9 @@
             INSURANCE: 'insurance'
         };
 
-        // Available credit cards database
+        // Available credit cards database organized by issuer
         const availableCards = {
+            // === CHASE ===
             'chase-sapphire-reserve': {
                 id: 'chase-sapphire-reserve',
                 name: 'Chase Sapphire Reserve',
@@ -139,6 +140,25 @@
                         value: 429,
                         description: 'Unlimited lounge access',
                         activated: true
+                    }
+                ]
+            },
+            'chase-sapphire-preferred': {
+                id: 'chase-sapphire-preferred',
+                name: 'Chase Sapphire Preferred',
+                issuer: 'Chase',
+                annualFee: 95,
+                color: 'card-gradient-chase',
+                benefits: [
+                    {
+                        id: 'csp-hotel-credit',
+                        name: '$50 Hotel Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 50,
+                        description: 'Annual hotel credit through Chase Travel',
+                        used: false
                     }
                 ]
             },
@@ -241,9 +261,69 @@
                     }
                 ]
             },
+            'world-of-hyatt': {
+                id: 'world-of-hyatt',
+                name: 'World of Hyatt Credit Card',
+                issuer: 'Chase',
+                annualFee: 95,
+                color: 'card-gradient-chase',
+                benefits: [
+                    {
+                        id: 'hyatt-free-night',
+                        name: 'Free Night Award',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 150,
+                        description: 'Annual free night at Category 1-4 Hyatt hotels',
+                        used: false
+                    },
+                    {
+                        id: 'hyatt-elite-status',
+                        name: 'Discoverist Elite Status',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 200,
+                        description: 'Automatic Hyatt elite status',
+                        activated: true
+                    }
+                ]
+            },
+            'ihg-one-rewards': {
+                id: 'ihg-one-rewards',
+                name: 'IHG One Rewards Premier',
+                issuer: 'Chase',
+                annualFee: 89,
+                color: 'card-gradient-chase',
+                benefits: [
+                    {
+                        id: 'ihg-free-night',
+                        name: 'Free Night Award',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: 'Annual free night at IHG hotels',
+                        used: false
+                    },
+                    {
+                        id: 'ihg-elite-status',
+                        name: 'Platinum Elite Status',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 150,
+                        description: 'Automatic IHG elite status',
+                        activated: true
+                    }
+                ]
+            },
+            
+            // === AMERICAN EXPRESS ===
             'amex-platinum': {
                 id: 'amex-platinum',
-                name: 'Amex Platinum',
+                name: 'The Platinum Card',
                 issuer: 'American Express',
                 annualFee: 695,
                 color: 'card-gradient-amex',
@@ -342,7 +422,7 @@
             },
             'amex-gold': {
                 id: 'amex-gold',
-                name: 'Amex Gold',
+                name: 'Gold Card',
                 issuer: 'American Express',
                 annualFee: 325,
                 color: 'card-gradient-amex',
@@ -379,28 +459,216 @@
                     }
                 ]
             },
-            'chase-sapphire-preferred': {
-                id: 'chase-sapphire-preferred',
-                name: 'Chase Sapphire Preferred',
-                issuer: 'Chase',
-                annualFee: 95,
-                color: 'card-gradient-chase',
+            'amex-green': {
+                id: 'amex-green',
+                name: 'Green Card',
+                issuer: 'American Express',
+                annualFee: 150,
+                color: 'card-gradient-amex',
                 benefits: [
                     {
-                        id: 'csp-hotel-credit',
-                        name: '$50 Hotel Credit',
+                        id: 'amex-green-clear',
+                        name: 'CLEAR Plus Credit',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
-                        value: 50,
-                        description: 'Annual hotel credit through Chase Travel',
+                        value: 189,
+                        description: 'Annual CLEAR Plus membership credit',
+                        used: false
+                    },
+                    {
+                        id: 'amex-green-lounge',
+                        name: 'LoungeBuddy Credits',
+                        category: BENEFIT_CATEGORY.LOUNGE,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: '$100 in LoungeBuddy credits',
                         used: false
                     }
                 ]
             },
+            'amex-business-platinum': {
+                id: 'amex-business-platinum',
+                name: 'Business Platinum Card',
+                issuer: 'American Express',
+                annualFee: 695,
+                color: 'card-gradient-amex',
+                benefits: [
+                    {
+                        id: 'amex-biz-airline',
+                        name: '$200 Airline Fee Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 200,
+                        description: 'Selected airline incidental fees',
+                        used: false
+                    },
+                    {
+                        id: 'amex-biz-dell',
+                        name: '$400 Dell Credit',
+                        category: BENEFIT_CATEGORY.SHOPPING,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 400,
+                        description: '$200 semi-annual Dell credit',
+                        used: false
+                    },
+                    {
+                        id: 'amex-biz-adobe',
+                        name: '$150 Adobe Credit',
+                        category: BENEFIT_CATEGORY.SHOPPING,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 150,
+                        description: 'Annual Adobe Creative Cloud credit',
+                        used: false
+                    },
+                    {
+                        id: 'amex-biz-wireless',
+                        name: '$120 Wireless Credit',
+                        category: BENEFIT_CATEGORY.SHOPPING,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 120,
+                        description: '$10/month wireless credit',
+                        used: false
+                    }
+                ]
+            },
+            'amex-marriott-brilliant': {
+                id: 'amex-marriott-brilliant',
+                name: 'Marriott Bonvoy Brilliant',
+                issuer: 'American Express',
+                annualFee: 650,
+                color: 'card-gradient-amex',
+                benefits: [
+                    {
+                        id: 'marriott-free-night',
+                        name: 'Free Night Award',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 350,
+                        description: 'Annual free night up to 85,000 points',
+                        used: false
+                    },
+                    {
+                        id: 'marriott-dining',
+                        name: '$300 Marriott Dining Credit',
+                        category: BENEFIT_CATEGORY.DINING,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 300,
+                        description: 'Annual dining credit at Marriott properties',
+                        used: false
+                    },
+                    {
+                        id: 'marriott-gold-status',
+                        name: 'Gold Elite Status',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 200,
+                        description: 'Automatic Marriott Gold elite status',
+                        activated: true
+                    }
+                ]
+            },
+            'amex-hilton-aspire': {
+                id: 'amex-hilton-aspire',
+                name: 'Hilton Honors Aspire',
+                issuer: 'American Express',
+                annualFee: 450,
+                color: 'card-gradient-amex',
+                benefits: [
+                    {
+                        id: 'hilton-resort-credit',
+                        name: '$250 Resort Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 250,
+                        description: 'Annual resort credit at Hilton properties',
+                        used: false
+                    },
+                    {
+                        id: 'hilton-airline',
+                        name: '$100 Airline Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: 'Annual airline incidental credit',
+                        used: false
+                    },
+                    {
+                        id: 'hilton-free-night',
+                        name: 'Free Weekend Night',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 200,
+                        description: 'Annual free weekend night award',
+                        used: false
+                    },
+                    {
+                        id: 'hilton-diamond-status',
+                        name: 'Diamond Elite Status',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 300,
+                        description: 'Automatic Hilton Diamond elite status',
+                        activated: true
+                    }
+                ]
+            },
+            'amex-delta-reserve': {
+                id: 'amex-delta-reserve',
+                name: 'Delta SkyMiles Reserve',
+                issuer: 'American Express',
+                annualFee: 650,
+                color: 'card-gradient-amex',
+                benefits: [
+                    {
+                        id: 'delta-companion',
+                        name: 'Companion Certificate',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 400,
+                        description: 'Annual domestic companion certificate',
+                        used: false
+                    },
+                    {
+                        id: 'delta-sky-club',
+                        name: 'Sky Club Access',
+                        category: BENEFIT_CATEGORY.LOUNGE,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 545,
+                        description: 'Delta Sky Club membership',
+                        activated: true
+                    },
+                    {
+                        id: 'delta-mqds',
+                        name: 'MQD Waiver',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 200,
+                        description: 'Medallion Qualifying Dollar waiver',
+                        activated: true
+                    }
+                ]
+            },
+            
+            // === CAPITAL ONE ===
             'capital-one-venture-x': {
                 id: 'capital-one-venture-x',
-                name: 'Capital One Venture X',
+                name: 'Venture X Rewards',
                 issuer: 'Capital One',
                 annualFee: 395,
                 color: 'card-gradient-chase',
@@ -434,12 +702,62 @@
                         value: 429,
                         description: 'Unlimited lounge access',
                         activated: true
+                    },
+                    {
+                        id: 'venture-x-anniversary',
+                        name: 'Anniversary Bonus',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: '10,000 miles anniversary bonus',
+                        used: false
                     }
                 ]
             },
+            'capital-one-venture': {
+                id: 'capital-one-venture',
+                name: 'Venture Rewards',
+                issuer: 'Capital One',
+                annualFee: 95,
+                color: 'card-gradient-chase',
+                benefits: [
+                    {
+                        id: 'venture-tsa',
+                        name: 'TSA PreCheck/Global Entry',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FOUR_YEAR,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 100,
+                        description: '$100 credit every 4 years',
+                        used: false
+                    }
+                ]
+            },
+            'capital-one-savor': {
+                id: 'capital-one-savor',
+                name: 'Savor Cash Rewards',
+                issuer: 'Capital One',
+                annualFee: 95,
+                color: 'card-gradient-chase',
+                benefits: [
+                    {
+                        id: 'savor-uber',
+                        name: '$100 Uber Cash',
+                        category: BENEFIT_CATEGORY.RIDESHARE,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: 'Annual Uber Cash credit',
+                        used: false
+                    }
+                ]
+            },
+            
+            // === CITI ===
             'citi-prestige': {
                 id: 'citi-prestige',
-                name: 'Citi Prestige',
+                name: 'Prestige Card',
                 issuer: 'Citi',
                 annualFee: 495,
                 color: 'card-gradient-united',
@@ -452,6 +770,126 @@
                         type: BENEFIT_TYPE.CREDIT,
                         value: 250,
                         description: 'Annual travel credit',
+                        used: false
+                    },
+                    {
+                        id: 'prestige-golf',
+                        name: '$100 Golf Credit',
+                        category: BENEFIT_CATEGORY.ENTERTAINMENT,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: 'Annual golf credit',
+                        used: false
+                    },
+                    {
+                        id: 'prestige-lounge',
+                        name: 'Priority Pass Select',
+                        category: BENEFIT_CATEGORY.LOUNGE,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 429,
+                        description: 'Unlimited Priority Pass lounge access',
+                        activated: true
+                    }
+                ]
+            },
+            'citi-premier': {
+                id: 'citi-premier',
+                name: 'Premier Card',
+                issuer: 'Citi',
+                annualFee: 95,
+                color: 'card-gradient-united',
+                benefits: [
+                    {
+                        id: 'premier-hotel',
+                        name: '$100 Hotel Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: 'Annual hotel credit',
+                        used: false
+                    }
+                ]
+            },
+            'citi-aadvantage-executive': {
+                id: 'citi-aadvantage-executive',
+                name: 'AAdvantage Executive',
+                issuer: 'Citi',
+                annualFee: 450,
+                color: 'card-gradient-united',
+                benefits: [
+                    {
+                        id: 'aa-companion',
+                        name: 'Companion Certificate',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 400,
+                        description: 'Annual companion certificate',
+                        used: false
+                    },
+                    {
+                        id: 'aa-admirals-club',
+                        name: 'Admirals Club Access',
+                        category: BENEFIT_CATEGORY.LOUNGE,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 650,
+                        description: 'Admirals Club membership',
+                        activated: true
+                    }
+                ]
+            },
+            
+            // === WELLS FARGO ===
+            'wells-fargo-autograph': {
+                id: 'wells-fargo-autograph',
+                name: 'Autograph Card',
+                issuer: 'Wells Fargo',
+                annualFee: 0,
+                color: 'card-gradient-united',
+                benefits: [
+                    {
+                        id: 'autograph-cell-phone',
+                        name: 'Cell Phone Protection',
+                        category: BENEFIT_CATEGORY.INSURANCE,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 600,
+                        description: 'Cell phone protection insurance',
+                        activated: true
+                    }
+                ]
+            },
+            
+            // === BANK OF AMERICA ===
+            'bofa-premium-rewards': {
+                id: 'bofa-premium-rewards',
+                name: 'Premium Rewards Card',
+                issuer: 'Bank of America',
+                annualFee: 95,
+                color: 'card-gradient-united',
+                benefits: [
+                    {
+                        id: 'bofa-airline',
+                        name: '$100 Airline Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: 'Annual airline incidental credit',
+                        used: false
+                    },
+                    {
+                        id: 'bofa-tsa',
+                        name: 'TSA PreCheck/Global Entry',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FOUR_YEAR,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 100,
+                        description: '$100 credit every 4 years',
                         used: false
                     }
                 ]
@@ -532,95 +970,6 @@
 
         const { useState, useEffect } = React;
 
-        // Add card modal component
-        function AddCardModal({ isOpen, onClose, onAdd, existingCardIds }) {
-            const [selectedCard, setSelectedCard] = useState('');
-
-            const availableToAdd = Object.values(availableCards).filter(
-                card => !existingCardIds.includes(card.id)
-            );
-
-            const handleAdd = () => {
-                if (selectedCard) {
-                    onAdd(selectedCard);
-                    setSelectedCard('');
-                    onClose();
-                }
-            };
-
-            if (!isOpen) return null;
-
-            return (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
-                        <h2 className="text-2xl font-bold mb-4">Add Credit Card</h2>
-                        
-                        {availableToAdd.length === 0 ? (
-                            <p className="text-gray-600 mb-4">All available cards have been added!</p>
-                        ) : (
-                            <>
-                                <div className="space-y-3 mb-6">
-                                    {availableToAdd.map(card => (
-                                        <label
-                                            key={card.id}
-                                            className={`block p-4 border rounded-lg cursor-pointer transition-all ${
-                                                selectedCard === card.id
-                                                    ? 'border-blue-500 bg-blue-50'
-                                                    : 'border-gray-300 hover:border-gray-400'
-                                            }`}
-                                        >
-                                            <input
-                                                type="radio"
-                                                name="card"
-                                                value={card.id}
-                                                checked={selectedCard === card.id}
-                                                onChange={(e) => setSelectedCard(e.target.value)}
-                                                className="sr-only"
-                                            />
-                                            <div className="flex justify-between items-center">
-                                                <div>
-                                                    <h3 className="font-semibold">{card.name}</h3>
-                                                    <p className="text-sm text-gray-600">{card.issuer}</p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="font-medium">${card.annualFee}/year</p>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    ))}
-                                </div>
-                                
-                                <div className="text-xs text-gray-500 mb-4">
-                                    Note: Some cards may have simplified benefits. You can customize after adding.
-                                </div>
-                            </>
-                        )}
-                        
-                        <div className="flex gap-3 justify-end">
-                            <button
-                                onClick={onClose}
-                                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            {availableToAdd.length > 0 && (
-                                <button
-                                    onClick={handleAdd}
-                                    disabled={!selectedCard}
-                                    className={`px-4 py-2 rounded-md transition-colors ${
-                                        selectedCard
-                                            ? 'bg-blue-600 text-white hover:bg-blue-700'
-                                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    }`}
-                                >
-                                    Add Card
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            );
-        }
 
         // Components
         function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' }) {
@@ -798,6 +1147,153 @@
             );
         }
 
+        // Add Card Page Component
+        function AddCardPage({ onAddCard, onBack, existingCardIds }) {
+            const [selectedCards, setSelectedCards] = useState(new Set());
+            
+            // Group cards by issuer
+            const groupedCards = Object.values(availableCards).reduce((acc, card) => {
+                if (!existingCardIds.includes(card.id)) {
+                    if (!acc[card.issuer]) {
+                        acc[card.issuer] = [];
+                    }
+                    acc[card.issuer].push(card);
+                }
+                return acc;
+            }, {});
+            
+            const handleCardToggle = (cardId) => {
+                const newSelected = new Set(selectedCards);
+                if (newSelected.has(cardId)) {
+                    newSelected.delete(cardId);
+                } else {
+                    newSelected.add(cardId);
+                }
+                setSelectedCards(newSelected);
+            };
+            
+            const handleAddSelected = () => {
+                selectedCards.forEach(cardId => onAddCard(cardId));
+                setSelectedCards(new Set());
+                onBack();
+            };
+            
+            const totalBenefitValue = (card) => {
+                return card.benefits.reduce((sum, benefit) => sum + benefit.value, 0);
+            };
+            
+            return (
+                <div className="min-h-screen bg-gray-100">
+                    <header className="bg-white shadow-sm sticky top-0 z-10">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={onBack}
+                                        className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                                    >
+                                        <span className="text-xl">←</span>
+                                        <span>Back to Dashboard</span>
+                                    </button>
+                                    <h1 className="text-3xl font-bold text-gray-900">Add Credit Cards</h1>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <span className="text-sm text-gray-600">
+                                        {selectedCards.size} card{selectedCards.size !== 1 ? 's' : ''} selected
+                                    </span>
+                                    <button
+                                        onClick={handleAddSelected}
+                                        disabled={selectedCards.size === 0}
+                                        className={`px-6 py-2 rounded-md font-medium transition-colors ${
+                                            selectedCards.size > 0
+                                                ? 'bg-green-600 text-white hover:bg-green-700'
+                                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                        }`}
+                                    >
+                                        Add Selected Cards
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        {Object.keys(groupedCards).length === 0 ? (
+                            <div className="text-center py-16">
+                                <h2 className="text-2xl font-semibold text-gray-700 mb-4">All Available Cards Added</h2>
+                                <p className="text-gray-600 mb-6">You've already added all available premium credit cards to your collection.</p>
+                                <button
+                                    onClick={onBack}
+                                    className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                                >
+                                    Back to Dashboard
+                                </button>
+                            </div>
+                        ) : (
+                            Object.entries(groupedCards).map(([issuer, cards]) => (
+                                <div key={issuer} className="mb-12">
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">
+                                        {issuer}
+                                    </h2>
+                                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                                        {cards.map(card => (
+                                            <div
+                                                key={card.id}
+                                                className={`relative bg-white rounded-lg border-2 transition-all duration-200 hover:shadow-lg cursor-pointer ${
+                                                    selectedCards.has(card.id)
+                                                        ? 'border-green-500 bg-green-50'
+                                                        : 'border-gray-200 hover:border-gray-300'
+                                                }`}
+                                                onClick={() => handleCardToggle(card.id)}
+                                            >
+                                                {selectedCards.has(card.id) && (
+                                                    <div className="absolute top-3 right-3 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                                                        ✓
+                                                    </div>
+                                                )}
+                                                
+                                                <div className={`${card.color} text-white rounded-t-lg p-4`}>
+                                                    <h3 className="text-lg font-bold mb-1">{card.name}</h3>
+                                                    <p className="text-white/80 text-sm">Annual Fee: {formatCurrency(card.annualFee)}</p>
+                                                </div>
+                                                
+                                                <div className="p-4">
+                                                    <div className="mb-4">
+                                                        <p className="text-sm text-gray-600 mb-2">
+                                                            {card.benefits.length} benefit{card.benefits.length !== 1 ? 's' : ''}
+                                                        </p>
+                                                        <p className="text-sm text-green-600 font-semibold">
+                                                            Total Value: {formatCurrency(totalBenefitValue(card))}
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <div className="space-y-2">
+                                                        {card.benefits.slice(0, 3).map(benefit => (
+                                                            <div key={benefit.id} className="flex items-center justify-between text-sm">
+                                                                <span className="text-gray-700 truncate">{benefit.name}</span>
+                                                                <span className="text-gray-500 font-medium ml-2">
+                                                                    {formatCurrency(benefit.value)}
+                                                                </span>
+                                                            </div>
+                                                        ))}
+                                                        {card.benefits.length > 3 && (
+                                                            <div className="text-xs text-gray-500 italic">
+                                                                +{card.benefits.length - 3} more benefit{card.benefits.length - 3 !== 1 ? 's' : ''}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </main>
+                </div>
+            );
+        }
+
         function App() {
             const [cards, setCards] = useState(() => {
                 const saved = localStorage.getItem('creditCardBenefits');
@@ -807,7 +1303,7 @@
                 return [];
             });
             const [viewMode, setViewMode] = useState('unused'); // 'card', 'list', 'unused'
-            const [showAddModal, setShowAddModal] = useState(false);
+            const [currentPage, setCurrentPage] = useState('dashboard'); // 'dashboard', 'add-cards'
 
             useEffect(() => {
                 localStorage.setItem('creditCardBenefits', JSON.stringify(cards));
@@ -868,6 +1364,16 @@
                 );
             };
 
+            if (currentPage === 'add-cards') {
+                return (
+                    <AddCardPage
+                        onAddCard={handleAddCard}
+                        onBack={() => setCurrentPage('dashboard')}
+                        existingCardIds={cards.map(card => card.id)}
+                    />
+                );
+            }
+
             return (
                 <div className="min-h-screen bg-gray-100">
                     <header className="bg-white shadow-sm">
@@ -876,7 +1382,7 @@
                                 <h1 className="text-3xl font-bold text-gray-900">Credit Card Benefit Tracker</h1>
                                 <div className="flex gap-2">
                                     <button
-                                        onClick={() => setShowAddModal(true)}
+                                        onClick={() => setCurrentPage('add-cards')}
                                         className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
                                     >
                                         Add Card
@@ -901,7 +1407,7 @@
                                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">No credit cards added yet</h2>
                                 <p className="text-gray-600 mb-6">Add your credit cards to start tracking benefits</p>
                                 <button
-                                    onClick={() => setShowAddModal(true)}
+                                    onClick={() => setCurrentPage('add-cards')}
                                     className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium"
                                 >
                                     Add Your First Card
@@ -1015,12 +1521,6 @@
                         </div>
                     </footer>
 
-                    <AddCardModal
-                        isOpen={showAddModal}
-                        onClose={() => setShowAddModal(false)}
-                        onAdd={handleAddCard}
-                        existingCardIds={cards.map(card => card.id)}
-                    />
                 </div>
             );
         }
