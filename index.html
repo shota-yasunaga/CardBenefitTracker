@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Card Benefit Tracker</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -87,8 +97,8 @@
                         category: BENEFIT_CATEGORY.DINING,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.SUBSCRIPTION,
-                        value: 120,
-                        description: 'Complimentary DoorDash DashPass membership',
+                        value: 420,
+                        description: 'DashPass membership + up to $25 monthly credits ($300/year) (activate by Dec 2027)',
                         subscribed: false
                     },
                     {
@@ -98,7 +108,7 @@
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
                         value: 300,
-                        description: 'Annual credit for event tickets ($25/month accumulation)',
+                        description: 'Up to $300 annual event ticket credit ($150 Jan-Jun, $150 Jul-Dec)',
                         used: false
                     },
                     {
@@ -120,6 +130,56 @@
                         value: 250,
                         description: 'Semi-annual hotel credit for The Edit properties',
                         used: false
+                    },
+                    {
+                        id: 'csr-dining-jan',
+                        name: '$150 Dining Credit (Jan-Jun)',
+                        category: BENEFIT_CATEGORY.DINING,
+                        frequency: BENEFIT_FREQUENCY.SEMI_ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 150,
+                        description: 'Semi-annual dining credit at Sapphire Reserve Exclusive Tables (activation required)',
+                        used: false
+                    },
+                    {
+                        id: 'csr-dining-jul',
+                        name: '$150 Dining Credit (Jul-Dec)',
+                        category: BENEFIT_CATEGORY.DINING,
+                        frequency: BENEFIT_FREQUENCY.SEMI_ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 150,
+                        description: 'Semi-annual dining credit at Sapphire Reserve Exclusive Tables (activation required)',
+                        used: false
+                    },
+                    {
+                        id: 'csr-lyft',
+                        name: '$10 Lyft Credit',
+                        category: BENEFIT_CATEGORY.RIDESHARE,
+                        frequency: BENEFIT_FREQUENCY.MONTHLY,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 10,
+                        description: 'Monthly Lyft ride credit (through Sept 2027)',
+                        used: false
+                    },
+                    {
+                        id: 'csr-peloton',
+                        name: '$10 Peloton Credit',
+                        category: BENEFIT_CATEGORY.SHOPPING,
+                        frequency: BENEFIT_FREQUENCY.MONTHLY,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 10,
+                        description: 'Monthly Peloton membership credit (activation required)',
+                        used: false
+                    },
+                    {
+                        id: 'csr-apple',
+                        name: '$250 Apple TV+ & Music',
+                        category: BENEFIT_CATEGORY.ENTERTAINMENT,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.SUBSCRIPTION,
+                        value: 250,
+                        description: 'Complimentary Apple TV+ and Apple Music subscriptions through Jun 2027',
+                        subscribed: false
                     },
                     {
                         id: 'csr-tsa',
@@ -1318,8 +1378,24 @@
                                 benefits: card.benefits.map(benefit => {
                                     if (benefit.id === benefitId) {
                                         if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                                            // Track subscription toggle
+                                            if (typeof gtag !== 'undefined') {
+                                                gtag('event', 'subscription_toggle', {
+                                                    card_name: card.name,
+                                                    benefit_name: benefit.name,
+                                                    action: benefit.subscribed ? 'unsubscribe' : 'subscribe'
+                                                });
+                                            }
                                             return { ...benefit, subscribed: !benefit.subscribed };
                                         } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                                            // Track benefit usage
+                                            if (typeof gtag !== 'undefined') {
+                                                gtag('event', 'benefit_used', {
+                                                    card_name: card.name,
+                                                    benefit_name: benefit.name,
+                                                    benefit_value: benefit.value
+                                                });
+                                            }
                                             return { ...benefit, used: true };
                                         }
                                     }
@@ -1340,11 +1416,30 @@
                     id: `${cardId}-${benefit.id}-${Date.now()}`
                 }));
                 setCards(prevCards => [...prevCards, newCard]);
+                
+                // Track card addition
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'card_added', {
+                        card_name: newCard.name,
+                        card_issuer: newCard.issuer,
+                        annual_fee: newCard.annualFee,
+                        benefits_count: newCard.benefits.length
+                    });
+                }
             };
 
             const handleRemoveCard = (cardId) => {
                 if (window.confirm('Are you sure you want to remove this card?')) {
+                    const cardToRemove = cards.find(card => card.id === cardId);
                     setCards(prevCards => prevCards.filter(card => card.id !== cardId));
+                    
+                    // Track card removal
+                    if (typeof gtag !== 'undefined' && cardToRemove) {
+                        gtag('event', 'card_removed', {
+                            card_name: cardToRemove.name,
+                            card_issuer: cardToRemove.issuer
+                        });
+                    }
                 }
             };
 
@@ -1382,14 +1477,31 @@
                                 <h1 className="text-3xl font-bold text-gray-900">Credit Card Benefit Tracker</h1>
                                 <div className="flex gap-2">
                                     <button
-                                        onClick={() => setCurrentPage('add-cards')}
+                                        onClick={() => {
+                                            setCurrentPage('add-cards');
+                                            // Track navigation to add cards page
+                                            if (typeof gtag !== 'undefined') {
+                                                gtag('event', 'page_view', {
+                                                    page_title: 'Add Cards',
+                                                    page_location: 'add-cards'
+                                                });
+                                            }
+                                        }}
                                         className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
                                     >
                                         Add Card
                                     </button>
                                     <select
                                         value={viewMode}
-                                        onChange={(e) => setViewMode(e.target.value)}
+                                        onChange={(e) => {
+                                            setViewMode(e.target.value);
+                                            // Track view mode change
+                                            if (typeof gtag !== 'undefined') {
+                                                gtag('event', 'view_mode_change', {
+                                                    view_mode: e.target.value
+                                                });
+                                            }
+                                        }}
                                         className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium"
                                     >
                                         <option value="unused">Unused Only</option>
@@ -1407,7 +1519,16 @@
                                 <h2 className="text-2xl font-semibold text-gray-700 mb-4">No credit cards added yet</h2>
                                 <p className="text-gray-600 mb-6">Add your credit cards to start tracking benefits</p>
                                 <button
-                                    onClick={() => setCurrentPage('add-cards')}
+                                    onClick={() => {
+                                        setCurrentPage('add-cards');
+                                        // Track first card addition intent
+                                        if (typeof gtag !== 'undefined') {
+                                            gtag('event', 'first_card_intent', {
+                                                page_title: 'Add Cards',
+                                                page_location: 'add-cards'
+                                            });
+                                        }
+                                    }}
                                     className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium"
                                 >
                                     Add Your First Card
