@@ -1034,7 +1034,7 @@
 
 
         // Components
-        function BenefitCard({ benefit, cardId, cardName, onToggle, onUndo, isRecentlyUsed, isUndoableUsed, countdown, viewMode = 'card' }) {
+        function BenefitCard({ benefit, cardId, cardName, onToggle, onUndo, isRecentlyUsed, isUndoableUsed, viewMode = 'card' }) {
             const expirationDate = getExpirationDate(benefit.frequency);
             const daysLeft = daysUntilExpiration(expirationDate);
             const currentAmount = getCurrentBenefitAmount(benefit, benefit.frequency);
@@ -1149,11 +1149,6 @@
                             <span className={`text-xs px-2 py-1 rounded-full ${expirationBg} ${expirationColor} font-medium`}>
                                 {daysLeft > 0 ? `${daysLeft} days` : 'Expired'}
                             </span>
-                            {isRecentlyUsed && (
-                                <span className="ml-2 text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-600 font-medium">
-                                    Moving in {countdown}s
-                                </span>
-                            )}
                         </td>
                         <td className="py-3 px-6 text-sm font-medium text-slate-900 dark:text-slate-100">
                             {benefit.type === BENEFIT_TYPE.CREDIT && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR 
@@ -1186,11 +1181,6 @@
                             <span className={`text-xs px-3 py-1 rounded-full ${expirationBg} ${expirationColor} font-medium`}>
                                 {daysLeft > 0 ? `${daysLeft} days left` : 'Expired'}
                             </span>
-                            {isRecentlyUsed && (
-                                <span className="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-600 font-medium">
-                                    Moving in {countdown}s
-                                </span>
-                            )}
                             {benefit.type === BENEFIT_TYPE.CREDIT && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR && (
                                 <span className="text-lg font-bold text-green-600 dark:text-green-400">
                                     {formatCurrency(currentAmount)}
@@ -1209,7 +1199,7 @@
             );
         }
 
-        function CreditCardSection({ card, onToggle, onRemove, onUndo, recentlyUsed, undoableUsed, countdown }) {
+        function CreditCardSection({ card, onToggle, onRemove, onUndo, recentlyUsed, undoableUsed }) {
             return (
                 <div className="mb-8">
                     <div className={`${card.color} text-white rounded-t-xl p-8 relative overflow-hidden`}>
@@ -1244,7 +1234,6 @@
                                     onUndo={onUndo}
                                     isRecentlyUsed={recentlyUsed.has(benefit.id)}
                                     isUndoableUsed={undoableUsed.has(benefit.id)}
-                                    countdown={countdown}
                                 />
                             ))}
                         </div>
@@ -1400,6 +1389,144 @@
             );
         }
 
+        // Settings Page Component
+        function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
+            const [showResetAllModal, setShowResetAllModal] = useState(false);
+            const [showResetBenefitsModal, setShowResetBenefitsModal] = useState(false);
+
+            const handleResetAll = () => {
+                onResetAll();
+                setShowResetAllModal(false);
+            };
+
+            const handleResetBenefitUsage = () => {
+                onResetBenefitUsage();
+                setShowResetBenefitsModal(false);
+            };
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+                    <header className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg border-b border-gray-200/50 dark:border-slate-700/50 sticky top-0 z-50">
+                        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={onBack}
+                                        className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                                    >
+                                        <span className="text-xl">←</span>
+                                        <span>Back to Dashboard</span>
+                                    </button>
+                                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Settings</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-6">
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Data Management</h2>
+                            
+                            <div className="space-y-6">
+                                {/* Reset Benefit Usage */}
+                                <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Reset Benefit Usage</h3>
+                                    <p className="text-slate-600 dark:text-slate-400 mb-4">
+                                        This will reset all benefit usage states (used, subscribed, activated) back to their default values. 
+                                        Your cards will remain, but all benefits will be marked as unused.
+                                    </p>
+                                    <button
+                                        onClick={() => setShowResetBenefitsModal(true)}
+                                        className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-medium"
+                                    >
+                                        Reset Benefit Usage
+                                    </button>
+                                </div>
+
+                                {/* Reset All Data */}
+                                <div className="border border-red-200 dark:border-red-700 rounded-lg p-6 bg-red-50 dark:bg-red-900/20">
+                                    <h3 className="text-lg font-semibold text-red-900 dark:text-red-300 mb-2">Reset All Data</h3>
+                                    <p className="text-red-700 dark:text-red-400 mb-4">
+                                        <strong>Warning:</strong> This will permanently delete all your data including cards and benefit usage. 
+                                        This action cannot be undone.
+                                    </p>
+                                    <button
+                                        onClick={() => setShowResetAllModal(true)}
+                                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium"
+                                    >
+                                        Reset All Data
+                                    </button>
+                                </div>
+
+                                {/* Data Info */}
+                                <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-6">
+                                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Data Storage</h3>
+                                    <p className="text-slate-600 dark:text-slate-400 text-sm">
+                                        Your data is stored locally in your browser. No information is sent to any external servers. 
+                                        Data persists until you clear your browser data or use the reset functions above.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+
+                    {/* Reset All Data Modal */}
+                    {showResetAllModal && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md w-full">
+                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Confirm Reset All Data</h3>
+                                <p className="text-slate-600 dark:text-slate-400 mb-6">
+                                    Are you sure you want to delete all your data? This will remove all cards and benefit usage history. 
+                                    This action cannot be undone.
+                                </p>
+                                <div className="flex gap-3 justify-end">
+                                    <button
+                                        onClick={() => setShowResetAllModal(false)}
+                                        className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleResetAll}
+                                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium"
+                                    >
+                                        Yes, Reset All Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Reset Benefit Usage Modal */}
+                    {showResetBenefitsModal && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md w-full">
+                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Confirm Reset Benefit Usage</h3>
+                                <p className="text-slate-600 dark:text-slate-400 mb-6">
+                                    Are you sure you want to reset all benefit usage? This will mark all benefits as unused 
+                                    but keep your cards. This action cannot be undone.
+                                </p>
+                                <div className="flex gap-3 justify-end">
+                                    <button
+                                        onClick={() => setShowResetBenefitsModal(false)}
+                                        className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleResetBenefitUsage}
+                                        className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-medium"
+                                    >
+                                        Yes, Reset Benefit Usage
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
         function App() {
             const [cards, setCards] = useState(() => {
                 const saved = localStorage.getItem('creditCardBenefits');
@@ -1409,7 +1536,7 @@
                 return [];
             });
             const [viewMode, setViewMode] = useState('unused'); // 'card', 'list', 'unused'
-            const [currentPage, setCurrentPage] = useState('dashboard'); // 'dashboard', 'add-cards'
+            const [currentPage, setCurrentPage] = useState('dashboard'); // 'dashboard', 'add-cards', 'settings'
 
             // Add dark mode state
             const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
@@ -1417,7 +1544,6 @@
             // Add state for recently used benefits
             const [recentlyUsed, setRecentlyUsed] = useState(new Set());
             const [undoableUsed, setUndoableUsed] = useState(new Set());
-            const [countdown, setCountdown] = useState(30);
 
             useEffect(() => {
                 localStorage.setItem('darkMode', isDarkMode);
@@ -1426,18 +1552,11 @@
             // Add timer effect for recently used benefits
             useEffect(() => {
                 if (recentlyUsed.size > 0) {
-                    setCountdown(30);
-                    const interval = setInterval(() => {
-                        setCountdown(prev => {
-                            if (prev <= 1) {
-                                setRecentlyUsed(new Set());
-                                return 30;
-                            }
-                            return prev - 1;
-                        });
-                    }, 1000);
+                    const timer = setTimeout(() => {
+                        setRecentlyUsed(new Set());
+                    }, 30000); // 30 seconds
 
-                    return () => clearInterval(interval);
+                    return () => clearTimeout(timer);
                 }
             }, [recentlyUsed.size > 0]);
 
@@ -1562,6 +1681,48 @@
                 }
             };
 
+            // Reset functions
+            const handleResetAll = () => {
+                setCards([]);
+                localStorage.removeItem('creditCardBenefits');
+                
+                // Track reset all
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'data_reset_all');
+                }
+            };
+
+            const handleResetBenefitUsage = () => {
+                setCards(prevCards => {
+                    return prevCards.map(card => ({
+                        ...card,
+                        benefits: card.benefits.map(benefit => {
+                            const resetBenefit = { ...benefit };
+                            // Reset usage states to defaults
+                            if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                                resetBenefit.used = false;
+                            }
+                            if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                                resetBenefit.subscribed = false;
+                            }
+                            if (benefit.type === BENEFIT_TYPE.FEATURE) {
+                                resetBenefit.activated = true; // Features are typically active by default
+                            }
+                            return resetBenefit;
+                        })
+                    }));
+                });
+                
+                // Clear tracking states
+                setRecentlyUsed(new Set());
+                setUndoableUsed(new Set());
+                
+                // Track reset benefit usage
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'data_reset_benefits');
+                }
+            };
+
             const getAllBenefits = () => {
                 return cards.flatMap(card => 
                     card.benefits.map(benefit => ({
@@ -1585,6 +1746,16 @@
                         onAddCard={handleAddCard}
                         onBack={() => setCurrentPage('dashboard')}
                         existingCardIds={cards.map(card => card.id)}
+                    />
+                );
+            }
+
+            if (currentPage === 'settings') {
+                return (
+                    <SettingsPage
+                        onBack={() => setCurrentPage('dashboard')}
+                        onResetAll={handleResetAll}
+                        onResetBenefitUsage={handleResetBenefitUsage}
                     />
                 );
             }
@@ -1662,6 +1833,24 @@
                                         >
                                             Add Cards
                                         </button>
+                                        <button
+                                            onClick={() => {
+                                                setCurrentPage('settings');
+                                                if (typeof gtag !== 'undefined') {
+                                                    gtag('event', 'page_view', {
+                                                        page_title: 'Settings',
+                                                        page_location: 'settings'
+                                                    });
+                                                }
+                                            }}
+                                            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                                currentPage === 'settings'
+                                                    ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
+                                                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
+                                            }`}
+                                        >
+                                            Settings
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1707,7 +1896,6 @@
                                 onUndo={handleUndo}
                                 recentlyUsed={recentlyUsed}
                                 undoableUsed={undoableUsed}
-                                countdown={countdown}
                             />
                         ))}
 
@@ -1769,7 +1957,6 @@
                                                                     onUndo={handleUndo}
                                                                     isRecentlyUsed={recentlyUsed.has(benefit.id)}
                                                                     isUndoableUsed={undoableUsed.has(benefit.id)}
-                                                                    countdown={countdown}
                                                                     viewMode="list"
                                                                 />
                                                             ))}
@@ -1818,7 +2005,6 @@
                                                                     onUndo={handleUndo}
                                                                     isRecentlyUsed={recentlyUsed.has(benefit.id)}
                                                                     isUndoableUsed={undoableUsed.has(benefit.id)}
-                                                                    countdown={countdown}
                                                                     viewMode="list"
                                                                 />
                                                             ))}

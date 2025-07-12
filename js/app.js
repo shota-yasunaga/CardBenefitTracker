@@ -8,6 +8,7 @@ function App() {
     });
     const [viewMode, setViewMode] = React.useState('unused'); // 'card', 'list', 'unused'
     const [showAddModal, setShowAddModal] = React.useState(false);
+    const [currentPage, setCurrentPage] = React.useState('dashboard'); // 'dashboard', 'settings'
 
     React.useEffect(() => {
         localStorage.setItem('creditCardBenefits', JSON.stringify(cards));
@@ -52,6 +53,34 @@ function App() {
         }
     };
 
+    // Reset functions
+    const handleResetAll = () => {
+        setCards([]);
+        localStorage.removeItem('creditCardBenefits');
+    };
+
+    const handleResetBenefitUsage = () => {
+        setCards(prevCards => {
+            return prevCards.map(card => ({
+                ...card,
+                benefits: card.benefits.map(benefit => {
+                    const resetBenefit = { ...benefit };
+                    // Reset usage states to defaults
+                    if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                        resetBenefit.used = false;
+                    }
+                    if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                        resetBenefit.subscribed = false;
+                    }
+                    if (benefit.type === BENEFIT_TYPE.FEATURE) {
+                        resetBenefit.activated = true; // Features are typically active by default
+                    }
+                    return resetBenefit;
+                })
+            }));
+        });
+    };
+
     const getAllBenefits = () => {
         return cards.flatMap(card => 
             card.benefits.map(benefit => ({
@@ -68,6 +97,18 @@ function App() {
         );
     };
 
+    // Render settings page
+    if (currentPage === 'settings') {
+        return (
+            <SettingsPage
+                onBack={() => setCurrentPage('dashboard')}
+                onResetAll={handleResetAll}
+                onResetBenefitUsage={handleResetBenefitUsage}
+            />
+        );
+    }
+
+    // Render dashboard
     return (
         <div className="min-h-screen bg-gray-100">
             <header className="bg-white shadow-sm">
@@ -75,6 +116,12 @@ function App() {
                     <div className="flex justify-between items-center">
                         <h1 className="text-3xl font-bold text-gray-900">Credit Card Benefit Tracker</h1>
                         <div className="flex gap-2">
+                            <button
+                                onClick={() => setCurrentPage('settings')}
+                                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm font-medium"
+                            >
+                                Settings
+                            </button>
                             <button
                                 onClick={() => setShowAddModal(true)}
                                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
