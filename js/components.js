@@ -138,23 +138,15 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
 
         if (isDontCare) {
             return (
-                <div className="flex gap-2">
-                    <span className="text-sm text-gray-400 font-medium">
-                        Don't Care
-                    </span>
-                    <button
-                        onClick={() => onToggle(cardId, benefit.id, 'undontcare')}
-                        className="px-2 py-1 rounded-md text-xs font-medium transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300"
-                    >
-                        Undo
-                    </button>
-                </div>
+                <DontCareStatus
+                    onUndo={() => onToggle(cardId, benefit.id, 'undontcare')}
+                />
             );
         }
 
         if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
             return (
-                <div className="flex gap-2">
+                <ActionButtonGroup>
                     <button
                         onClick={() => onToggle(cardId, benefit.id)}
                         className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
@@ -165,19 +157,16 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
                     >
                         {benefit.subscribed ? 'Subscribed' : 'Subscribe'}
                     </button>
-                    <button
+                    <DontCareButton
+                        label="Don't Care"
                         onClick={() => onToggle(cardId, benefit.id, 'dontcare')}
-                        className="px-2 py-1 rounded-md text-xs font-medium transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300"
-                        title="Mark as don't care"
-                    >
-                        Don't Care
-                    </button>
-                </div>
+                    />
+                </ActionButtonGroup>
             );
         }
 
         return (
-            <div className="flex gap-2">
+            <ActionButtonGroup>
                 <button
                     onClick={() => onToggle(cardId, benefit.id)}
                     className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
@@ -190,15 +179,12 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
                     {benefit.used ? 'Used' : 'Mark Used'}
                 </button>
                 {!benefit.used && (
-                    <button
+                    <DontCareButton
+                        label="Don't Care"
                         onClick={() => onToggle(cardId, benefit.id, 'dontcare')}
-                        className="px-2 py-1 rounded-md text-xs font-medium transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300"
-                        title="Mark as don't care"
-                    >
-                        Don't Care
-                    </button>
+                    />
                 )}
-            </div>
+            </ActionButtonGroup>
         );
     };
 

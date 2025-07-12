@@ -227,14 +227,18 @@
         }
 
         // Test helper functions
-        function simulateHandleToggle(cards, cardId, benefitId) {
+        function simulateHandleToggle(cards, cardId, benefitId, action = 'default') {
             return cards.map(card => {
                 if (card.id === cardId) {
                     return {
                         ...card,
                         benefits: card.benefits.map(benefit => {
                             if (benefit.id === benefitId) {
-                                if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                                if (action === 'dontcare') {
+                                    return { ...benefit, dontCare: true };
+                                } else if (action === 'undontcare') {
+                                    return { ...benefit, dontCare: false };
+                                } else if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
                                     return { ...benefit, subscribed: !benefit.subscribed };
                                 } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
                                     return { ...benefit, used: true };
@@ -256,7 +260,7 @@
                     cardName: card.name
                 }))
             ).filter(benefit => 
-                !benefit.used && !benefit.subscribed && benefit.type !== BENEFIT_TYPE.FEATURE
+                !benefit.used && !benefit.subscribed && !benefit.dontCare && benefit.type !== BENEFIT_TYPE.FEATURE
             );
         }
 
@@ -288,6 +292,31 @@
                 'Subscription Benefit Toggle',
                 benefit.subscribed === true,
                 benefit.subscribed ? 'Subscription benefit marked as subscribed' : 'Subscription benefit not marked as subscribed'
+            );
+        }
+
+        function testHandleToggleDontCare() {
+            logTestInfo('Testing handleToggle for "don\'t care" functionality...');
+            
+            const initialCards = [testCard];
+            const updatedCards = simulateHandleToggle(initialCards, 'test-card', 'test-credit-benefit', 'dontcare');
+            
+            const benefit = updatedCards[0].benefits.find(b => b.id === 'test-credit-benefit');
+            
+            logTestResult(
+                'Don\'t Care Benefit Toggle',
+                benefit.dontCare === true,
+                benefit.dontCare ? 'Benefit marked as don\'t care' : 'Benefit not marked as don\'t care'
+            );
+
+            // Test undo functionality
+            const undoCards = simulateHandleToggle(updatedCards, 'test-card', 'test-credit-benefit', 'undontcare');
+            const undoBenefit = undoCards[0].benefits.find(b => b.id === 'test-credit-benefit');
+            
+            logTestResult(
+                'Don\'t Care Benefit Undo',
+                undoBenefit.dontCare === false,
+                undoBenefit.dontCare ? 'Benefit still marked as don\'t care' : 'Benefit unmarked as don\'t care'
             );
         }
 
@@ -404,6 +433,7 @@
             
             testHandleToggleCreditBenefit();
             testHandleToggleSubscriptionBenefit();
+            testHandleToggleDontCare();
             testGetUnusedBenefits();
             testLocalStorageIntegration();
             testBenefitIdGeneration();
