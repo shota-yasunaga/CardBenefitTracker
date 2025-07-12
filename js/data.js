@@ -312,21 +312,21 @@ const availableCards = {
         benefits: [
             {
                 id: 'amex-gold-dining',
-                name: '$120 Dining Credit',
+                name: '$10 Dining Credit',
                 category: BENEFIT_CATEGORY.DINING,
-                frequency: BENEFIT_FREQUENCY.ANNUAL,
+                frequency: BENEFIT_FREQUENCY.MONTHLY,
                 type: BENEFIT_TYPE.CREDIT,
-                value: 120,
+                value: 10,
                 description: '$10/month at Grubhub, The Cheesecake Factory, and others',
                 used: false
             },
             {
                 id: 'amex-gold-uber',
-                name: '$120 Uber Cash',
+                name: '$10 Uber Cash',
                 category: BENEFIT_CATEGORY.RIDESHARE,
-                frequency: BENEFIT_FREQUENCY.ANNUAL,
+                frequency: BENEFIT_FREQUENCY.MONTHLY,
                 type: BENEFIT_TYPE.CREDIT,
-                value: 120,
+                value: 10,
                 description: '$10/month Uber credit',
                 used: false
             },
