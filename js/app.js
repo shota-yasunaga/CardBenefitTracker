@@ -13,7 +13,7 @@ function App() {
         localStorage.setItem('creditCardBenefits', JSON.stringify(cards));
     }, [cards]);
 
-    const handleToggle = (cardId, benefitId) => {
+    const handleToggle = (cardId, benefitId, action = 'default') => {
         setCards(prevCards => {
             return prevCards.map(card => {
                 if (card.id === cardId) {
@@ -21,7 +21,11 @@ function App() {
                         ...card,
                         benefits: card.benefits.map(benefit => {
                             if (benefit.id === benefitId) {
-                                if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                                if (action === 'dontcare') {
+                                    return { ...benefit, dontCare: true };
+                                } else if (action === 'undontcare') {
+                                    return { ...benefit, dontCare: false };
+                                } else if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
                                     return { ...benefit, subscribed: !benefit.subscribed };
                                 } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
                                     return { ...benefit, used: true };
@@ -64,7 +68,7 @@ function App() {
 
     const getUnusedBenefits = () => {
         return getAllBenefits().filter(benefit => 
-            !benefit.used && !benefit.subscribed && benefit.type !== BENEFIT_TYPE.FEATURE
+            !benefit.used && !benefit.subscribed && !benefit.dontCare && benefit.type !== BENEFIT_TYPE.FEATURE
         );
     };
 
