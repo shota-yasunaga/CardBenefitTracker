@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+mkdir -p card_images
+echo "Downloading chase-sapphire-reserve..."
+curl -L -o "card_images/chase-sapphire-reserve.png" "https://cdn.creditcards.com/shared/images/cards/251x158/50e5eed0-504f-11f0-962e-072d632f0110.png"
+echo "Downloading chase-sapphire-preferred..."
+curl -L -o "card_images/chase-sapphire-preferred.png" "https://www.creditcards.com/ext/cdn.prodstatic.com/shared/images/cards/500x315/ae837480-ed19-11ee-b6aa-83dad90afdcd.png"
+echo "Downloading united-quest..."
+curl -L -o "card_images/united-quest.png" "https://cdn.creditcards.com/shared/images/cards/251x158/b9cf9ec0-29ac-11ef-bab3-196138b9c6eb.png"
+echo "Downloading world-of-hyatt..."
+curl -L -o "card_images/world-of-hyatt.png" "https://www.creditcards.com/ext/cdn.prodstatic.com/shared/images/cards/500x315/d6298300-22c1-11ec-97b1-37a1bb7c2537.png"
+echo "Downloading ihg-one-rewards..."
+curl -L -o "card_images/ihg-one-rewards.png" "https://www.creditcards.com/ext/cdn.prodstatic.com/shared/images/cards/500x315/b2afe080-168b-11ee-9d05-8969f2172cdd.png"
+echo "Downloading amex-platinum..."
+curl -L -o "card_images/amex-platinum.png" "https://www.creditcards.com/ext/cdn.prodstatic.com/shared/images/cards/500x315/b00a5840-5b1a-11ef-a7c5-db9b566f392d.png"
+echo "Downloading amex-gold..."
+curl -L -o "card_images/amex-gold.png" "https://www.creditcards.com/ext/cdn.prodstatic.com/shared/images/cards/500x315/87ce2390-9d21-11ef-9a6e-b1df6310cacd.png"
