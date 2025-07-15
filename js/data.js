@@ -21,8 +21,45 @@ const BENEFIT_CATEGORY = {
     SHOPPING: 'shopping',
     RIDESHARE: 'rideshare',
     LOUNGE: 'lounge',
-    INSURANCE: 'insurance'
+    INSURANCE: 'insurance',
+    CUSTOM: 'custom'
 };
+
+// Helper functions for custom cards
+function generateCustomCardId() {
+    return `custom-card-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+function generateCustomBenefitId() {
+    return `custom-benefit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+function createCustomCard(cardData) {
+    return {
+        id: generateCustomCardId(),
+        name: cardData.name || 'Custom Card',
+        issuer: cardData.issuer || 'Custom',
+        annualFee: cardData.annualFee || 0,
+        color: cardData.color || 'card-gradient-custom',
+        isCustom: true,
+        benefits: cardData.benefits || []
+    };
+}
+
+function createCustomBenefit(benefitData) {
+    return {
+        id: generateCustomBenefitId(),
+        name: benefitData.name || 'Custom Benefit',
+        category: benefitData.category || BENEFIT_CATEGORY.CUSTOM,
+        frequency: benefitData.frequency || BENEFIT_FREQUENCY.ANNUAL,
+        type: benefitData.type || BENEFIT_TYPE.CREDIT,
+        value: benefitData.value || 0,
+        description: benefitData.description || '',
+        used: false,
+        subscribed: false,
+        activated: benefitData.type === BENEFIT_TYPE.FEATURE
+    };
+}
 
 // Available credit cards database
 const availableCards = {

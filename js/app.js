@@ -47,6 +47,11 @@ function App() {
         setCards(prevCards => [...prevCards, newCard]);
     };
 
+    const handleAddCustomCard = (customCard) => {
+        // Custom card already has unique IDs from createCustomCard function
+        setCards(prevCards => [...prevCards, customCard]);
+    };
+
     const handleRemoveCard = (cardId) => {
         if (window.confirm('Are you sure you want to remove this card?')) {
             setCards(prevCards => prevCards.filter(card => card.id !== cardId));
@@ -198,6 +203,23 @@ function App() {
                                         viewMode="list"
                                     />
                                 ))}
+                                {/* Add Card Shortcut Row */}
+                                <tr className="bg-gray-50 hover:bg-gray-100 transition-colors">
+                                    <td colSpan="4" className="py-4 px-4">
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <span className="text-lg">➕</span>
+                                            <span className="text-sm">Want to track more benefits?</span>
+                                        </div>
+                                    </td>
+                                    <td className="py-4 px-4 text-right">
+                                        <button
+                                            onClick={() => setShowAddModal(true)}
+                                            className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
+                                        >
+                                            Add Card
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -243,6 +265,23 @@ function App() {
                                                 viewMode="list"
                                             />
                                         ))}
+                                        {/* Add Card Shortcut Row */}
+                                        <tr className="bg-gray-50 hover:bg-gray-100 transition-colors">
+                                            <td colSpan="4" className="py-4 px-4">
+                                                <div className="flex items-center gap-2 text-gray-600">
+                                                    <span className="text-lg">➕</span>
+                                                    <span className="text-sm">Want to track more benefits?</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-4 px-4 text-right">
+                                                <button
+                                                    onClick={() => setShowAddModal(true)}
+                                                    className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
+                                                >
+                                                    Add Card
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -266,6 +305,7 @@ function App() {
                 isOpen={showAddModal}
                 onClose={() => setShowAddModal(false)}
                 onAdd={handleAddCard}
+                onAddCustom={handleAddCustomCard}
                 existingCardIds={cards.map(card => card.id)}
             />
         </div>

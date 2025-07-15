@@ -46,6 +46,19 @@ body {
     pointer-events: none;
 }
 
+.card-gradient-custom {
+    background: linear-gradient(135deg, #6b46c1 0%, #8b5cf6 100%);
+    position: relative;
+}
+
+.card-gradient-custom::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
 .benefit-card {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateY(0);
