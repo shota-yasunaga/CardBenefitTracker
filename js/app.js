@@ -171,7 +171,7 @@ function App() {
                 ))}
 
                 {viewMode === 'list' && (
-                    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
                         <table className="min-w-full">
                             <thead className="bg-gray-50">
                                 <tr>
@@ -233,7 +233,7 @@ function App() {
                                 <p className="text-gray-600">No unused benefits found. Great job using your benefits!</p>
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
                                 <table className="min-w-full">
                                     <thead className="bg-gray-50">
                                         <tr>
