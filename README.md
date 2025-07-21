@@ -194,6 +194,10 @@ Potential features for future versions:
 - **Custom Cards**: Add user-defined credit cards
 - **Benefit Calendar**: Timeline view of benefits throughout the year
 
+## 📬 Support & Feature Requests
+
+For help or to request new features, please email [shotadevelops@gmail.com](mailto:shotadevelops@gmail.com).
+
 ## 📜 License
 
 This project is open source and available under the MIT License.
