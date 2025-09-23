@@ -118,25 +118,27 @@ function App() {
         <div className="min-h-screen bg-gray-100">
             <header className="bg-white shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-3xl font-bold text-gray-900">Credit Card Benefit Tracker</h1>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => setCurrentPage('settings')}
-                                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm font-medium"
-                            >
-                                Settings
-                            </button>
-                            <button
-                                onClick={() => setShowAddModal(true)}
-                                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
-                            >
-                                Add Card
-                            </button>
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <h1 className="text-2xl font-bold text-gray-900 text-center sm:text-left sm:text-3xl">Credit Card Benefit Tracker</h1>
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end w-full sm:w-auto">
+                            <div className="flex flex-col gap-2 sm:flex-row sm:gap-2 w-full sm:w-auto">
+                                <button
+                                    onClick={() => setCurrentPage('settings')}
+                                    className="w-full sm:w-auto px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm font-medium"
+                                >
+                                    Settings
+                                </button>
+                                <button
+                                    onClick={() => setShowAddModal(true)}
+                                    className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
+                                >
+                                    Add Card
+                                </button>
+                            </div>
                             <select
                                 value={viewMode}
                                 onChange={(e) => setViewMode(e.target.value)}
-                                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium"
+                                className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md text-sm font-medium"
                             >
                                 <option value="unused">Unused Only</option>
                                 <option value="card">Card View</option>
