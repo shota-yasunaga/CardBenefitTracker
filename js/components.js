@@ -232,8 +232,8 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
                     </span>
                 </td>
                 <td className="py-3 px-4 text-sm font-medium">
-                    {benefit.type === BENEFIT_TYPE.CREDIT && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR 
-                        ? formatCurrency(currentAmount) 
+                    {(benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.INSURANCE) && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR
+                        ? formatCurrency(currentAmount)
                         : formatCurrency(benefit.value)}
                 </td>
                 <td className="py-3 px-4 text-right">{renderButton()}</td>
@@ -258,7 +258,7 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
                     <span className={`text-xs px-2 py-1 rounded-full ${expirationBg} ${expirationColor} font-medium`}>
                         {daysLeft > 0 ? `${daysLeft} days left` : 'Expired'}
                     </span>
-                    {benefit.type === BENEFIT_TYPE.CREDIT && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR && (
+                    {(benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.INSURANCE) && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR && (
                         <span className="text-sm text-gray-700 font-medium">
                             {formatCurrency(currentAmount)}
                         </span>
@@ -357,7 +357,8 @@ function CustomBenefitBuilder({ benefit, onUpdate, onRemove, index }) {
         { value: BENEFIT_TYPE.CREDIT, label: 'Credit' },
         { value: BENEFIT_TYPE.SUBSCRIPTION, label: 'Subscription' },
         { value: BENEFIT_TYPE.FEATURE, label: 'Feature' },
-        { value: BENEFIT_TYPE.ONE_TIME, label: 'One-Time Credit' }
+        { value: BENEFIT_TYPE.ONE_TIME, label: 'One-Time Credit' },
+        { value: BENEFIT_TYPE.INSURANCE, label: 'Insurance' }
     ];
 
     return (

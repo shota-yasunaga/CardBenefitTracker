@@ -24,7 +24,7 @@ function App() {
                             if (benefit.id === benefitId) {
                                 if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
                                     return { ...benefit, subscribed: !benefit.subscribed };
-                                } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                                } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME || benefit.type === BENEFIT_TYPE.INSURANCE) {
                                     return { ...benefit, used: true };
                                 }
                             }
@@ -71,7 +71,7 @@ function App() {
                 benefits: card.benefits.map(benefit => {
                     const resetBenefit = { ...benefit };
                     // Reset usage states to defaults
-                    if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                    if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME || benefit.type === BENEFIT_TYPE.INSURANCE) {
                         resetBenefit.used = false;
                     }
                     if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {

@@ -66,7 +66,8 @@
             CREDIT: 'credit',
             SUBSCRIPTION: 'subscription',
             FEATURE: 'feature',
-            ONE_TIME: 'one_time'
+            ONE_TIME: 'one_time',
+            INSURANCE: 'insurance'
         };
 
         const BENEFIT_CATEGORY = {
@@ -330,60 +331,212 @@
                     }
                 ]
             },
-            'world-of-hyatt': {
-                id: 'world-of-hyatt',
+            'world-of-hyatt-credit-card': {
+                id: 'world-of-hyatt-credit-card',
                 name: 'World of Hyatt Credit Card',
                 issuer: 'Chase',
                 annualFee: 95,
                 color: 'card-gradient-chase',
                 benefits: [
                     {
-                        id: 'hyatt-free-night',
-                        name: 'Free Night Award',
+                        id: 'hyatt-free-night-cat1-4',
+                        name: 'Free Night Award (Category 1–4)',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 0,
+                        description: 'Receive 1 free night at any Category 1–4 Hyatt hotel every card anniversary year (certificate must be used by a deadline):contentReference[oaicite:0]{index=0}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hyatt-addl-free-night-15k',
+                        name: 'Free Night Award after $15K spend',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 0,
+                        description: 'Earn an additional Category 1–4 free night each calendar year after spending $15,000 on the card:contentReference[oaicite:1]{index=1}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hyatt-discoverist-status',
+                        name: 'Complimentary Discoverist Status',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'Automatic World of Hyatt Discoverist elite status for as long as the card is open:contentReference[oaicite:2]{index=2}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'hyatt-elite-nights-5',
+                        name: 'Elite Night Credits (5 per year)',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
-                        value: 150,
-                        description: 'Annual free night at Category 1-4 Hyatt hotels',
-                        used: false
+                        value: 5,
+                        description: 'Receive 5 elite night credits each calendar year toward Hyatt status:contentReference[oaicite:3]{index=3}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'hyatt-elite-status',
-                        name: 'Discoverist Elite Status',
+                        id: 'hyatt-elite-nights-spend',
+                        name: 'Elite Night Credits (2 per $5K spent)',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 2,
+                        description: 'Earn 2 additional elite night credits for each $5,000 spent on the card each year:contentReference[oaicite:4]{index=4}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hyatt-visa-concierge',
+                        name: 'Visa Signature Concierge Service',
+                        category: BENEFIT_CATEGORY.CUSTOM,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
                         type: BENEFIT_TYPE.FEATURE,
-                        value: 200,
-                        description: 'Automatic Hyatt elite status',
+                        value: 0,
+                        description: 'Complimentary 24/7 Visa Signature Concierge for travel and entertainment assistance:contentReference[oaicite:5]{index=5}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'hyatt-dashpass-12mo',
+                        name: '1-Year DashPass Membership ($99 value)',
+                        category: BENEFIT_CATEGORY.DINING,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.SUBSCRIPTION,
+                        value: 99,
+                        description: 'Complimentary 12-month DoorDash DashPass membership (offers $0 delivery fees on eligible orders; up to $10 off quarterly):contentReference[oaicite:6]{index=6}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hyatt-no-foreign-fee',
+                        name: 'No Foreign Transaction Fees',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'No fees on purchases made outside the U.S. with this card:contentReference[oaicite:7]{index=7}.',
+                        used: false,
+                        subscribed: false,
                         activated: true
                     }
                 ]
             },
-            'ihg-one-rewards': {
-                id: 'ihg-one-rewards',
-                name: 'IHG One Rewards Premier',
+            'ihg-one-rewards-premier-credit-card': {
+                id: 'ihg-one-rewards-premier-credit-card',
+                name: 'IHG One Rewards Premier Credit Card',
                 issuer: 'Chase',
-                annualFee: 89,
+                annualFee: 99,
                 color: 'card-gradient-chase',
                 benefits: [
                     {
-                        id: 'ihg-free-night',
-                        name: 'Free Night Award',
+                        id: 'ihg-anniversary-free-night',
+                        name: 'Anniversary Free Night Award',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 0,
+                        description: 'Receive 1 free night award each year after your account anniversary (up to 40,000 IHG points value):contentReference[oaicite:8]{index=8}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'ihg-fourth-night-free',
+                        name: '4th Night Free on Reward Stay',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'When redeeming points for a stay of 4 or more nights, the 4th night is free (effectively a 25% points discount):contentReference[oaicite:9]{index=9}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'ihg-global-entry-credit',
+                        name: 'Global Entry/TSA Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FOUR_YEAR,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 120,
+                        description: 'Up to $120 statement credit every 4 years for Global Entry or TSA PreCheck application fee:contentReference[oaicite:10]{index=10}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'ihg-united-50',
+                        name: 'United TravelBank Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 50,
+                        description: 'Up to $50 in United Airlines TravelBank cash per year after enrollment:contentReference[oaicite:11]{index=11}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'ihg-100-credit-20k',
+                        name: '$100 Spend Credit & 10K Points',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
                         value: 100,
-                        description: 'Annual free night at IHG hotels',
-                        used: false
+                        description: 'Receive $100 statement credit and 10,000 bonus points each calendar year after spending $20,000 on the card:contentReference[oaicite:12]{index=12}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'ihg-elite-status',
-                        name: 'Platinum Elite Status',
+                        id: 'ihg-diamond-status',
+                        name: 'Diamond Elite Status (IHG)',
                         category: BENEFIT_CATEGORY.TRAVEL,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
                         type: BENEFIT_TYPE.FEATURE,
-                        value: 150,
-                        description: 'Automatic IHG elite status',
+                        value: 0,
+                        description: 'Achieve IHG Diamond elite status (top tier) after spending $40,000 in a calendar year:contentReference[oaicite:13]{index=13}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'ihg-points-discount',
+                        name: '20% Points Purchase Discount',
+                        category: BENEFIT_CATEGORY.SHOPPING,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'Enjoy at least a 20% discount when purchasing IHG points using your card:contentReference[oaicite:14]{index=14}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'ihg-no-foreign-fee',
+                        name: 'No Foreign Transaction Fees',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'No fees for purchases made outside the U.S.:contentReference[oaicite:15]{index=15}.',
+                        used: false,
+                        subscribed: false,
                         activated: true
                     }
                 ]
@@ -528,208 +681,492 @@
                     }
                 ]
             },
-            'amex-green': {
-                id: 'amex-green',
-                name: 'Green Card',
+            'american-express-green-card': {
+                id: 'american-express-green-card',
+                name: 'American Express Green Card',
                 issuer: 'American Express',
                 annualFee: 150,
                 color: 'card-gradient-amex',
                 benefits: [
                     {
-                        id: 'amex-green-clear',
-                        name: 'CLEAR Plus Credit',
+                        id: 'amex-green-clear-credit',
+                        name: '$209 CLEAR Plus Credit',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
-                        value: 189,
-                        description: 'Annual CLEAR Plus membership credit',
-                        used: false
+                        value: 209,
+                        description: 'Up to $209 statement credit per year for CLEAR Plus membership (airport security service):contentReference[oaicite:16]{index=16}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'amex-green-lounge',
-                        name: 'LoungeBuddy Credits',
-                        category: BENEFIT_CATEGORY.LOUNGE,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
-                        type: BENEFIT_TYPE.CREDIT,
-                        value: 100,
-                        description: '$100 in LoungeBuddy credits',
-                        used: false
+                        id: 'amex-green-no-foreign',
+                        name: 'No Foreign Transaction Fees',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'No fees on purchases made outside the U.S. using this card:contentReference[oaicite:17]{index=17}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'amex-green-shoprunner',
+                        name: 'ShopRunner Membership (free)',
+                        category: BENEFIT_CATEGORY.SHOPPING,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.SUBSCRIPTION,
+                        value: 0,
+                        description: 'Complimentary ShopRunner membership for free 2-day shipping at eligible retailers.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     }
                 ]
             },
-            'amex-business-platinum': {
-                id: 'amex-business-platinum',
-                name: 'Business Platinum Card',
+            'american-express-business-platinum-card': {
+                id: 'american-express-business-platinum-card',
+                name: 'American Express Business Platinum Card',
                 issuer: 'American Express',
-                annualFee: 695,
+                annualFee: 895,
                 color: 'card-gradient-amex',
                 benefits: [
                     {
-                        id: 'amex-biz-airline',
+                        id: 'bizplat-airline-credit',
                         name: '$200 Airline Fee Credit',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
                         value: 200,
-                        description: 'Selected airline incidental fees',
-                        used: false
+                        description: 'Up to $200 in statement credits per year for airline incidental fees (bags, seats, etc.):contentReference[oaicite:19]{index=19}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'amex-biz-dell',
-                        name: '$400 Dell Credit',
-                        category: BENEFIT_CATEGORY.SHOPPING,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        id: 'bizplat-global-entry',
+                        name: 'Global Entry/TSA PreCheck Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FOUR_YEAR,
                         type: BENEFIT_TYPE.CREDIT,
-                        value: 400,
-                        description: '$200 semi-annual Dell credit',
-                        used: false
+                        value: 120,
+                        description: 'Up to $120 statement credit every 4 years for Global Entry or TSA PreCheck application fee:contentReference[oaicite:20]{index=20}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'amex-biz-adobe',
-                        name: '$150 Adobe Credit',
+                        id: 'bizplat-dell-150',
+                        name: '$150 Dell Statement Credit',
                         category: BENEFIT_CATEGORY.SHOPPING,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
                         value: 150,
-                        description: 'Annual Adobe Creative Cloud credit',
-                        used: false
+                        description: 'Up to $150 statement credit annually for Dell Technologies purchases on Dell.com:contentReference[oaicite:21]{index=21}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'amex-biz-wireless',
-                        name: '$120 Wireless Credit',
+                        id: 'bizplat-dell-1000',
+                        name: '$1,000 Dell Bonus Credit',
                         category: BENEFIT_CATEGORY.SHOPPING,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
-                        value: 120,
-                        description: '$10/month wireless credit',
-                        used: false
+                        value: 1000,
+                        description: 'Spend $5,000+ on the card in a year to get a $1,000 statement credit on Dell purchases:contentReference[oaicite:22]{index=22}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'bizplat-adobe',
+                        name: '$250 Adobe Credit',
+                        category: BENEFIT_CATEGORY.SHOPPING,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 250,
+                        description: 'Up to $250 statement credit each year for Adobe Creative Cloud purchases（after $600 spend）:contentReference[oaicite:23]{index=23}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'bizplat-wireless',
+                        name: '$10 Monthly Wireless Credit',
+                        category: BENEFIT_CATEGORY.CUSTOM,
+                        frequency: BENEFIT_FREQUENCY.MONTHLY,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 10,
+                        description: '$10 credit per month (up to $120/yr) toward wireless phone services on U.S. carriers:contentReference[oaicite:24]{index=24}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'bizplat-hilton',
+                        name: '$200 Hilton Statement Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 200,
+                        description: 'Up to $200 in statement credits per year on eligible Hilton purchases:contentReference[oaicite:25]{index=25}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'bizplat-indeed',
+                        name: '$360 Indeed Credit ($90/quarter)',
+                        category: BENEFIT_CATEGORY.CUSTOM,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 360,
+                        description: '$90 credit each quarter (up to $360/yr) for Indeed job site services:contentReference[oaicite:26]{index=26}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'bizplat-fhr-credit',
+                        name: '$600 Fine Hotels & Resorts Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 600,
+                        description: 'Up to $600 in annual statement credits for bookings through Amex Fine Hotels & Resorts or The Hotel Collection:contentReference[oaicite:27]{index=27}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'bizplat-clear',
+                        name: '$209 CLEAR Plus Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 209,
+                        description: 'Up to $209 statement credit per year for CLEAR Plus membership:contentReference[oaicite:28]{index=28}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'bizplat-priority-pass',
+                        name: 'Priority Pass Select Membership ($429)',
+                        category: BENEFIT_CATEGORY.LOUNGE,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 429,
+                        description: 'Complimentary Priority Pass™ Select membership for airport lounge access (includes guests, ~$429 value).',
+                        used: false,
+                        subscribed: false,
+                        activated: true
                     }
                 ]
             },
-            'amex-marriott-brilliant': {
-                id: 'amex-marriott-brilliant',
-                name: 'Marriott Bonvoy Brilliant',
+            'marriott-bonvoy-brilliant-american-express-card': {
+                id: 'marriott-bonvoy-brilliant-american-express-card',
+                name: 'Marriott Bonvoy Brilliant American Express Card',
                 issuer: 'American Express',
                 annualFee: 650,
                 color: 'card-gradient-amex',
                 benefits: [
                     {
-                        id: 'marriott-free-night',
-                        name: 'Free Night Award',
-                        category: BENEFIT_CATEGORY.TRAVEL,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
-                        type: BENEFIT_TYPE.CREDIT,
-                        value: 350,
-                        description: 'Annual free night up to 85,000 points',
-                        used: false
-                    },
-                    {
-                        id: 'marriott-dining',
-                        name: '$300 Marriott Dining Credit',
+                        id: 'mb-brilliant-dining-credit',
+                        name: '$300 Dining Credits ($25/mo)',
                         category: BENEFIT_CATEGORY.DINING,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
                         value: 300,
-                        description: 'Annual dining credit at Marriott properties',
-                        used: false
+                        description: 'Up to $25 statement credit per month (up to $300/yr) at restaurants worldwide:contentReference[oaicite:29]{index=29}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'marriott-gold-status',
-                        name: 'Gold Elite Status',
-                        category: BENEFIT_CATEGORY.TRAVEL,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
-                        type: BENEFIT_TYPE.FEATURE,
-                        value: 200,
-                        description: 'Automatic Marriott Gold elite status',
-                        activated: true
-                    }
-                ]
-            },
-            'amex-hilton-aspire': {
-                id: 'amex-hilton-aspire',
-                name: 'Hilton Honors Aspire',
-                issuer: 'American Express',
-                annualFee: 450,
-                color: 'card-gradient-amex',
-                benefits: [
-                    {
-                        id: 'hilton-resort-credit',
-                        name: '$250 Resort Credit',
-                        category: BENEFIT_CATEGORY.TRAVEL,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
-                        type: BENEFIT_TYPE.CREDIT,
-                        value: 250,
-                        description: 'Annual resort credit at Hilton properties',
-                        used: false
-                    },
-                    {
-                        id: 'hilton-airline',
-                        name: '$100 Airline Credit',
+                        id: 'mb-brilliant-property-credit',
+                        name: '$100 Ritz/Regis Credit',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
                         value: 100,
-                        description: 'Annual airline incidental credit',
-                        used: false
+                        description: 'Up to $100 resort credit on qualifying charges at Ritz-Carlton or St. Regis hotels on 2-night stays booked via special rate:contentReference[oaicite:30]{index=30}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'hilton-free-night',
-                        name: 'Free Weekend Night',
+                        id: 'mb-brilliant-free-night',
+                        name: 'Annual Free Night Award (up to 85k pts)',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 0,
+                        description: 'Receive 1 free night certificate each year (up to 85,000 point category) after renewal:contentReference[oaicite:31]{index=31}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'mb-brilliant-elite-credits',
+                        name: '25 Elite Night Credits',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
-                        value: 200,
-                        description: 'Annual free weekend night award',
-                        used: false
+                        value: 25,
+                        description: 'Get 25 elite night credits each calendar year toward Marriott Platinum status:contentReference[oaicite:32]{index=32}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'hilton-diamond-status',
-                        name: 'Diamond Elite Status',
-                        category: BENEFIT_CATEGORY.TRAVEL,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        id: 'mb-brilliant-priority-pass',
+                        name: 'Priority Pass Select Membership ($429)',
+                        category: BENEFIT_CATEGORY.LOUNGE,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
                         type: BENEFIT_TYPE.FEATURE,
-                        value: 300,
-                        description: 'Automatic Hilton Diamond elite status',
+                        value: 429,
+                        description: 'Priority Pass™ Select membership for unlimited access to 1,200+ airport lounges worldwide:contentReference[oaicite:33]{index=33}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'mb-brilliant-platinum-status',
+                        name: 'Marriott Platinum Elite Status',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'Complimentary Marriott Bonvoy Platinum Elite status as long as card is open:contentReference[oaicite:34]{index=34}.',
+                        used: false,
+                        subscribed: false,
                         activated: true
                     }
                 ]
             },
-            'amex-delta-reserve': {
-                id: 'amex-delta-reserve',
-                name: 'Delta SkyMiles Reserve',
+            'hilton-honors-aspire-card': {
+                id: 'hilton-honors-aspire-card',
+                name: 'Hilton Honors American Express Aspire Card',
+                issuer: 'American Express',
+                annualFee: 550,
+                color: 'card-gradient-amex',
+                benefits: [
+                    {
+                        id: 'hilton-aspire-diamond-status',
+                        name: 'Hilton Diamond Status',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'Complimentary Hilton Honors Diamond elite status (top tier):contentReference[oaicite:35]{index=35}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'hilton-aspire-free-night',
+                        name: 'Annual Free Night Reward',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 0,
+                        description: 'Receive 1 free night reward each year (no point limit specified):contentReference[oaicite:36]{index=36}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hilton-aspire-extra-night-30k',
+                        name: 'Free Night after $30K Spend',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 0,
+                        description: 'Earn an additional free night reward when you spend $30,000 in a calendar year:contentReference[oaicite:37]{index=37}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hilton-aspire-extra-night-60k',
+                        name: 'Free Night after $60K Spend',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.ONE_TIME,
+                        value: 0,
+                        description: 'Earn another free night reward when you spend $60,000 in a calendar year:contentReference[oaicite:38]{index=38}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hilton-aspire-resort-credit-1',
+                        name: '$200 Hilton Resort Credit (Jan–Jun)',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.SEMI_ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 200,
+                        description: '$200 statement credit for eligible Hilton resort purchases each January–June (up to $400/yr):contentReference[oaicite:39]{index=39}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hilton-aspire-resort-credit-2',
+                        name: '$200 Hilton Resort Credit (Jul–Dec)',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.SEMI_ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 200,
+                        description: '$200 statement credit for eligible Hilton resort purchases each July–December (up to $400/yr):contentReference[oaicite:40]{index=40}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hilton-aspire-airline-credit',
+                        name: '$200 Airline Fee Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 200,
+                        description: 'Up to $200 per year in statement credits ($50/quarter) for airline purchases or travel booked with airline:contentReference[oaicite:41]{index=41}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hilton-aspire-clear',
+                        name: '$209 CLEAR Plus Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 209,
+                        description: 'Up to $209 per year statement credit for CLEAR Plus airport security service (enrollment required):contentReference[oaicite:42]{index=42}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'hilton-aspire-car-rental-status',
+                        name: 'National Emerald Club Executive Status',
+                        category: BENEFIT_CATEGORY.CUSTOM,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'Complimentary National Car Rental Emerald Club Executive status (enroll via Amex online):contentReference[oaicite:43]{index=43}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'hilton-aspire-resort-credit-waldorf',
+                        name: '$100 Waldorf/Conrad Resort Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ONE_TIME,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 100,
+                        description: 'Up to $100 resort credit for qualifying stays at Waldorf Astoria or Conrad hotels (book 2-night min at special rate):contentReference[oaicite:44]{index=44}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    }
+                ]
+            },
+            'delta-reserve-american-express-card': {
+                id: 'delta-reserve-american-express-card',
+                name: 'Delta SkyMiles Reserve American Express Card',
                 issuer: 'American Express',
                 annualFee: 650,
                 color: 'card-gradient-amex',
                 benefits: [
                     {
-                        id: 'delta-companion',
-                        name: 'Companion Certificate',
-                        category: BENEFIT_CATEGORY.TRAVEL,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
-                        type: BENEFIT_TYPE.CREDIT,
-                        value: 400,
-                        description: 'Annual domestic companion certificate',
-                        used: false
-                    },
-                    {
-                        id: 'delta-sky-club',
-                        name: 'Sky Club Access',
+                        id: 'delta-15-skyclub-visits',
+                        name: 'Delta Sky Club Visits (15 per year)',
                         category: BENEFIT_CATEGORY.LOUNGE,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.FEATURE,
-                        value: 545,
-                        description: 'Delta Sky Club membership',
+                        value: 0,
+                        description: '15 Delta Sky Club lounge visits each Medallion year when flying Delta (unlimited after $75K spend):contentReference[oaicite:45]{index=45}.',
+                        used: false,
+                        subscribed: false,
                         activated: true
                     },
                     {
-                        id: 'delta-mqds',
-                        name: 'MQD Waiver',
+                        id: 'delta-centurion-access',
+                        name: 'Centurion & Escape Lounge Access',
+                        category: BENEFIT_CATEGORY.LOUNGE,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'Complimentary access to Amex Centurion and Escape Lounges when flying Delta with this card:contentReference[oaicite:46]{index=46}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'delta-companion-certificate',
+                        name: 'Annual Companion Certificate',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
-                        type: BENEFIT_TYPE.FEATURE,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 0,
+                        description: 'One round-trip companion ticket (up to $600-$700 value) each year on a main cabin Delta flight after renewal:contentReference[oaicite:47]{index=47}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'delta-rideshare-credit',
+                        name: '$10 Monthly Lyft Credit',
+                        category: BENEFIT_CATEGORY.RIDESHARE,
+                        frequency: BENEFIT_FREQUENCY.MONTHLY,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 10,
+                        description: 'Up to $10 statement credit per month (up to $120/yr) on eligible US rideshare purchases (Lyft):contentReference[oaicite:48]{index=48}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'delta-deltastays-credit',
+                        name: '$200 Delta Stays Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
                         value: 200,
-                        description: 'Medallion Qualifying Dollar waiver',
-                        activated: true
+                        description: 'Up to $200 back per year for prepaid hotels or vacation rentals booked via Delta Stays:contentReference[oaicite:49]{index=49}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'delta-resy-credit',
+                        name: '$20 Monthly Resy Credit',
+                        category: BENEFIT_CATEGORY.DINING,
+                        frequency: BENEFIT_FREQUENCY.MONTHLY,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 20,
+                        description: 'Up to $20 statement credit per month (up to $240/yr) on eligible Resy restaurant reservations:contentReference[oaicite:50]{index=50}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'delta-uber-one-credit',
+                        name: '$9.99 Monthly Uber One Credit',
+                        category: BENEFIT_CATEGORY.RIDESHARE,
+                        frequency: BENEFIT_FREQUENCY.MONTHLY,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 9.99,
+                        description: 'Up to $9.99 credit per month for 12 months for Uber One membership (max ~$120):contentReference[oaicite:51]{index=51}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     }
                 ]
             },
@@ -784,41 +1221,105 @@
                     }
                 ]
             },
-            'capital-one-venture': {
-                id: 'capital-one-venture',
-                name: 'Venture Rewards',
+            'capital-one-venture-rewards-credit-card': {
+                id: 'capital-one-venture-rewards-credit-card',
+                name: 'Capital One Venture Rewards Credit Card',
                 issuer: 'Capital One',
                 annualFee: 95,
-                color: 'card-gradient-chase',
+                color: 'card-gradient-capitalone',
                 benefits: [
                     {
-                        id: 'venture-tsa',
-                        name: 'TSA PreCheck/Global Entry',
+                        id: 'venture-global-entry',
+                        name: 'Global Entry/TSA PreCheck Credit',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.FOUR_YEAR,
-                        type: BENEFIT_TYPE.ONE_TIME,
-                        value: 100,
-                        description: '$100 credit every 4 years',
-                        used: false
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 120,
+                        description: 'Up to $120 statement credit for Global Entry or TSA PreCheck every 4 years:contentReference[oaicite:52]{index=52}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'venture-hertz-status',
+                        name: 'Complimentary Hertz Five Star Status',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'Automatic Hertz Five Star rental status (skip counter, car upgrades):contentReference[oaicite:53]{index=53}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'venture-lifestyle-credit',
+                        name: '$50 Lifestyle Collection Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ONE_TIME,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 50,
+                        description: 'Receive $50 experience credit on every Capital One Lifestyle Collection hotel or vacation rental booking:contentReference[oaicite:54]{index=54}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'venture-no-foreign-fee',
+                        name: 'No Foreign Transaction Fees',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'No fees on purchases made outside the U.S. with this card:contentReference[oaicite:55]{index=55}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
                     }
                 ]
             },
-            'capital-one-savor': {
-                id: 'capital-one-savor',
-                name: 'Savor Cash Rewards',
+            'capital-one-savor-cash-rewards-credit-card': {
+                id: 'capital-one-savor-cash-rewards-credit-card',
+                name: 'Capital One Savor Cash Rewards Credit Card',
                 issuer: 'Capital One',
-                annualFee: 95,
-                color: 'card-gradient-chase',
+                annualFee: 0,
+                color: 'card-gradient-capitalone',
                 benefits: [
                     {
-                        id: 'savor-uber',
-                        name: '$100 Uber Cash',
-                        category: BENEFIT_CATEGORY.RIDESHARE,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        id: 'savor-cash-3pct-dining',
+                        name: '3% Cash Back on Dining & Groceries',
+                        category: BENEFIT_CATEGORY.DINING,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
                         type: BENEFIT_TYPE.CREDIT,
-                        value: 100,
-                        description: 'Annual Uber Cash credit',
-                        used: false
+                        value: 3,
+                        description: 'Earn unlimited 3% cash back at restaurants and grocery stores (Visa signature basis):contentReference[oaicite:56]{index=56}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'savor-cash-3pct-entertainment',
+                        name: '3% Cash Back on Entertainment & Streaming',
+                        category: BENEFIT_CATEGORY.ENTERTAINMENT,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 3,
+                        description: 'Earn unlimited 3% cash back on entertainment and popular streaming services:contentReference[oaicite:57]{index=57}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'savor-cash-no-foreign',
+                        name: 'No Foreign Transaction Fees',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'No fees on purchases made outside the U.S. with this card:contentReference[oaicite:58]{index=58}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
                     }
                 ]
             },
@@ -863,103 +1364,271 @@
                     }
                 ]
             },
-            'citi-premier': {
-                id: 'citi-premier',
-                name: 'Premier Card',
+            'citi-premier-card': {
+                id: 'citi-premier-card',
+                name: 'Citi Premier® Card',
                 issuer: 'Citi',
                 annualFee: 95,
-                color: 'card-gradient-united',
+                color: 'card-gradient-citi',
                 benefits: [
                     {
-                        id: 'premier-hotel',
-                        name: '$100 Hotel Credit',
+                        id: 'citi-premier-hotel-credit',
+                        name: '$100 Annual Hotel Credit',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
                         value: 100,
-                        description: 'Annual hotel credit',
-                        used: false
-                    }
-                ]
-            },
-            'citi-aadvantage-executive': {
-                id: 'citi-aadvantage-executive',
-                name: 'AAdvantage Executive',
-                issuer: 'Citi',
-                annualFee: 450,
-                color: 'card-gradient-united',
-                benefits: [
+                        description: 'Up to $100 statement credit once per year on a single hotel stay of $500+ when booked through Citi Travel:contentReference[oaicite:59]{index=59}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
                     {
-                        id: 'aa-companion',
-                        name: 'Companion Certificate',
+                        id: 'citi-premier-resort-credit',
+                        name: '$100 Resort Credit (Luxury Collection)',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
-                        value: 400,
-                        description: 'Annual companion certificate',
-                        used: false
+                        value: 100,
+                        description: 'Up to $100 resort credit per year at select Luxury Collection hotels booked via Citi Travel:contentReference[oaicite:60]{index=60}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'aa-admirals-club',
-                        name: 'Admirals Club Access',
-                        category: BENEFIT_CATEGORY.LOUNGE,
-                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        id: 'citi-premier-no-foreign',
+                        name: 'No Foreign Transaction Fees',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
                         type: BENEFIT_TYPE.FEATURE,
-                        value: 650,
-                        description: 'Admirals Club membership',
+                        value: 0,
+                        description: 'No fees for purchases made outside the U.S. with this card:contentReference[oaicite:61]{index=61}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    }
+                ]
+            },
+            'citi-aadvantage-executive-world-elite-mastercard': {
+                id: 'citi-aadvantage-executive-world-elite-mastercard',
+                name: 'Citi AAdvantage® Executive World Elite Mastercard®',
+                issuer: 'Citi',
+                annualFee: 550,
+                color: 'card-gradient-citi',
+                benefits: [
+                    {
+                        id: 'aa-exec-admirals-club',
+                        name: 'Complimentary Admirals Club® Access',
+                        category: BENEFIT_CATEGORY.LOUNGE,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 850,
+                        description: 'Free Admirals Club membership (up to $850 value) for cardholder with up to 2 guests:contentReference[oaicite:62]{index=62}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'aa-exec-10k-lyft',
+                        name: '$10 Monthly Lyft Credit',
+                        category: BENEFIT_CATEGORY.RIDESHARE,
+                        frequency: BENEFIT_FREQUENCY.MONTHLY,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 10,
+                        description: 'Earn up to $10 statement credit each month (up to $120/yr) on rides with Lyft:contentReference[oaicite:63]{index=63}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'aa-exec-10k-grubhub',
+                        name: '$10 Monthly Grubhub Credit',
+                        category: BENEFIT_CATEGORY.DINING,
+                        frequency: BENEFIT_FREQUENCY.MONTHLY,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 10,
+                        description: 'Earn up to $10 statement credit each month (up to $120/yr) on eligible Grubhub purchases:contentReference[oaicite:64]{index=64}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'aa-exec-avis-budget-credit',
+                        name: '$120 Car Rental Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 120,
+                        description: 'Up to $120 statement credit per year on prepaid Avis and Budget car rentals booked directly:contentReference[oaicite:65]{index=65}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'aa-exec-global-entry',
+                        name: 'Global Entry/TSA Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FOUR_YEAR,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 120,
+                        description: 'Up to $120 statement credit every 4 years for Global Entry or TSA PreCheck application fee:contentReference[oaicite:66]{index=66}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'aa-exec-first-bag',
+                        name: 'First Checked Bag Free',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'First checked bag free on domestic AA flights for you and up to 8 companions:contentReference[oaicite:67]{index=67}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
+                    },
+                    {
+                        id: 'aa-exec-priority-boarding',
+                        name: 'Priority Boarding & Check-in',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'Complimentary priority check-in, security, and boarding for you and 8 companions:contentReference[oaicite:68]{index=68}.',
+                        used: false,
+                        subscribed: false,
                         activated: true
                     }
                 ]
             },
             
             // === WELLS FARGO ===
-            'wells-fargo-autograph': {
-                id: 'wells-fargo-autograph',
-                name: 'Autograph Card',
+            'wells-fargo-autograph-journey-card': {
+                id: 'wells-fargo-autograph-journey-card',
+                name: 'Wells Fargo Autograph Journey Card',
                 issuer: 'Wells Fargo',
-                annualFee: 0,
-                color: 'card-gradient-united',
+                annualFee: 95,
+                color: 'card-gradient-wellsfargo',
                 benefits: [
                     {
-                        id: 'autograph-cell-phone',
-                        name: 'Cell Phone Protection',
-                        category: BENEFIT_CATEGORY.INSURANCE,
+                        id: 'autograph-airline-credit',
+                        name: '$50 Airline Statement Credit',
+                        category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
+                        type: BENEFIT_TYPE.CREDIT,
+                        value: 50,
+                        description: 'Up to $50 annual statement credit (minimum $50 airline purchase) toward airline ticket fees:contentReference[oaicite:69]{index=69}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'autograph-no-foreign',
+                        name: 'No Foreign Transaction Fees',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
                         type: BENEFIT_TYPE.FEATURE,
-                        value: 600,
-                        description: 'Cell phone protection insurance',
+                        value: 0,
+                        description: 'No fees on purchases made outside the U.S. with this card:contentReference[oaicite:70]{index=70}.',
+                        used: false,
+                        subscribed: false,
                         activated: true
+                    },
+                    {
+                        id: 'autograph-cellphone-protection',
+                        name: '$1,000 Cell Phone Protection',
+                        category: BENEFIT_CATEGORY.INSURANCE,
+                        frequency: BENEFIT_FREQUENCY.ONE_TIME,
+                        type: BENEFIT_TYPE.INSURANCE,
+                        value: 1000,
+                        description: 'Up to $1,000 per claim for cell phone damage, theft, or loss (subject to $25 deductible):contentReference[oaicite:71]{index=71}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'autograph-baggage-insurance',
+                        name: '$3,000 Lost Baggage Reimbursement',
+                        category: BENEFIT_CATEGORY.INSURANCE,
+                        frequency: BENEFIT_FREQUENCY.ONE_TIME,
+                        type: BENEFIT_TYPE.INSURANCE,
+                        value: 3000,
+                        description: 'Up to $3,000 per trip for lost/stolen luggage when traveling on a common carrier:contentReference[oaicite:72]{index=72}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'autograph-trip-cancel',
+                        name: '$15,000 Trip Cancellation Insurance',
+                        category: BENEFIT_CATEGORY.INSURANCE,
+                        frequency: BENEFIT_FREQUENCY.ONE_TIME,
+                        type: BENEFIT_TYPE.INSURANCE,
+                        value: 15000,
+                        description: 'Trip cancellation/interruption insurance reimbursing up to $15,000 per covered trip:contentReference[oaicite:73]{index=73}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'autograph-travel-accident',
+                        name: '$1,000,000 Travel Accident Insurance',
+                        category: BENEFIT_CATEGORY.INSURANCE,
+                        frequency: BENEFIT_FREQUENCY.ONE_TIME,
+                        type: BENEFIT_TYPE.INSURANCE,
+                        value: 1000000,
+                        description: 'Automatic common carrier travel accident insurance up to $1,000,000 when ticket purchased on card:contentReference[oaicite:74]{index=74}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     }
                 ]
             },
-            
+
             // === BANK OF AMERICA ===
-            'bofa-premium-rewards': {
-                id: 'bofa-premium-rewards',
-                name: 'Premium Rewards Card',
+            'bank-of-america-premium-rewards-credit-card': {
+                id: 'bank-of-america-premium-rewards-credit-card',
+                name: 'Bank of America Premium Rewards Credit Card',
                 issuer: 'Bank of America',
                 annualFee: 95,
-                color: 'card-gradient-united',
+                color: 'card-gradient-bankofamerica',
                 benefits: [
                     {
-                        id: 'bofa-airline',
-                        name: '$100 Airline Credit',
+                        id: 'boa-airline-credit',
+                        name: '$100 Airline Incidentals Credit',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.ANNUAL,
                         type: BENEFIT_TYPE.CREDIT,
                         value: 100,
-                        description: 'Annual airline incidental credit',
-                        used: false
+                        description: 'Up to $100 statement credit per year for airline incidental fees (baggage, seats, lounges, etc.):contentReference[oaicite:75]{index=75}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
                     },
                     {
-                        id: 'bofa-tsa',
-                        name: 'TSA PreCheck/Global Entry',
+                        id: 'boa-global-entry',
+                        name: '$100 Global Entry/TSA Credit',
                         category: BENEFIT_CATEGORY.TRAVEL,
                         frequency: BENEFIT_FREQUENCY.FOUR_YEAR,
-                        type: BENEFIT_TYPE.ONE_TIME,
+                        type: BENEFIT_TYPE.CREDIT,
                         value: 100,
-                        description: '$100 credit every 4 years',
-                        used: false
+                        description: 'Up to $100 credit every 4 years for Global Entry or TSA PreCheck application fees:contentReference[oaicite:76]{index=76}.',
+                        used: false,
+                        subscribed: false,
+                        activated: false
+                    },
+                    {
+                        id: 'boa-no-foreign',
+                        name: 'No Foreign Transaction Fees',
+                        category: BENEFIT_CATEGORY.TRAVEL,
+                        frequency: BENEFIT_FREQUENCY.FEATURE,
+                        type: BENEFIT_TYPE.FEATURE,
+                        value: 0,
+                        description: 'No fees on purchases made outside the U.S. with this card:contentReference[oaicite:77]{index=77}.',
+                        used: false,
+                        subscribed: false,
+                        activated: true
                     }
                 ]
             }
@@ -1194,8 +1863,8 @@
                             </span>
                         </td>
                         <td className="py-3 px-6 text-sm font-medium text-slate-900 dark:text-slate-100">
-                            {benefit.type === BENEFIT_TYPE.CREDIT && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR 
-                                ? formatCurrency(currentAmount) 
+                            {(benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.INSURANCE) && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR
+                                ? formatCurrency(currentAmount)
                                 : formatCurrency(benefit.value)}
                         </td>
                         <td className="py-3 px-6 text-right">{renderButton()}</td>
@@ -1224,7 +1893,7 @@
                             <span className={`text-xs px-3 py-1 rounded-full ${expirationBg} ${expirationColor} font-medium`}>
                                 {daysLeft > 0 ? `${daysLeft} days left` : 'Expired'}
                             </span>
-                            {benefit.type === BENEFIT_TYPE.CREDIT && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR && (
+                            {(benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.INSURANCE) && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR && (
                                 <span className="text-lg font-bold text-green-600 dark:text-green-400">
                                     {formatCurrency(currentAmount)}
                                 </span>
@@ -1325,23 +1994,23 @@
                 'chase-sapphire-reserve': 'assets/cards/chase-sapphire-reserve.png',
                 'chase-sapphire-preferred': 'assets/cards/chase-sapphire-preferred.jpg',
                 'united-quest': 'assets/cards/united-quest.png',
-                'world-of-hyatt': 'assets/cards/world-of-hyatt.jpg',
-                'ihg-one-rewards': 'assets/cards/ihg-one-rewards.jpg',
+                'world-of-hyatt-credit-card': 'assets/cards/world-of-hyatt.jpg',
+                'ihg-one-rewards-premier-credit-card': 'assets/cards/ihg-one-rewards.jpg',
                 'amex-platinum': 'assets/cards/amex-platinum.jpg',
                 'amex-gold': 'assets/cards/amex-gold.jpg',
-                'amex-green': 'assets/cards/amex-green.jpg',
-                'amex-business-platinum': 'assets/cards/amex-business-platinum.jpg',
-                'amex-marriott-brilliant': 'assets/cards/amex-marriott-brilliant.jpg',
-                'amex-hilton-aspire': 'assets/cards/amex-hilton-aspire.jpg',
-                'amex-delta-reserve': 'assets/cards/amex-delta-reserve.jpg',
+                'american-express-green-card': 'assets/cards/amex-green.jpg',
+                'american-express-business-platinum-card': 'assets/cards/amex-business-platinum.jpg',
+                'marriott-bonvoy-brilliant-american-express-card': 'assets/cards/amex-marriott-brilliant.jpg',
+                'hilton-honors-aspire-card': 'assets/cards/amex-hilton-aspire.jpg',
+                'delta-reserve-american-express-card': 'assets/cards/amex-delta-reserve.jpg',
                 'capital-one-venture-x': 'assets/cards/capital-one-venture-x.jpg',
-                'capital-one-venture': 'assets/cards/capital-one-venture.jpg',
-                'capital-one-savor': 'assets/cards/capital-one-savor.jpg',
+                'capital-one-venture-rewards-credit-card': 'assets/cards/capital-one-venture.jpg',
+                'capital-one-savor-cash-rewards-credit-card': 'assets/cards/capital-one-savor.jpg',
                 'citi-prestige': 'assets/cards/citi-prestige.jpg',
-                'citi-premier': 'assets/cards/citi-premier.jpg',
-                'citi-aadvantage-executive': 'assets/cards/citi-aadvantage-executive.jpg',
-                'wells-fargo-autograph': 'assets/cards/wells-fargo-autograph.jpg',
-                'bofa-premium-rewards': 'assets/cards/bofa-premium-rewards.jpg'
+                'citi-premier-card': 'assets/cards/citi-premier.jpg',
+                'citi-aadvantage-executive-world-elite-mastercard': 'assets/cards/citi-aadvantage-executive.jpg',
+                'wells-fargo-autograph-journey-card': 'assets/cards/wells-fargo-autograph.jpg',
+                'bank-of-america-premium-rewards-credit-card': 'assets/cards/bofa-premium-rewards.jpg'
             };
             
             return (
@@ -1674,7 +2343,7 @@
                                                 });
                                             }
                                             return { ...benefit, subscribed: !benefit.subscribed };
-                                        } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                                } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME || benefit.type === BENEFIT_TYPE.INSURANCE) {
                                             // Track benefit usage and add to recently used
                                             if (!benefit.used) {
                                                 setRecentlyUsed(prev => new Set([...prev, benefitId]));
@@ -1710,7 +2379,7 @@
                                     if (benefit.id === benefitId) {
                                         if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
                                             return { ...benefit, subscribed: false };
-                                        } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                                } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME || benefit.type === BENEFIT_TYPE.INSURANCE) {
                                             return { ...benefit, used: false };
                                         }
                                     }
@@ -1788,7 +2457,7 @@
                         benefits: card.benefits.map(benefit => {
                             const resetBenefit = { ...benefit };
                             // Reset usage states to defaults
-                            if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                    if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME || benefit.type === BENEFIT_TYPE.INSURANCE) {
                                 resetBenefit.used = false;
                             }
                             if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
