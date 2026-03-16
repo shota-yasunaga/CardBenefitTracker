@@ -640,7 +640,7 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
                             : 'bg-blue-600 text-white hover:bg-blue-700'
                     }`}
                 >
-                    {benefit.subscribed ? 'Subscribed' : 'Subscribe'}
+                    {benefit.subscribed ? 'Subscribed' : 'Mark subscribed'}
                 </button>
             );
         }
