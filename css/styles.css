@@ -196,3 +196,52 @@ button:focus-visible {
 .dark ::-webkit-scrollbar-thumb:hover {
     background: rgba(71, 85, 105, 0.5);
 }
+
+/* Benefits table grid - 5 columns for sticky first column */
+.benefits-table-grid {
+    display: grid;
+    grid-template-columns: minmax(200px, 2fr) minmax(120px, 1fr) minmax(90px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr);
+}
+
+/* Sticky Benefit column for horizontal scroll tables */
+.sticky-benefit-col {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: rgb(255 255 255);
+    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.08);
+}
+
+tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
+    background: rgb(248 250 252);
+}
+
+.sticky-benefit-col.sticky-benefit-col-used {
+    background: rgb(248 250 252);
+}
+
+.dark .sticky-benefit-col {
+    background: rgb(30 41 59);
+    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.3);
+}
+
+.dark tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
+    background: rgb(51 65 85);
+}
+
+.dark .sticky-benefit-col.sticky-benefit-col-used {
+    background: rgb(15 23 42);
+}
+
+.sticky-benefit-col-header {
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background: rgb(248 250 252);
+    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.08);
+}
+
+.dark .sticky-benefit-col-header {
+    background: rgb(51 65 85);
+    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.3);
+}
