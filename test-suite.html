@@ -260,6 +260,41 @@
             );
         }
 
+        function simulateGetPeriodKey(frequency, referenceDate) {
+            const date = new Date(referenceDate);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const monthKey = String(month).padStart(2, '0');
+
+            switch (frequency) {
+                case BENEFIT_FREQUENCY.MONTHLY:
+                    return `${year}-${monthKey}`;
+                case BENEFIT_FREQUENCY.SEMI_ANNUAL:
+                    return `${year}-${month <= 6 ? 'H1' : 'H2'}`;
+                case BENEFIT_FREQUENCY.ANNUAL:
+                case BENEFIT_FREQUENCY.ONE_TIME:
+                    return `${year}`;
+                case BENEFIT_FREQUENCY.FOUR_YEAR: {
+                    const start = year - (year % 4);
+                    return `${start}-${start + 3}`;
+                }
+                default:
+                    return `${year}`;
+            }
+        }
+
+        function simulateAppendUsageEvent(history, payload) {
+            const timestamp = payload.timestamp || new Date().toISOString();
+            return [{
+                id: `test-${history.length + 1}`,
+                timestamp,
+                action: payload.action,
+                cardId: payload.cardId || null,
+                benefitId: payload.benefitId || null,
+                periodKey: payload.frequency ? simulateGetPeriodKey(payload.frequency, timestamp) : null
+            }, ...history];
+        }
+
         // Test cases
         function testHandleToggleCreditBenefit() {
             logTestInfo('Testing handleToggle for credit benefit...');
@@ -397,6 +432,39 @@
             );
         }
 
+        function testPeriodKeyGeneration() {
+            logTestInfo('Testing period key generation...');
+
+            const monthly = simulateGetPeriodKey(BENEFIT_FREQUENCY.MONTHLY, '2026-03-15T00:00:00Z');
+            const semiAnnualH2 = simulateGetPeriodKey(BENEFIT_FREQUENCY.SEMI_ANNUAL, '2026-07-01T00:00:00Z');
+            const annual = simulateGetPeriodKey(BENEFIT_FREQUENCY.ANNUAL, '2026-11-20T00:00:00Z');
+
+            logTestResult(
+                'Period Key Generation',
+                monthly === '2026-03' && semiAnnualH2 === '2026-H2' && annual === '2026',
+                `Monthly=${monthly}, SemiAnnual=${semiAnnualH2}, Annual=${annual}`
+            );
+        }
+
+        function testUsageHistoryAppend() {
+            logTestInfo('Testing usage history append behavior...');
+
+            const initialHistory = [];
+            const nextHistory = simulateAppendUsageEvent(initialHistory, {
+                action: 'used',
+                cardId: 'test-card',
+                benefitId: 'test-credit-benefit',
+                frequency: BENEFIT_FREQUENCY.MONTHLY,
+                timestamp: '2026-03-12T10:15:00Z'
+            });
+
+            logTestResult(
+                'Usage History Append',
+                nextHistory.length === 1 && nextHistory[0].periodKey === '2026-03' && nextHistory[0].action === 'used',
+                `Stored action=${nextHistory[0].action}, period=${nextHistory[0].periodKey}`
+            );
+        }
+
         // Main test runner
         function runAllTests() {
             clearResults();
@@ -409,6 +477,8 @@
             testBenefitIdGeneration();
             testCurrencyFormatting();
             testExpirationDateCalculation();
+            testPeriodKeyGeneration();
+            testUsageHistoryAppend();
             
             logTestInfo('All automated tests completed.');
             displayResults();
