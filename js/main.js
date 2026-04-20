@@ -11,7 +11,8 @@ const BENEFIT_TYPE = {
     CREDIT: 'credit',
     SUBSCRIPTION: 'subscription',
     FEATURE: 'feature',
-    ONE_TIME: 'one_time'
+    ONE_TIME: 'one_time',
+    INSURANCE: 'insurance'
 };
 
 const BENEFIT_CATEGORY = {
@@ -21,7 +22,8 @@ const BENEFIT_CATEGORY = {
     SHOPPING: 'shopping',
     RIDESHARE: 'rideshare',
     LOUNGE: 'lounge',
-    INSURANCE: 'insurance'
+    INSURANCE: 'insurance',
+    CUSTOM: 'custom'
 };
 
 // Available credit cards database
