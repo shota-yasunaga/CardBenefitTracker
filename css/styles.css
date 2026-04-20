@@ -1,6 +1,8 @@
 body {
     font-family: 'Inter', sans-serif;
     background: linear-gradient(135deg, rgb(248 250 252) 0%, rgb(239 246 255) 50%, rgb(224 231 255) 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .dark body {

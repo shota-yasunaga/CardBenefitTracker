@@ -29,22 +29,22 @@ function AddCardModal({ isOpen, onClose, onAdd, onAddCustom, existingCardIds }) 
 
     return (
         <>
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+            <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black bg-opacity-50 p-4 sm:items-center">
+                <div className="bg-white rounded-lg p-5 sm:p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
                     <h2 className="text-2xl font-bold mb-4">Add Credit Card</h2>
-                    
+
                     {/* Create Custom Card Option */}
                     <div className="mb-4">
                         <label className="block p-4 border-2 border-purple-300 bg-purple-50 rounded-lg cursor-pointer transition-all hover:border-purple-400">
-                            <div className="flex justify-between items-center">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <h3 className="font-semibold text-purple-900">⭐ Create Custom Card</h3>
                                     <p className="text-sm text-purple-700">Design your own card with custom benefits</p>
                                 </div>
-                                <div className="text-right">
+                                <div className="sm:text-right w-full sm:w-auto">
                                     <button
                                         onClick={handleCreateCustom}
-                                        className="px-3 py-1 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-sm"
+                                        className="w-full sm:w-auto px-3 py-1 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-sm"
                                     >
                                         Create
                                     </button>
@@ -82,12 +82,12 @@ function AddCardModal({ isOpen, onClose, onAdd, onAddCustom, existingCardIds }) 
                                             onChange={(e) => setSelectedCard(e.target.value)}
                                             className="sr-only"
                                         />
-                                        <div className="flex justify-between items-center">
+                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                             <div>
                                                 <h3 className="font-semibold">{card.name}</h3>
                                                 <p className="text-sm text-gray-600">{card.issuer}</p>
                                             </div>
-                                            <div className="text-right">
+                                            <div className="sm:text-right text-left">
                                                 <p className="font-medium">${card.annualFee}/year</p>
                                             </div>
                                         </div>
@@ -100,11 +100,11 @@ function AddCardModal({ isOpen, onClose, onAdd, onAddCustom, existingCardIds }) 
                             </div>
                         </>
                     )}
-                    
-                    <div className="flex gap-3 justify-end">
+
+                    <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                         <button
                             onClick={onClose}
-                            className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                            className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                         >
                             Cancel
                         </button>
@@ -112,7 +112,7 @@ function AddCardModal({ isOpen, onClose, onAdd, onAddCustom, existingCardIds }) 
                             <button
                                 onClick={handleAdd}
                                 disabled={!selectedCard}
-                                className={`px-4 py-2 rounded-md transition-colors ${
+                                className={`w-full sm:w-auto px-4 py-2 rounded-md transition-colors ${
                                     selectedCard
                                         ? 'bg-blue-600 text-white hover:bg-blue-700'
                                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -243,7 +243,7 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
 
     return (
         <div className={`benefit-card bg-white rounded-lg p-4 shadow-md border border-gray-200 ${isUsed ? 'opacity-60' : ''}`}>
-            <div className="flex items-start justify-between mb-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-3">
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                         <span className="text-xl">{categoryIcons[benefit.category]}</span>
@@ -252,9 +252,9 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
                     <p className="text-sm text-gray-600">{benefit.description}</p>
                 </div>
             </div>
-            
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <span className={`text-xs px-2 py-1 rounded-full ${expirationBg} ${expirationColor} font-medium`}>
                         {daysLeft > 0 ? `${daysLeft} days left` : 'Expired'}
                     </span>
@@ -279,8 +279,8 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
 function CreditCardSection({ card, onToggle, onRemove }) {
     return (
         <div className="mb-8">
-            <div className={`${card.color} text-white rounded-t-lg p-6`}>
-                <div className="flex justify-between items-start">
+            <div className={`${card.color} text-white rounded-t-lg p-5 sm:p-6`}>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                         <div className="flex items-center gap-2">
                             <h2 className="text-2xl font-bold">{card.name}</h2>
@@ -294,15 +294,15 @@ function CreditCardSection({ card, onToggle, onRemove }) {
                     </div>
                     <button
                         onClick={() => onRemove(card.id)}
-                        className="text-white/80 hover:text-white transition-colors"
+                        className="self-end sm:self-auto text-white/80 hover:text-white transition-colors"
                         title="Remove card"
                     >
                         ✕
                     </button>
                 </div>
             </div>
-            
-            <div className="bg-gray-50 rounded-b-lg p-4">
+
+            <div className="bg-gray-50 rounded-b-lg p-4 sm:p-5">
                 <div className="grid gap-3 md:grid-cols-2">
                     {card.benefits.map(benefit => (
                         <BenefitCard
@@ -362,11 +362,11 @@ function CustomBenefitBuilder({ benefit, onUpdate, onRemove, index }) {
 
     return (
         <div className="border border-gray-200 rounded-lg p-4 mb-4 bg-gray-50">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-4">
                 <h4 className="font-medium text-gray-900">Benefit #{index + 1}</h4>
                 <button
                     onClick={() => onRemove(index)}
-                    className="text-red-500 hover:text-red-700 transition-colors"
+                    className="self-end sm:self-auto text-red-500 hover:text-red-700 transition-colors"
                     title="Remove benefit"
                 >
                     ✕
@@ -594,10 +594,10 @@ function CustomCardModal({ isOpen, onClose, onAdd }) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black bg-opacity-50 p-4 sm:items-center">
+            <div className="bg-white rounded-lg p-5 sm:p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 <h2 className="text-2xl font-bold mb-6">Create Custom Card</h2>
-                
+
                 {/* Card Details Section */}
                 <div className="mb-6">
                     <h3 className="text-lg font-semibold mb-4">Card Details</h3>
@@ -673,7 +673,7 @@ function CustomCardModal({ isOpen, onClose, onAdd }) {
 
                 {/* Benefits Section */}
                 <div className="mb-6">
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
                         <h3 className="text-lg font-semibold">Benefits</h3>
                         <button
                             onClick={handleAddBenefit}
@@ -694,16 +694,16 @@ function CustomCardModal({ isOpen, onClose, onAdd }) {
                     ))}
                 </div>
                 
-                <div className="flex gap-3 justify-end">
+                <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                        className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSubmit}
-                        className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+                        className="w-full sm:w-auto px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
                     >
                         Create Custom Card
                     </button>
@@ -732,28 +732,28 @@ function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
         <div className="min-h-screen bg-gray-100">
             <header className="bg-white shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                             <button
                                 onClick={onBack}
-                                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                                className="flex items-center justify-center sm:justify-start gap-2 text-gray-600 hover:text-gray-900 transition-colors w-full sm:w-auto"
                             >
                                 <span className="text-xl">←</span>
                                 <span>Back to Dashboard</span>
                             </button>
-                            <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+                            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center sm:text-left">Settings</h1>
                         </div>
                     </div>
                 </div>
             </header>
 
             <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="bg-white rounded-lg shadow-lg p-6">
+                <div className="bg-white rounded-lg shadow-lg p-5 sm:p-6">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Data Management</h2>
                     
                     <div className="space-y-6">
                         {/* Reset Benefit Usage */}
-                        <div className="border border-gray-200 rounded-lg p-6">
+                        <div className="border border-gray-200 rounded-lg p-5 sm:p-6">
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">Reset Benefit Usage</h3>
                             <p className="text-gray-600 mb-4">
                                 This will reset all benefit usage states (used, subscribed, activated) back to their default values. 
@@ -761,14 +761,14 @@ function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
                             </p>
                             <button
                                 onClick={() => setShowResetBenefitsModal(true)}
-                                className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-medium"
+                                className="w-full sm:w-auto px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-medium"
                             >
                                 Reset Benefit Usage
                             </button>
                         </div>
 
                         {/* Reset All Data */}
-                        <div className="border border-red-200 rounded-lg p-6 bg-red-50">
+                        <div className="border border-red-200 rounded-lg p-5 sm:p-6 bg-red-50">
                             <h3 className="text-lg font-semibold text-red-900 mb-2">Reset All Data</h3>
                             <p className="text-red-700 mb-4">
                                 <strong>Warning:</strong> This will permanently delete all your data including cards and benefit usage. 
@@ -776,14 +776,14 @@ function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
                             </p>
                             <button
                                 onClick={() => setShowResetAllModal(true)}
-                                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium"
+                                className="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium"
                             >
                                 Reset All Data
                             </button>
                         </div>
 
                         {/* Data Info */}
-                        <div className="border border-gray-200 rounded-lg p-6">
+                        <div className="border border-gray-200 rounded-lg p-5 sm:p-6">
                             <h3 className="text-lg font-semibold text-gray-900 mb-2">Data Storage</h3>
                             <p className="text-gray-600 text-sm">
                                 Your data is stored locally in your browser. No information is sent to any external servers. 
@@ -796,23 +796,23 @@ function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
 
             {/* Reset All Data Modal */}
             {showResetAllModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 max-w-md w-full">
+                <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black bg-opacity-50 p-4 sm:items-center">
+                    <div className="bg-white rounded-lg p-5 sm:p-6 max-w-md w-full">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Confirm Reset All Data</h3>
                         <p className="text-gray-600 mb-6">
                             Are you sure you want to delete all your data? This will remove all cards and benefit usage history. 
                             This action cannot be undone.
                         </p>
-                        <div className="flex gap-3 justify-end">
+                        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                             <button
                                 onClick={() => setShowResetAllModal(false)}
-                                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                                className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleResetAll}
-                                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium"
+                                className="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium"
                             >
                                 Yes, Reset All Data
                             </button>
@@ -823,23 +823,23 @@ function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
 
             {/* Reset Benefit Usage Modal */}
             {showResetBenefitsModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 max-w-md w-full">
+                <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black bg-opacity-50 p-4 sm:items-center">
+                    <div className="bg-white rounded-lg p-5 sm:p-6 max-w-md w-full">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Confirm Reset Benefit Usage</h3>
                         <p className="text-gray-600 mb-6">
                             Are you sure you want to reset all benefit usage? This will mark all benefits as unused 
                             but keep your cards. This action cannot be undone.
                         </p>
-                        <div className="flex gap-3 justify-end">
+                        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                             <button
                                 onClick={() => setShowResetBenefitsModal(false)}
-                                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                                className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleResetBenefitUsage}
-                                className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-medium"
+                                className="w-full sm:w-auto px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-medium"
                             >
                                 Yes, Reset Benefit Usage
                             </button>
