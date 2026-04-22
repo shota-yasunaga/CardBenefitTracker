@@ -6,13 +6,54 @@ function App() {
         }
         return [];
     });
+    const [usageHistory, setUsageHistory] = React.useState(() => {
+        const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
+        if (!saved) return [];
+        try {
+            const parsed = JSON.parse(saved);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn('Failed to parse usage history, resetting to empty.', error);
+            return [];
+        }
+    });
     const [viewMode, setViewMode] = React.useState('unused'); // 'card', 'list', 'unused'
     const [showAddModal, setShowAddModal] = React.useState(false);
-    const [currentPage, setCurrentPage] = React.useState('dashboard'); // 'dashboard', 'settings'
+    const [currentPage, setCurrentPage] = React.useState('dashboard'); // 'dashboard', 'settings', 'history'
 
     React.useEffect(() => {
         localStorage.setItem('creditCardBenefits', JSON.stringify(cards));
     }, [cards]);
+
+    React.useEffect(() => {
+        localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(usageHistory.slice(0, HISTORY_MAX_ENTRIES)));
+    }, [usageHistory]);
+
+    const appendUsageEvent = ({
+        action,
+        cardId = null,
+        cardName = null,
+        benefitId = null,
+        benefitName = null,
+        frequency = null,
+        amountUsed = null
+    }) => {
+        const timestamp = new Date().toISOString();
+        const periodKey = frequency ? getPeriodKey(frequency, timestamp, { name: benefitName || '' }) : null;
+        const event = {
+            id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+            timestamp,
+            action,
+            cardId,
+            cardName,
+            benefitId,
+            benefitName,
+            frequency,
+            periodKey,
+            amountUsed
+        };
+        setUsageHistory(prev => [event, ...prev].slice(0, HISTORY_MAX_ENTRIES));
+    };
 
     const handleToggle = (cardId, benefitId) => {
         setCards(prevCards => {
@@ -23,8 +64,27 @@ function App() {
                         benefits: card.benefits.map(benefit => {
                             if (benefit.id === benefitId) {
                                 if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                                    appendUsageEvent({
+                                        action: benefit.subscribed ? 'unsubscribed' : 'subscribed',
+                                        cardId: card.id,
+                                        cardName: card.name,
+                                        benefitId: benefit.id,
+                                        benefitName: benefit.name,
+                                        frequency: benefit.frequency
+                                    });
                                     return { ...benefit, subscribed: !benefit.subscribed };
                                 } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
+                                    if (!benefit.used) {
+                                        appendUsageEvent({
+                                            action: 'used',
+                                            cardId: card.id,
+                                            cardName: card.name,
+                                            benefitId: benefit.id,
+                                            benefitName: benefit.name,
+                                            frequency: benefit.frequency,
+                                            amountUsed: benefit.value
+                                        });
+                                    }
                                     return { ...benefit, used: true };
                                 }
                             }
@@ -60,11 +120,13 @@ function App() {
 
     // Reset functions
     const handleResetAll = () => {
+        appendUsageEvent({ action: 'reset_all' });
         setCards([]);
         localStorage.removeItem('creditCardBenefits');
     };
 
     const handleResetBenefitUsage = () => {
+        appendUsageEvent({ action: 'reset_usage' });
         setCards(prevCards => {
             return prevCards.map(card => ({
                 ...card,
@@ -113,6 +175,16 @@ function App() {
         );
     }
 
+    if (currentPage === 'history') {
+        return (
+            <UsageHistoryPage
+                historyEvents={usageHistory}
+                cards={cards}
+                onBack={() => setCurrentPage('dashboard')}
+            />
+        );
+    }
+
     // Render dashboard
     return (
         <div className="min-h-screen bg-gray-100">
@@ -126,6 +198,12 @@ function App() {
                                 className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm font-medium"
                             >
                                 Settings
+                            </button>
+                            <button
+                                onClick={() => setCurrentPage('history')}
+                                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-sm font-medium"
+                            >
+                                History
                             </button>
                             <button
                                 onClick={() => setShowAddModal(true)}

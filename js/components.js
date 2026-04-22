@@ -771,8 +771,8 @@ function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
                         <div className="border border-red-200 rounded-lg p-6 bg-red-50">
                             <h3 className="text-lg font-semibold text-red-900 mb-2">Reset All Data</h3>
                             <p className="text-red-700 mb-4">
-                                <strong>Warning:</strong> This will permanently delete all your data including cards and benefit usage. 
-                                This action cannot be undone.
+                                <strong>Warning:</strong> This will permanently delete all your cards and current benefit usage state.
+                                Usage history records are retained for audit purposes.
                             </p>
                             <button
                                 onClick={() => setShowResetAllModal(true)}
@@ -800,8 +800,8 @@ function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
                     <div className="bg-white rounded-lg p-6 max-w-md w-full">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Confirm Reset All Data</h3>
                         <p className="text-gray-600 mb-6">
-                            Are you sure you want to delete all your data? This will remove all cards and benefit usage history. 
-                            This action cannot be undone.
+                            Are you sure you want to delete all your cards and active usage state?
+                            Usage history will be kept.
                         </p>
                         <div className="flex gap-3 justify-end">
                             <button
@@ -847,6 +847,173 @@ function SettingsPage({ onBack, onResetAll, onResetBenefitUsage }) {
                     </div>
                 </div>
             )}
+        </div>
+    );
+}
+
+function UsageHistoryPage({ historyEvents, cards, onBack }) {
+    const [selectedCardId, setSelectedCardId] = React.useState('all');
+    const [selectedAction, setSelectedAction] = React.useState('all');
+    const [groupMode, setGroupMode] = React.useState('date');
+    const [fromDate, setFromDate] = React.useState('');
+    const [toDateFilter, setToDateFilter] = React.useState('');
+
+    const cardOptions = React.useMemo(() => {
+        const options = [{ id: 'all', name: 'All Cards' }];
+        cards.forEach((card) => options.push({ id: card.id, name: card.name }));
+        return options;
+    }, [cards]);
+
+    const filteredEvents = React.useMemo(() => {
+        return historyEvents.filter((event) => {
+            if (selectedCardId !== 'all' && event.cardId !== selectedCardId) return false;
+            if (selectedAction !== 'all' && event.action !== selectedAction) return false;
+
+            const eventDate = toDate(event.timestamp);
+            if (fromDate) {
+                const from = new Date(`${fromDate}T00:00:00`);
+                if (eventDate < from) return false;
+            }
+            if (toDateFilter) {
+                const to = new Date(`${toDateFilter}T23:59:59`);
+                if (eventDate > to) return false;
+            }
+            return true;
+        });
+    }, [historyEvents, selectedCardId, selectedAction, fromDate, toDateFilter]);
+
+    const groupedEvents = React.useMemo(() => {
+        return filteredEvents.reduce((acc, event) => {
+            const date = toDate(event.timestamp);
+            const groupKey = groupMode === 'period'
+                ? `${event.periodKey || 'unknown'}::${event.frequency || 'unknown'}`
+                : date.toISOString().slice(0, 10);
+            if (!acc[groupKey]) {
+                acc[groupKey] = [];
+            }
+            acc[groupKey].push(event);
+            return acc;
+        }, {});
+    }, [filteredEvents, groupMode]);
+
+    const sortedGroupKeys = React.useMemo(() => {
+        return Object.keys(groupedEvents).sort((a, b) => b.localeCompare(a));
+    }, [groupedEvents]);
+
+    const actionLabel = {
+        used: 'Marked used',
+        undo_used: 'Usage undone',
+        subscribed: 'Subscribed',
+        unsubscribed: 'Unsubscribed',
+        reset_usage: 'Reset benefit usage',
+        reset_all: 'Reset all data'
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-100">
+            <header className="bg-white shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={onBack}
+                            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                        >
+                            <span className="text-xl">←</span>
+                            <span>Back to Dashboard</span>
+                        </button>
+                        <h1 className="text-3xl font-bold text-gray-900">Usage History</h1>
+                    </div>
+                </div>
+            </header>
+
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+                <div className="bg-white rounded-lg shadow-lg p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                        <select
+                            value={selectedCardId}
+                            onChange={(e) => setSelectedCardId(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        >
+                            {cardOptions.map((card) => (
+                                <option key={card.id} value={card.id}>{card.name}</option>
+                            ))}
+                        </select>
+                        <select
+                            value={selectedAction}
+                            onChange={(e) => setSelectedAction(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        >
+                            <option value="all">All Actions</option>
+                            <option value="used">Marked used</option>
+                            <option value="undo_used">Usage undone</option>
+                            <option value="subscribed">Subscribed</option>
+                            <option value="unsubscribed">Unsubscribed</option>
+                            <option value="reset_usage">Reset usage</option>
+                            <option value="reset_all">Reset all</option>
+                        </select>
+                        <input
+                            type="date"
+                            value={fromDate}
+                            onChange={(e) => setFromDate(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        />
+                        <input
+                            type="date"
+                            value={toDateFilter}
+                            onChange={(e) => setToDateFilter(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        />
+                        <select
+                            value={groupMode}
+                            onChange={(e) => setGroupMode(e.target.value)}
+                            className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        >
+                            <option value="date">Group by Date</option>
+                            <option value="period">Group by Period</option>
+                        </select>
+                    </div>
+                </div>
+
+                {filteredEvents.length === 0 ? (
+                    <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+                        <p className="text-gray-600">No usage events yet.</p>
+                    </div>
+                ) : (
+                    <div className="space-y-5">
+                        {sortedGroupKeys.map((groupKey) => {
+                            const events = groupedEvents[groupKey].slice().sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                            const [periodKey, frequency] = groupKey.split('::');
+                            const title = groupMode === 'period'
+                                ? formatPeriodLabel(periodKey, frequency)
+                                : groupKey;
+                            return (
+                                <div key={groupKey} className="bg-white rounded-lg shadow-lg overflow-hidden">
+                                    <div className="px-5 py-3 border-b border-gray-200 bg-gray-50">
+                                        <h3 className="font-semibold text-gray-900">{title}</h3>
+                                    </div>
+                                    <div className="divide-y divide-gray-200">
+                                        {events.map((event) => (
+                                            <div key={event.id} className="px-5 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                                                <div>
+                                                    <p className="text-sm font-medium text-gray-900">
+                                                        {event.benefitName || 'Bulk action'} {actionLabel[event.action] || event.action}
+                                                    </p>
+                                                    <p className="text-xs text-gray-500">
+                                                        {event.cardName || 'All cards'} · {new Date(event.timestamp).toLocaleString()}
+                                                    </p>
+                                                </div>
+                                                <div className="text-xs text-gray-600">
+                                                    {event.periodKey ? `Period: ${formatPeriodLabel(event.periodKey, event.frequency)}` : 'No period'}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </main>
         </div>
     );
 }
