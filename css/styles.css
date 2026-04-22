@@ -448,6 +448,19 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
     display: none;
 }
 
+/* Make native form controls readable in dark mode */
+.dark input,
+.dark select,
+.dark textarea {
+    color: rgb(241 245 249);
+    color-scheme: dark;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: rgb(148 163 184);
+}
+
 /* Summary KPI cards on dashboard */
 .kpi-grid {
     display: grid;
