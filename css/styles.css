@@ -438,3 +438,153 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 .dark .feedback-helper-text {
     color: rgb(148 163 184);
 }
+
+/* Hide scrollbar but keep scrollability (used for mobile tab strip) */
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Summary KPI cards on dashboard */
+.kpi-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 640px) {
+    .kpi-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.kpi-card {
+    background: rgb(255 255 255 / 0.85);
+    border: 1px solid rgb(226 232 240 / 0.8);
+    border-radius: 1rem;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 10px 24px -18px rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+}
+
+.dark .kpi-card {
+    background: rgb(30 41 59 / 0.8);
+    border-color: rgb(71 85 105 / 0.7);
+}
+
+.kpi-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgb(100 116 139);
+    font-weight: 600;
+}
+
+.dark .kpi-label {
+    color: rgb(148 163 184);
+}
+
+.kpi-value {
+    margin-top: 0.35rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgb(15 23 42);
+    line-height: 1.1;
+}
+
+.dark .kpi-value {
+    color: rgb(248 250 252);
+}
+
+.kpi-sub {
+    margin-top: 0.25rem;
+    font-size: 0.72rem;
+    color: rgb(100 116 139);
+}
+
+.dark .kpi-sub {
+    color: rgb(148 163 184);
+}
+
+.kpi-accent-amber { border-left: 4px solid #f59e0b; }
+.kpi-accent-green { border-left: 4px solid #16a34a; }
+.kpi-accent-blue  { border-left: 4px solid #3b82f6; }
+.kpi-accent-rose  { border-left: 4px solid #f43f5e; }
+
+/* Progress bar used on Card View section headers */
+.progress-track {
+    height: 6px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #34d399 0%, #22c55e 100%);
+    transition: width 0.4s ease;
+}
+
+/* Toolbar used above the benefit tables */
+.toolbar {
+    background: rgb(255 255 255 / 0.85);
+    border: 1px solid rgb(226 232 240 / 0.8);
+    border-radius: 1rem;
+    padding: 0.75rem 0.9rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.dark .toolbar {
+    background: rgb(30 41 59 / 0.8);
+    border-color: rgb(71 85 105 / 0.7);
+}
+
+/* Expiration badge variants that also work in dark mode */
+.badge-expiry {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+}
+.badge-expiry-neutral {
+    background: rgb(241 245 249);
+    color: rgb(71 85 105);
+}
+.dark .badge-expiry-neutral {
+    background: rgb(51 65 85 / 0.85);
+    color: rgb(203 213 225);
+}
+.badge-expiry-warn {
+    background: rgb(255 237 213);
+    color: rgb(154 52 18);
+}
+.dark .badge-expiry-warn {
+    background: rgb(120 53 15 / 0.45);
+    color: rgb(254 215 170);
+}
+.badge-expiry-danger {
+    background: rgb(254 226 226);
+    color: rgb(153 27 27);
+}
+.dark .badge-expiry-danger {
+    background: rgb(127 29 29 / 0.55);
+    color: rgb(254 202 202);
+}
+.badge-expiry-expired {
+    background: rgb(226 232 240);
+    color: rgb(71 85 105);
+    text-decoration: line-through;
+}
+.dark .badge-expiry-expired {
+    background: rgb(51 65 85 / 0.75);
+    color: rgb(148 163 184);
+}
