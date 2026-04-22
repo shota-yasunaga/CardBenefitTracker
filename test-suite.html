@@ -435,9 +435,9 @@
         function testPeriodKeyGeneration() {
             logTestInfo('Testing period key generation...');
 
-            const monthly = simulateGetPeriodKey(BENEFIT_FREQUENCY.MONTHLY, '2026-03-15T00:00:00Z');
-            const semiAnnualH2 = simulateGetPeriodKey(BENEFIT_FREQUENCY.SEMI_ANNUAL, '2026-07-01T00:00:00Z');
-            const annual = simulateGetPeriodKey(BENEFIT_FREQUENCY.ANNUAL, '2026-11-20T00:00:00Z');
+            const monthly = simulateGetPeriodKey(BENEFIT_FREQUENCY.MONTHLY, '2026-03-15T12:00:00Z');
+            const semiAnnualH2 = simulateGetPeriodKey(BENEFIT_FREQUENCY.SEMI_ANNUAL, '2026-07-15T12:00:00Z');
+            const annual = simulateGetPeriodKey(BENEFIT_FREQUENCY.ANNUAL, '2026-11-20T12:00:00Z');
 
             logTestResult(
                 'Period Key Generation',
