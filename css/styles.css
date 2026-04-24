@@ -1,32 +1,48 @@
 /* ============================================================
-   Page-level wrapper gradients
-   The app uses `bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50`
-   (and a dark-mode variant) on several full-screen wrappers. We override
-   those with a richer multi-stop gradient plus soft color "aurora"
-   hotspots so the page has visible depth instead of a flat wash.
+   Design tokens (light + dark)
+   A modern, neutral palette anchored on indigo-500 as the single
+   accent. Surfaces are mostly #fff/slate with crisp hairlines.
    ============================================================ */
-.min-h-screen.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
-.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50.min-h-screen {
-    background-image:
-        radial-gradient(ellipse 900px 600px at 8% -5%, rgba(99, 102, 241, 0.22) 0%, transparent 55%),
-        radial-gradient(ellipse 800px 500px at 95% 5%, rgba(14, 165, 233, 0.18) 0%, transparent 55%),
-        radial-gradient(ellipse 1000px 600px at 60% 110%, rgba(139, 92, 246, 0.2) 0%, transparent 55%),
-        radial-gradient(ellipse 700px 500px at 15% 95%, rgba(236, 72, 153, 0.12) 0%, transparent 55%),
-        linear-gradient(135deg, #f8fafc 0%, #eef4ff 45%, #e0e7ff 100%) !important;
+:root {
+    --bg: #f7f8fa;
+    --bg-elev: #ffffff;
+    --bg-subtle: #f1f3f7;
+    --fg: #0b1020;
+    --fg-muted: #5b6478;
+    --fg-subtle: #8a93a6;
+    --line: rgba(15, 23, 42, 0.08);
+    --line-strong: rgba(15, 23, 42, 0.14);
+    --accent: #6366f1;
+    --accent-strong: #4f46e5;
+    --accent-soft: rgba(99, 102, 241, 0.10);
+    --ring: rgba(99, 102, 241, 0.35);
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05), 0 2px 6px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px -8px rgba(15, 23, 42, 0.12);
+    --shadow-lg: 0 1px 2px rgba(15, 23, 42, 0.06), 0 24px 48px -24px rgba(15, 23, 42, 0.25);
 }
 
-.dark .min-h-screen.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
-.dark .bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50.min-h-screen {
-    background-image:
-        radial-gradient(ellipse 900px 600px at 8% -5%, rgba(99, 102, 241, 0.28) 0%, transparent 55%),
-        radial-gradient(ellipse 800px 500px at 95% 5%, rgba(14, 165, 233, 0.22) 0%, transparent 55%),
-        radial-gradient(ellipse 1000px 600px at 60% 110%, rgba(139, 92, 246, 0.26) 0%, transparent 55%),
-        radial-gradient(ellipse 700px 500px at 15% 95%, rgba(236, 72, 153, 0.14) 0%, transparent 55%),
-        linear-gradient(135deg, #020617 0%, #0b1228 45%, #0f172a 100%) !important;
+.dark {
+    --bg: #07090f;
+    --bg-elev: #0e121b;
+    --bg-subtle: #141826;
+    --fg: #eceef4;
+    --fg-muted: #98a0b3;
+    --fg-subtle: #6c7488;
+    --line: rgba(255, 255, 255, 0.06);
+    --line-strong: rgba(255, 255, 255, 0.1);
+    --accent: #818cf8;
+    --accent-strong: #6366f1;
+    --accent-soft: rgba(129, 140, 248, 0.14);
+    --ring: rgba(129, 140, 248, 0.4);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 24px -8px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 1px 2px rgba(0, 0, 0, 0.35), 0 30px 50px -24px rgba(0, 0, 0, 0.6);
 }
 
 /* ============================================================
-   Global typography + background
+   Typography + base
    ============================================================ */
 html {
     -webkit-font-smoothing: antialiased;
@@ -35,44 +51,276 @@ html {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    font-feature-settings: "cv11", "ss01", "ss03";
-    letter-spacing: -0.005em;
-    color: rgb(15 23 42);
-    background-color: rgb(244 247 252);
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv11", "ss01", "ss03", "cv02", "calt";
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.006em;
+    color: var(--fg);
+    background-color: var(--bg);
     background-image:
-        radial-gradient(at 8% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 55%),
-        radial-gradient(at 92% 4%, rgba(14, 165, 233, 0.16) 0px, transparent 50%),
-        radial-gradient(at 65% 100%, rgba(139, 92, 246, 0.14) 0px, transparent 55%),
-        radial-gradient(at 20% 90%, rgba(236, 72, 153, 0.1) 0px, transparent 45%),
-        linear-gradient(135deg, rgb(248 250 252) 0%, rgb(239 246 255) 55%, rgb(224 231 255) 100%);
+        radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: 0 0;
     background-attachment: fixed;
     min-height: 100vh;
 }
 
 .dark body {
-    color: rgb(226 232 240);
-    background-color: rgb(2 6 23);
     background-image:
-        radial-gradient(at 10% 0%, rgba(99, 102, 241, 0.22) 0px, transparent 55%),
-        radial-gradient(at 90% 10%, rgba(14, 165, 233, 0.18) 0px, transparent 50%),
-        radial-gradient(at 70% 100%, rgba(139, 92, 246, 0.2) 0px, transparent 55%),
-        radial-gradient(at 20% 90%, rgba(236, 72, 153, 0.12) 0px, transparent 45%),
-        linear-gradient(135deg, rgb(2 6 23) 0%, rgb(15 23 42) 55%, rgb(30 41 59) 100%);
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
 }
 
-/* Heading refinement */
 h1, h2, h3, h4 {
     letter-spacing: -0.022em;
     font-feature-settings: "ss01", "cv11";
 }
 
 h1 {
-    letter-spacing: -0.03em;
+    letter-spacing: -0.032em;
+    font-weight: 700;
+}
+
+h2 { letter-spacing: -0.028em; font-weight: 700; }
+
+/* ============================================================
+   Page-level wrapper
+   The app paints `bg-gradient-to-br from-slate-50 via-blue-50
+   to-indigo-50` on full-screen wrappers. Replace with a clean
+   paint + the subtle dotted grid, so the feel is a modern
+   "canvas" rather than a candy gradient.
+   ============================================================ */
+.min-h-screen.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
+.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50.min-h-screen {
+    background-color: var(--bg) !important;
+    background-image:
+        radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px) !important;
+    background-size: 22px 22px !important;
+    background-position: 0 0 !important;
+}
+
+.dark .min-h-screen.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
+.dark .bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50.min-h-screen {
+    background-color: var(--bg) !important;
+    background-image:
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+    background-size: 22px 22px !important;
 }
 
 /* ============================================================
-   Credit-card gradient panels — richer depth, soft sheen
+   Header — sharp, minimal, true sticky bar
+   ============================================================ */
+header.sticky {
+    background: rgba(255, 255, 255, 0.78) !important;
+    border-bottom: 1px solid var(--line) !important;
+    box-shadow: none;
+}
+
+.dark header.sticky {
+    background: rgba(14, 18, 27, 0.78) !important;
+    border-bottom: 1px solid var(--line) !important;
+}
+
+.backdrop-blur-lg {
+    backdrop-filter: saturate(1.3) blur(16px);
+    -webkit-backdrop-filter: saturate(1.3) blur(16px);
+}
+
+/* Drop the built-in header bottom border in favor of our token one */
+header.sticky.border-b {
+    border-bottom-color: var(--line) !important;
+}
+
+/* ============================================================
+   Tab bar — crisp pill segmented control
+   ============================================================ */
+/* The app uses `.flex.bg-slate-100/60.p-1.rounded-xl` */
+.flex.bg-slate-100\/60.p-1.rounded-xl,
+.flex.bg-slate-100\/60.dark\:bg-slate-700\/60.p-1.rounded-xl {
+    background: var(--bg-subtle) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 14px !important;
+    padding: 5px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.dark .flex.bg-slate-100\/60.p-1.rounded-xl,
+.dark .flex.bg-slate-100\/60.dark\:bg-slate-700\/60.p-1.rounded-xl {
+    background: rgba(255, 255, 255, 0.04) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+/* Active tab button */
+.flex.bg-slate-100\/60 > button.bg-white,
+.flex.bg-slate-100\/60 > button.dark\:bg-slate-600 {
+    background: var(--bg-elev) !important;
+    color: var(--fg) !important;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.9) inset,
+        0 1px 2px rgba(15, 23, 42, 0.08),
+        0 2px 8px -2px rgba(15, 23, 42, 0.08) !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em;
+}
+
+.dark .flex.bg-slate-100\/60 > button.bg-white,
+.dark .flex.bg-slate-100\/60 > button.dark\:bg-slate-600 {
+    background: #1a1f2e !important;
+    color: var(--fg) !important;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Inactive tab button */
+.flex.bg-slate-100\/60 > button {
+    border-radius: 10px !important;
+    transition: color 0.15s ease, background 0.15s ease !important;
+    font-weight: 500;
+    color: var(--fg-muted) !important;
+}
+
+.flex.bg-slate-100\/60 > button:hover {
+    color: var(--fg) !important;
+}
+
+/* ============================================================
+   Surface polish — cards, panels, modals
+   Selectors target existing Tailwind combos already used in-app.
+   ============================================================ */
+/* Translucent panels */
+.bg-white\/80.rounded-2xl,
+.bg-white\/80.rounded-xl,
+.bg-white\/90.rounded-2xl,
+.bg-white\/90.rounded-xl {
+    background-color: var(--bg-elev) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.dark .bg-slate-800\/80.rounded-2xl,
+.dark .bg-slate-800\/80.rounded-xl {
+    background-color: var(--bg-elev) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* Solid white settings / data-management panel */
+main > .bg-white.shadow-lg.rounded-lg,
+main .bg-white.shadow-lg.rounded-lg {
+    background-color: var(--bg-elev) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.dark main > .bg-white.shadow-lg.rounded-lg,
+.dark main .bg-white.shadow-lg.rounded-lg {
+    background-color: var(--bg-elev) !important;
+}
+
+/* Section sub-panels inside settings (thin ring, no heavy inset) */
+.border.border-slate-200.rounded-lg,
+.border.dark\:border-slate-700.rounded-lg {
+    border-color: var(--line) !important;
+    border-radius: 12px !important;
+    background: var(--bg-elev);
+}
+
+.dark .border.border-slate-200.rounded-lg,
+.dark .border.dark\:border-slate-700.rounded-lg {
+    background: rgba(255, 255, 255, 0.015);
+}
+
+/* Empty-state / generic "large card" panels used on dashboards */
+.bg-white\/80.backdrop-blur-sm.rounded-2xl {
+    background-color: var(--bg-elev) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* ============================================================
+   Benefit cards (Card View grid tiles)
+   ============================================================ */
+.benefit-card {
+    border-radius: 16px !important;
+    transition:
+        transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 0.25s ease,
+        border-color 0.25s ease !important;
+    transform: translateY(0);
+    background-color: var(--bg-elev) !important;
+    border: 1px solid var(--line) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: var(--shadow-xs) !important;
+}
+
+.benefit-card:hover {
+    transform: translateY(-3px) !important;
+    border-color: var(--line-strong) !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.dark .benefit-card {
+    background-color: var(--bg-elev) !important;
+}
+
+.summary-card {
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+                box-shadow 0.25s ease;
+    transform: translateY(0);
+    box-shadow: var(--shadow-xs);
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   Icon chip — monochrome modern replacement for the old
+   gradient emoji circle used throughout the app.
+   ============================================================ */
+.benefit-card .bg-gradient-to-br.from-blue-500.to-purple-600,
+.sticky.left-0 .bg-gradient-to-br.from-blue-500.to-purple-600,
+.grid.grid-cols-subgrid .bg-gradient-to-br.from-blue-500.to-purple-600 {
+    background-image: none !important;
+    background-color: var(--bg-subtle) !important;
+    color: var(--fg) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.dark .benefit-card .bg-gradient-to-br.from-blue-500.to-purple-600,
+.dark .sticky.left-0 .bg-gradient-to-br.from-blue-500.to-purple-600,
+.dark .grid.grid-cols-subgrid .bg-gradient-to-br.from-blue-500.to-purple-600 {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Hero empty-state icon square: keep an accent wash */
+.mx-auto.w-24.h-24.bg-gradient-to-br.from-blue-500.to-indigo-600,
+.mx-auto.w-16.h-16.bg-gradient-to-br.from-blue-500.to-indigo-600 {
+    background-image: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 12px 28px -10px rgba(79, 70, 229, 0.5),
+        0 0 0 1px rgba(99, 102, 241, 0.18);
+}
+
+/* ============================================================
+   Credit-card hero (Card View section header)
+   The markup is `${card.color} text-white rounded-t-xl p-8 relative overflow-hidden`.
+   We turn it from a flat gradient band into a real "card" surface
+   with rounded corners, shine sweep, and drop-shadow.
    ============================================================ */
 .card-gradient-chase,
 .card-gradient-united,
@@ -80,50 +328,76 @@ h1 {
 .card-gradient-custom {
     position: relative;
     overflow: hidden;
+    border-radius: 20px !important;
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.25),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.15),
-        0 20px 45px -25px rgba(15, 23, 42, 0.55);
+        inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+        0 22px 50px -20px rgba(15, 23, 42, 0.55);
 }
 
+/* When used as a section banner, preserve flat-bottom for the body
+   panel below to tuck against. */
+.card-gradient-chase.rounded-t-xl,
+.card-gradient-united.rounded-t-xl,
+.card-gradient-amex.rounded-t-xl,
+.card-gradient-custom.rounded-t-xl {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 12px 32px -16px rgba(15, 23, 42, 0.4);
+}
+
+/* Deeper, richer gradients */
 .card-gradient-chase {
     background:
-        radial-gradient(at 100% 0%, rgba(255,255,255,0.2) 0%, transparent 55%),
-        linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #3b82f6 100%);
+        radial-gradient(120% 120% at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 45%),
+        linear-gradient(135deg, #0b1e4b 0%, #1e3a8a 40%, #2563eb 100%);
 }
 
 .card-gradient-united {
     background:
-        radial-gradient(at 100% 0%, rgba(255,255,255,0.2) 0%, transparent 55%),
-        linear-gradient(135deg, #0c4a6e 0%, #0369a1 45%, #0ea5e9 100%);
+        radial-gradient(120% 120% at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 45%),
+        linear-gradient(135deg, #082f49 0%, #0c4a6e 45%, #0ea5e9 100%);
 }
 
 .card-gradient-amex {
     background:
-        radial-gradient(at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 55%),
-        linear-gradient(135deg, #334155 0%, #475569 50%, #64748b 100%);
+        radial-gradient(120% 120% at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 45%),
+        linear-gradient(135deg, #1f2937 0%, #334155 50%, #64748b 100%);
 }
 
 .card-gradient-custom {
     background:
-        radial-gradient(at 100% 0%, rgba(255,255,255,0.22) 0%, transparent 55%),
-        linear-gradient(135deg, #4c1d95 0%, #6b46c1 45%, #8b5cf6 100%);
+        radial-gradient(120% 120% at 100% 0%, rgba(255,255,255,0.2) 0%, transparent 45%),
+        linear-gradient(135deg, #2e1065 0%, #5b21b6 45%, #8b5cf6 100%);
 }
 
+/* Shine line sweep across hero */
 .card-gradient-chase::before,
 .card-gradient-united::before,
 .card-gradient-amex::before,
 .card-gradient-custom::before {
     content: '';
     position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 45%),
-        radial-gradient(circle at 85% 120%, rgba(255,255,255,0.12) 0%, transparent 40%);
+    top: -40%;
+    left: -20%;
+    width: 140%;
+    height: 180%;
+    background: linear-gradient(
+        115deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.18) 48%,
+        rgba(255, 255, 255, 0.08) 52%,
+        transparent 65%
+    );
     pointer-events: none;
-    mix-blend-mode: screen;
+    transform: translateX(0);
 }
 
+/* Fine grain overlay */
 .card-gradient-chase::after,
 .card-gradient-united::after,
 .card-gradient-amex::after,
@@ -131,432 +405,277 @@ h1 {
     content: '';
     position: absolute;
     inset: 0;
-    background-image:
-        radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
     background-size: 3px 3px;
-    opacity: 0.6;
+    opacity: 0.5;
     pointer-events: none;
     mix-blend-mode: overlay;
 }
 
-/* ============================================================
-   Cards / panels — stronger surface treatment
-   ============================================================ */
-.benefit-card {
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.35s ease;
-    transform: translateY(0);
-    will-change: transform;
+/* Body panel under the hero — tuck seamless */
+.bg-white.dark\:bg-slate-800.rounded-b-xl,
+.bg-white.rounded-b-xl {
+    background-color: var(--bg-elev) !important;
+    border: 1px solid var(--line) !important;
+    border-top: 0 !important;
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    box-shadow: var(--shadow-sm) !important;
 }
 
-.benefit-card:hover {
-    transform: translateY(-6px) scale(1.015);
-    box-shadow:
-        0 30px 60px -25px rgba(30, 58, 138, 0.35),
-        0 12px 30px -12px rgba(30, 64, 175, 0.2);
-}
-
-.dark .benefit-card:hover {
-    box-shadow:
-        0 30px 60px -20px rgba(59, 130, 246, 0.25),
-        0 12px 30px -12px rgba(139, 92, 246, 0.2);
-}
-
-.summary-card {
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateY(0);
-}
-
-.summary-card:hover {
-    transform: translateY(-4px) scale(1.015);
-    box-shadow:
-        0 25px 50px -18px rgba(30, 58, 138, 0.3),
-        0 10px 25px -10px rgba(30, 64, 175, 0.18);
-}
-
-.dark .summary-card:hover {
-    box-shadow:
-        0 25px 50px -18px rgba(59, 130, 246, 0.22),
-        0 10px 25px -10px rgba(139, 92, 246, 0.18);
-}
-
-/* Generic polish for the most common surface pattern used in-app:
-   white/slate translucent rounded panels with borders. */
-.bg-white\/80.rounded-2xl,
-.bg-white\/80.rounded-xl,
-.bg-white\/90.rounded-2xl,
-.bg-white\/90.rounded-xl,
-main .bg-white.rounded-2xl,
-main .bg-white.rounded-xl {
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.8) inset,
-        0 1px 3px rgba(15, 23, 42, 0.05),
-        0 24px 48px -28px rgba(30, 64, 175, 0.28),
-        0 12px 30px -18px rgba(79, 70, 229, 0.18);
-    border-color: rgba(226, 232, 240, 0.9) !important;
-}
-
-.dark .bg-slate-800\/80.rounded-2xl,
-.dark .bg-slate-800\/80.rounded-xl,
-.dark main .bg-slate-800.rounded-2xl,
-.dark main .bg-slate-800.rounded-xl {
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.06) inset,
-        0 1px 3px rgba(0, 0, 0, 0.3),
-        0 24px 48px -28px rgba(0, 0, 0, 0.7),
-        0 12px 30px -18px rgba(99, 102, 241, 0.25);
-    border-color: rgba(71, 85, 105, 0.7) !important;
-}
-
-/* Data Management / Settings panels (no translucent variant in markup) */
-main > .bg-white.shadow-lg.rounded-lg,
-main .bg-white.shadow-lg.rounded-lg {
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.9) inset,
-        0 1px 3px rgba(15, 23, 42, 0.05),
-        0 28px 55px -30px rgba(30, 64, 175, 0.35),
-        0 14px 30px -16px rgba(79, 70, 229, 0.2) !important;
+.dark .bg-white.dark\:bg-slate-800.rounded-b-xl {
+    background-color: var(--bg-elev) !important;
 }
 
 /* ============================================================
-   Header — subtle top accent line + slightly deeper blur
+   Buttons — flat, modern, no gradients
    ============================================================ */
-header.sticky {
-    box-shadow:
-        0 1px 0 rgba(148, 163, 184, 0.18),
-        0 10px 30px -18px rgba(15, 23, 42, 0.25);
-}
-
-header.sticky::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 1px;
-    background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(99, 102, 241, 0.35) 30%,
-        rgba(139, 92, 246, 0.35) 70%,
-        transparent 100%);
-    pointer-events: none;
-}
-
-.backdrop-blur-lg {
-    backdrop-filter: blur(20px) saturate(1.25);
-    -webkit-backdrop-filter: blur(20px) saturate(1.25);
-}
-
-/* ============================================================
-   Tabs
-   ============================================================ */
-.tab-button {
-    position: relative;
-    overflow: hidden;
-}
-
-.tab-button::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-}
-
-.tab-button.active::before {
-    transform: scaleX(1);
-}
-
-/* ============================================================
-   Page / element animations
-   ============================================================ */
-.page-transition {
-    animation: fadeIn 0.35s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(24px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fade-in-up {
-    animation: fadeInUp 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* ============================================================
-   Buttons
-   ============================================================ */
-.btn-primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
-    background-size: 180% 180%;
-    background-position: 0% 0%;
-    transition: background-position 0.5s ease,
-                box-shadow 0.3s ease,
-                transform 0.2s ease;
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.2) inset,
-        0 6px 18px -4px rgba(79, 70, 229, 0.5);
-}
-
-.btn-primary:hover {
-    background-position: 100% 100%;
-    transform: translateY(-2px);
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.25) inset,
-        0 12px 28px -6px rgba(79, 70, 229, 0.55);
-}
-
-/* Enhance any gradient pill / primary button styled via Tailwind's
-   from-blue-600 to-indigo-600 pattern used throughout the app. */
+/* Primary accent buttons (the app uses `bg-gradient-to-r from-blue-600 to-indigo-600` and variants) */
 .bg-gradient-to-r.from-blue-600.to-indigo-600,
-.bg-gradient-to-br.from-blue-500.to-indigo-600,
 .bg-gradient-to-r.from-blue-500.to-indigo-600 {
-    background-image: linear-gradient(135deg, #3b82f6 0%, #6366f1 55%, #8b5cf6 100%) !important;
+    background-image: none !important;
+    background-color: var(--accent-strong) !important;
+    color: #fff !important;
     box-shadow:
-        0 1px 0 rgba(255,255,255,0.22) inset,
-        0 10px 24px -8px rgba(79, 70, 229, 0.55);
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(79, 70, 229, 0.3),
+        0 6px 16px -6px rgba(79, 70, 229, 0.5) !important;
 }
 
-.hover\:from-blue-700.hover\:to-indigo-700:hover,
 .bg-gradient-to-r.from-blue-600.to-indigo-600:hover,
-.bg-gradient-to-br.from-blue-500.to-indigo-600:hover {
-    background-image: linear-gradient(135deg, #2563eb 0%, #4f46e5 55%, #7c3aed 100%) !important;
+.bg-gradient-to-r.from-blue-500.to-indigo-600:hover,
+.hover\:from-blue-700.hover\:to-indigo-700:hover {
+    background-image: none !important;
+    background-color: #4338ca !important;
     box-shadow:
-        0 1px 0 rgba(255,255,255,0.28) inset,
-        0 16px 34px -10px rgba(79, 70, 229, 0.6);
+        0 1px 0 rgba(255, 255, 255, 0.25) inset,
+        0 2px 4px rgba(79, 70, 229, 0.35),
+        0 12px 24px -8px rgba(79, 70, 229, 0.55) !important;
+}
+
+/* "Mark Used" / "Mark Subscribed" pill buttons: keep as a clear
+   accent-filled pill. Targeting common combo used in BenefitCard. */
+button.bg-blue-600.text-white,
+button.bg-blue-600.hover\:bg-blue-700 {
+    background-color: var(--accent-strong) !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.005em;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(79, 70, 229, 0.25);
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+button.bg-blue-600.text-white:hover:not(:disabled) {
+    background-color: #4338ca !important;
+    transform: translateY(-1px);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.25) inset,
+        0 4px 12px -4px rgba(79, 70, 229, 0.45);
+}
+
+/* Subscribed (green) success pill — tone down, keep modern */
+button.bg-green-600.text-white,
+button.bg-green-600.hover\:bg-green-700 {
+    background-color: #10b981 !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(16, 185, 129, 0.25);
+}
+
+button.bg-green-600.text-white:hover:not(:disabled) {
+    background-color: #059669 !important;
+}
+
+/* Used / disabled */
+button.bg-gray-200.text-gray-500.cursor-not-allowed {
+    background-color: var(--bg-subtle) !important;
+    color: var(--fg-subtle) !important;
+    border-radius: 10px !important;
+    box-shadow: inset 0 0 0 1px var(--line);
+}
+
+/* Reset Benefit Usage — warm amber accent, modern flat */
+button.bg-orange-600.text-white,
+button.bg-orange-600.hover\:bg-orange-700 {
+    background-color: #f97316 !important;
+    border-radius: 10px !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(234, 88, 12, 0.3);
+}
+
+button.bg-orange-600.text-white:hover {
+    background-color: #ea580c !important;
+}
+
+/* Reset All Data — red, modern flat */
+button.bg-red-600.text-white,
+button.bg-red-600.hover\:bg-red-700 {
+    background-color: #ef4444 !important;
+    border-radius: 10px !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(220, 38, 38, 0.3);
+}
+
+button.bg-red-600.text-white:hover {
+    background-color: #dc2626 !important;
+}
+
+/* Undo / neutral secondary */
+button.bg-gray-500.text-white,
+button.bg-gray-500.hover\:bg-gray-600 {
+    background-color: #475569 !important;
+    border-radius: 10px !important;
+}
+
+.dark button.bg-gray-500.text-white {
+    background-color: #334155 !important;
 }
 
 /* ============================================================
-   Backdrop / glass
+   Warning block background
    ============================================================ */
-.backdrop-blur-glass {
-    backdrop-filter: blur(18px) saturate(1.3);
-    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+.border.border-red-200.bg-red-50,
+.border.dark\:border-red-700.bg-red-50 {
+    background: linear-gradient(180deg, rgba(254, 226, 226, 0.6) 0%, rgba(254, 226, 226, 0.25) 100%) !important;
+    border-color: rgba(248, 113, 113, 0.4) !important;
+    border-radius: 12px !important;
+}
+
+.dark .border.border-red-200.bg-red-50,
+.dark .border.dark\:border-red-700.bg-red-50 {
+    background: linear-gradient(180deg, rgba(127, 29, 29, 0.25) 0%, rgba(127, 29, 29, 0.08) 100%) !important;
+    border-color: rgba(248, 113, 113, 0.22) !important;
 }
 
 /* ============================================================
-   Focus rings
+   Status pills (time-left, Active, etc.) — modern flat chips
    ============================================================ */
-button:focus-visible,
-a:focus-visible,
-[role="button"]:focus-visible {
-    outline: 2px solid #6366f1;
-    outline-offset: 3px;
-    border-radius: 8px;
+/* `bg-gray-100 text-gray-600` base pill */
+.rounded-full.bg-gray-100.text-gray-600 {
+    background-color: var(--bg-subtle) !important;
+    color: var(--fg-muted) !important;
+    border: 1px solid var(--line);
+    font-weight: 500;
+}
+
+.rounded-full.bg-orange-100.text-orange-600 {
+    background-color: rgba(249, 115, 22, 0.1) !important;
+    color: #c2410c !important;
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    font-weight: 500;
+}
+
+.rounded-full.bg-red-100.text-red-600 {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: #b91c1c !important;
+    border: 1px solid rgba(239, 68, 68, 0.22);
+    font-weight: 500;
+}
+
+.dark .rounded-full.bg-gray-100.text-gray-600 {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #c9cfdc !important;
+    border-color: var(--line);
 }
 
 /* ============================================================
-   Scrollbars — thinner, more elegant
+   Section titles (Benefit Lists, Settings, etc.)
+   Drop the centered muted vibe in favor of a bolder anchor.
    ============================================================ */
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.35), rgba(139, 92, 246, 0.35));
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.6), rgba(139, 92, 246, 0.6));
-    background-clip: padding-box;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.45), rgba(139, 92, 246, 0.45));
-    background-clip: padding-box;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.7), rgba(139, 92, 246, 0.7));
-    background-clip: padding-box;
+main h2.text-2xl.font-bold {
+    letter-spacing: -0.028em;
+    font-weight: 700;
 }
 
 /* ============================================================
-   Benefits table
-   ============================================================ */
-.benefits-table-grid {
-    display: grid;
-    grid-template-columns: minmax(200px, 2fr) minmax(120px, 1fr) minmax(90px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr);
-}
-
-.sticky-benefit-col {
-    position: sticky;
-    left: 0;
-    z-index: 10;
-    background: rgb(255 255 255);
-    box-shadow: 2px 0 12px -4px rgba(15, 23, 42, 0.12);
-}
-
-tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
-    background: rgb(248 250 252);
-}
-
-.sticky-benefit-col.sticky-benefit-col-used {
-    background: rgb(248 250 252);
-}
-
-.dark .sticky-benefit-col {
-    background: rgb(30 41 59);
-    box-shadow: 2px 0 12px -4px rgba(0, 0, 0, 0.45);
-}
-
-.dark tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
-    background: rgb(51 65 85);
-}
-
-.dark .sticky-benefit-col.sticky-benefit-col-used {
-    background: rgb(15 23 42);
-}
-
-.sticky-benefit-col-header {
-    position: sticky;
-    left: 0;
-    z-index: 20;
-    background: rgb(248 250 252);
-    box-shadow: 2px 0 12px -4px rgba(15, 23, 42, 0.12);
-}
-
-.dark .sticky-benefit-col-header {
-    background: rgb(51 65 85);
-    box-shadow: 2px 0 12px -4px rgba(0, 0, 0, 0.45);
-}
-
-/* Subtle row separators and hover */
-tbody tr {
-    transition: background-color 0.2s ease;
-}
-
-/* ============================================================
-   Feedback form blocks
+   Feedback card ("Spot a benefit issue?")
    ============================================================ */
 .feedback-card {
-    border: 1px solid rgb(203 213 225 / 0.7);
-    background:
-        linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.85) 100%);
-    border-radius: 1rem;
-    padding: 1.1rem 1.15rem;
+    border: 1px solid var(--line);
+    background: var(--bg-elev);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
     text-align: left;
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.9) inset,
-        0 12px 30px -22px rgba(15, 23, 42, 0.55);
+    box-shadow: var(--shadow-xs);
 }
 
 .dark .feedback-card {
-    border-color: rgb(71 85 105 / 0.7);
-    background:
-        linear-gradient(180deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.85) 100%);
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.05) inset,
-        0 14px 32px -22px rgba(2, 6, 23, 0.95);
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: var(--shadow-xs);
 }
 
 .feedback-card-compact {
-    padding: 0.95rem 1.1rem;
+    padding: 0.9rem 1.05rem;
 }
 
 .feedback-card-header {
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.55rem;
 }
 
 .feedback-card-title {
     margin: 0;
-    font-size: 0.97rem;
-    line-height: 1.3rem;
+    font-size: 0.95rem;
+    line-height: 1.25rem;
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: rgb(15 23 42);
-}
-
-.dark .feedback-card-title {
-    color: rgb(248 250 252);
+    color: var(--fg);
 }
 
 .feedback-card-prompt {
     margin-top: 0.25rem;
     margin-bottom: 0;
     font-size: 0.82rem;
-    color: rgb(71 85 105);
-}
-
-.dark .feedback-card-prompt {
-    color: rgb(148 163 184);
+    color: var(--fg-muted);
 }
 
 .feedback-cta-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.45rem;
 }
 
 .feedback-cta-button,
 .feedback-secondary-button,
 .feedback-primary-button {
-    border-radius: 0.65rem;
-    padding: 0.5rem 0.85rem;
+    border-radius: 10px;
+    padding: 0.45rem 0.8rem;
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: -0.005em;
-    transition: all 0.2s ease;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, color 0.15s ease;
 }
 
 .feedback-cta-button {
-    border: 1px solid rgb(148 163 184 / 0.55);
-    color: rgb(30 41 59);
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    border: 1px solid var(--line);
+    color: var(--fg);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow-xs);
 }
 
 .feedback-cta-button:hover {
-    border-color: rgb(99 102 241 / 0.7);
-    color: rgb(67 56 202);
-    background: rgba(238, 242, 255, 0.95);
+    border-color: var(--accent);
+    color: var(--accent-strong);
+    background: var(--accent-soft);
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px -3px rgba(79, 70, 229, 0.25);
 }
 
 .dark .feedback-cta-button {
-    border-color: rgb(100 116 139 / 0.85);
-    color: rgb(226 232 240);
-    background: rgba(51, 65, 85, 0.8);
-    box-shadow: none;
+    border-color: var(--line);
+    color: var(--fg);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .dark .feedback-cta-button:hover {
-    border-color: rgb(129 140 248 / 0.8);
-    color: rgb(199 210 254);
-    background: rgba(55, 48, 163, 0.35);
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
 }
 
 .feedback-form {
@@ -575,93 +694,80 @@ tbody tr {
     font-size: 0.76rem;
     font-weight: 600;
     letter-spacing: -0.003em;
-    color: rgb(51 65 85);
-}
-
-.dark .feedback-label {
-    color: rgb(203 213 225);
+    color: var(--fg-muted);
 }
 
 .feedback-input {
-    border: 1px solid rgb(148 163 184 / 0.55);
-    background: rgb(255 255 255 / 0.97);
-    border-radius: 0.6rem;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-elev);
+    border-radius: 10px;
     padding: 0.55rem 0.7rem;
-    font-size: 0.84rem;
-    color: rgb(15 23 42);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-size: 0.86rem;
+    color: var(--fg);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .feedback-input:focus {
     outline: none;
-    border-color: rgb(99 102 241 / 0.8);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--ring);
 }
 
 .dark .feedback-input {
-    border-color: rgb(100 116 139 / 0.85);
-    background: rgb(15 23 42 / 0.8);
-    color: rgb(241 245 249);
-}
-
-.dark .feedback-input:focus {
-    border-color: rgb(129 140 248 / 0.9);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.28);
+    border-color: var(--line-strong);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--fg);
 }
 
 .feedback-textarea {
     resize: vertical;
-    min-height: 4.8rem;
+    min-height: 5rem;
 }
 
 .feedback-form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.55rem;
+    gap: 0.5rem;
     margin-top: 0.1rem;
 }
 
 .feedback-secondary-button {
-    border: 1px solid rgb(148 163 184 / 0.7);
-    color: rgb(51 65 85);
-    background: rgba(248, 250, 252, 0.95);
+    border: 1px solid var(--line);
+    color: var(--fg);
+    background: var(--bg-elev);
 }
 
 .feedback-secondary-button:hover {
-    background: rgba(241, 245, 249, 1);
-    transform: translateY(-1px);
+    background: var(--bg-subtle);
 }
 
 .feedback-primary-button {
     border: 1px solid transparent;
-    color: white;
-    background: linear-gradient(135deg, rgb(37 99 235) 0%, rgb(79 70 229) 50%, rgb(139 92 246) 100%);
+    color: #fff;
+    background: var(--accent-strong);
     box-shadow:
-        0 1px 0 rgba(255,255,255,0.25) inset,
-        0 10px 24px -8px rgba(79, 70, 229, 0.55);
+        0 1px 0 rgba(255, 255, 255, 0.22) inset,
+        0 6px 14px -4px rgba(79, 70, 229, 0.5);
 }
 
 .feedback-primary-button:hover:not(:disabled) {
+    background: #4338ca;
     transform: translateY(-1px);
-    filter: brightness(1.05);
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.3) inset,
-        0 14px 32px -10px rgba(79, 70, 229, 0.65);
 }
 
 .feedback-primary-button:disabled {
-    opacity: 0.65;
+    opacity: 0.6;
     cursor: wait;
 }
 
 .dark .feedback-secondary-button {
-    border-color: rgb(100 116 139 / 0.9);
-    color: rgb(226 232 240);
-    background: rgb(51 65 85 / 0.85);
+    border-color: var(--line);
+    color: var(--fg);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .dark .feedback-secondary-button:hover {
-    background: rgb(71 85 105 / 0.95);
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .feedback-status {
@@ -690,29 +796,195 @@ tbody tr {
 .feedback-helper-text {
     margin: 0.65rem 0 0 0;
     font-size: 0.73rem;
-    color: rgb(100 116 139);
-}
-
-.dark .feedback-helper-text {
-    color: rgb(148 163 184);
+    color: var(--fg-subtle);
 }
 
 /* ============================================================
-   Empty-state hero icon polish
+   Benefits-list tables (Card / Unused) — refined grid
    ============================================================ */
-.bg-gradient-to-br.from-blue-500.to-indigo-600 {
-    box-shadow:
-        0 1px 0 rgba(255,255,255,0.22) inset,
-        0 16px 38px -10px rgba(79, 70, 229, 0.5),
-        0 0 0 1px rgba(99, 102, 241, 0.18);
+.benefits-table-grid {
+    display: grid;
+    grid-template-columns: minmax(200px, 2fr) minmax(120px, 1fr) minmax(90px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr);
+}
+
+.sticky-benefit-col {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: var(--bg-elev);
+    box-shadow: 2px 0 12px -4px rgba(15, 23, 42, 0.08);
+}
+
+tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
+    background: var(--bg-subtle);
+}
+
+.sticky-benefit-col.sticky-benefit-col-used {
+    background: var(--bg-subtle);
+}
+
+.dark .sticky-benefit-col {
+    background: var(--bg-elev);
+    box-shadow: 2px 0 12px -4px rgba(0, 0, 0, 0.55);
+}
+
+.dark tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dark .sticky-benefit-col.sticky-benefit-col-used {
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.sticky-benefit-col-header {
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background: var(--bg-subtle);
+    box-shadow: 2px 0 12px -4px rgba(15, 23, 42, 0.08);
+}
+
+.dark .sticky-benefit-col-header {
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 2px 0 12px -4px rgba(0, 0, 0, 0.55);
+}
+
+/* Column headers */
+.benefits-table-grid > div.uppercase {
+    letter-spacing: 0.04em;
+    font-size: 0.7rem !important;
+    font-weight: 600;
+    color: var(--fg-subtle) !important;
+    background: var(--bg-subtle) !important;
+    border-bottom: 1px solid var(--line);
+}
+
+.dark .benefits-table-grid > div.uppercase {
+    background: rgba(255, 255, 255, 0.03) !important;
+    color: var(--fg-subtle) !important;
+}
+
+/* Row hover in list view */
+.grid.grid-cols-subgrid.col-span-5 {
+    transition: background-color 0.15s ease;
 }
 
 /* ============================================================
-   Dark-mode text readability boost
+   Focus rings (keyboard)
    ============================================================ */
-.dark .text-slate-600 {
-    color: rgb(148 163 184);
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 8px;
 }
-.dark .text-slate-400 {
-    color: rgb(148 163 184);
+
+/* ============================================================
+   Scrollbar — thin, tinted
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.18);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(15, 23, 42, 0.32);
+    background-clip: padding-box;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.14);
+    background-clip: padding-box;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+    background-clip: padding-box;
+}
+
+/* ============================================================
+   Small utilities
+   ============================================================ */
+.page-transition {
+    animation: fadeIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Slightly increase readability of muted text on dark mode */
+.dark .text-slate-400 { color: #a2abbe; }
+.dark .text-slate-600 { color: #b4bccd; }
+
+/* Make numeric amounts sit nicely */
+.text-green-600, .text-green-400, .dark .text-green-400 {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+/* Old btn-primary + backdrop helpers for compatibility (unused now) */
+.btn-primary {
+    background: var(--accent-strong);
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 6px 16px -6px rgba(79,70,229,0.5);
+}
+
+.btn-primary:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.backdrop-blur-glass {
+    backdrop-filter: blur(16px) saturate(1.25);
+    -webkit-backdrop-filter: blur(16px) saturate(1.25);
+}
+
+/* Tabs (legacy class from previous design, kept for parity) */
+.tab-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-button::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.tab-button.active::before {
+    transform: scaleX(1);
 }
