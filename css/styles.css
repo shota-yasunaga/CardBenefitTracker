@@ -1,93 +1,257 @@
+/* ============================================================
+   Page-level wrapper gradients
+   The app uses `bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50`
+   (and a dark-mode variant) on several full-screen wrappers. We override
+   those with a richer multi-stop gradient plus soft color "aurora"
+   hotspots so the page has visible depth instead of a flat wash.
+   ============================================================ */
+.min-h-screen.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
+.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50.min-h-screen {
+    background-image:
+        radial-gradient(ellipse 900px 600px at 8% -5%, rgba(99, 102, 241, 0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 800px 500px at 95% 5%, rgba(14, 165, 233, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 1000px 600px at 60% 110%, rgba(139, 92, 246, 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 700px 500px at 15% 95%, rgba(236, 72, 153, 0.12) 0%, transparent 55%),
+        linear-gradient(135deg, #f8fafc 0%, #eef4ff 45%, #e0e7ff 100%) !important;
+}
+
+.dark .min-h-screen.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
+.dark .bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50.min-h-screen {
+    background-image:
+        radial-gradient(ellipse 900px 600px at 8% -5%, rgba(99, 102, 241, 0.28) 0%, transparent 55%),
+        radial-gradient(ellipse 800px 500px at 95% 5%, rgba(14, 165, 233, 0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 1000px 600px at 60% 110%, rgba(139, 92, 246, 0.26) 0%, transparent 55%),
+        radial-gradient(ellipse 700px 500px at 15% 95%, rgba(236, 72, 153, 0.14) 0%, transparent 55%),
+        linear-gradient(135deg, #020617 0%, #0b1228 45%, #0f172a 100%) !important;
+}
+
+/* ============================================================
+   Global typography + background
+   ============================================================ */
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, rgb(248 250 252) 0%, rgb(239 246 255) 50%, rgb(224 231 255) 100%);
+    font-feature-settings: "cv11", "ss01", "ss03";
+    letter-spacing: -0.005em;
+    color: rgb(15 23 42);
+    background-color: rgb(244 247 252);
+    background-image:
+        radial-gradient(at 8% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 55%),
+        radial-gradient(at 92% 4%, rgba(14, 165, 233, 0.16) 0px, transparent 50%),
+        radial-gradient(at 65% 100%, rgba(139, 92, 246, 0.14) 0px, transparent 55%),
+        radial-gradient(at 20% 90%, rgba(236, 72, 153, 0.1) 0px, transparent 45%),
+        linear-gradient(135deg, rgb(248 250 252) 0%, rgb(239 246 255) 55%, rgb(224 231 255) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
 .dark body {
-    background: linear-gradient(135deg, rgb(15 23 42) 0%, rgb(30 41 59) 50%, rgb(51 65 85) 100%);
+    color: rgb(226 232 240);
+    background-color: rgb(2 6 23);
+    background-image:
+        radial-gradient(at 10% 0%, rgba(99, 102, 241, 0.22) 0px, transparent 55%),
+        radial-gradient(at 90% 10%, rgba(14, 165, 233, 0.18) 0px, transparent 50%),
+        radial-gradient(at 70% 100%, rgba(139, 92, 246, 0.2) 0px, transparent 55%),
+        radial-gradient(at 20% 90%, rgba(236, 72, 153, 0.12) 0px, transparent 45%),
+        linear-gradient(135deg, rgb(2 6 23) 0%, rgb(15 23 42) 55%, rgb(30 41 59) 100%);
+}
+
+/* Heading refinement */
+h1, h2, h3, h4 {
+    letter-spacing: -0.022em;
+    font-feature-settings: "ss01", "cv11";
+}
+
+h1 {
+    letter-spacing: -0.03em;
+}
+
+/* ============================================================
+   Credit-card gradient panels — richer depth, soft sheen
+   ============================================================ */
+.card-gradient-chase,
+.card-gradient-united,
+.card-gradient-amex,
+.card-gradient-custom {
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+        0 20px 45px -25px rgba(15, 23, 42, 0.55);
 }
 
 .card-gradient-chase {
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-    position: relative;
-}
-
-.card-gradient-chase::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    pointer-events: none;
+    background:
+        radial-gradient(at 100% 0%, rgba(255,255,255,0.2) 0%, transparent 55%),
+        linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #3b82f6 100%);
 }
 
 .card-gradient-united {
-    background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
-    position: relative;
-}
-
-.card-gradient-united::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    pointer-events: none;
+    background:
+        radial-gradient(at 100% 0%, rgba(255,255,255,0.2) 0%, transparent 55%),
+        linear-gradient(135deg, #0c4a6e 0%, #0369a1 45%, #0ea5e9 100%);
 }
 
 .card-gradient-amex {
-    background: linear-gradient(135deg, #475569 0%, #64748b 100%);
-    position: relative;
-}
-
-.card-gradient-amex::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    pointer-events: none;
+    background:
+        radial-gradient(at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 55%),
+        linear-gradient(135deg, #334155 0%, #475569 50%, #64748b 100%);
 }
 
 .card-gradient-custom {
-    background: linear-gradient(135deg, #6b46c1 0%, #8b5cf6 100%);
-    position: relative;
+    background:
+        radial-gradient(at 100% 0%, rgba(255,255,255,0.22) 0%, transparent 55%),
+        linear-gradient(135deg, #4c1d95 0%, #6b46c1 45%, #8b5cf6 100%);
 }
 
+.card-gradient-chase::before,
+.card-gradient-united::before,
+.card-gradient-amex::before,
 .card-gradient-custom::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 45%),
+        radial-gradient(circle at 85% 120%, rgba(255,255,255,0.12) 0%, transparent 40%);
     pointer-events: none;
+    mix-blend-mode: screen;
 }
 
+.card-gradient-chase::after,
+.card-gradient-united::after,
+.card-gradient-amex::after,
+.card-gradient-custom::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 3px 3px;
+    opacity: 0.6;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+/* ============================================================
+   Cards / panels — stronger surface treatment
+   ============================================================ */
 .benefit-card {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.35s ease;
     transform: translateY(0);
+    will-change: transform;
 }
 
 .benefit-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-6px) scale(1.015);
+    box-shadow:
+        0 30px 60px -25px rgba(30, 58, 138, 0.35),
+        0 12px 30px -12px rgba(30, 64, 175, 0.2);
 }
 
 .dark .benefit-card:hover {
-    box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 30px 60px -20px rgba(59, 130, 246, 0.25),
+        0 12px 30px -12px rgba(139, 92, 246, 0.2);
 }
 
 .summary-card {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateY(0);
 }
 
 .summary-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-4px) scale(1.015);
+    box-shadow:
+        0 25px 50px -18px rgba(30, 58, 138, 0.3),
+        0 10px 25px -10px rgba(30, 64, 175, 0.18);
 }
 
 .dark .summary-card:hover {
-    box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 25px 50px -18px rgba(59, 130, 246, 0.22),
+        0 10px 25px -10px rgba(139, 92, 246, 0.18);
 }
 
-/* Tab animation */
+/* Generic polish for the most common surface pattern used in-app:
+   white/slate translucent rounded panels with borders. */
+.bg-white\/80.rounded-2xl,
+.bg-white\/80.rounded-xl,
+.bg-white\/90.rounded-2xl,
+.bg-white\/90.rounded-xl,
+main .bg-white.rounded-2xl,
+main .bg-white.rounded-xl {
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.8) inset,
+        0 1px 3px rgba(15, 23, 42, 0.05),
+        0 24px 48px -28px rgba(30, 64, 175, 0.28),
+        0 12px 30px -18px rgba(79, 70, 229, 0.18);
+    border-color: rgba(226, 232, 240, 0.9) !important;
+}
+
+.dark .bg-slate-800\/80.rounded-2xl,
+.dark .bg-slate-800\/80.rounded-xl,
+.dark main .bg-slate-800.rounded-2xl,
+.dark main .bg-slate-800.rounded-xl {
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.06) inset,
+        0 1px 3px rgba(0, 0, 0, 0.3),
+        0 24px 48px -28px rgba(0, 0, 0, 0.7),
+        0 12px 30px -18px rgba(99, 102, 241, 0.25);
+    border-color: rgba(71, 85, 105, 0.7) !important;
+}
+
+/* Data Management / Settings panels (no translucent variant in markup) */
+main > .bg-white.shadow-lg.rounded-lg,
+main .bg-white.shadow-lg.rounded-lg {
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.9) inset,
+        0 1px 3px rgba(15, 23, 42, 0.05),
+        0 28px 55px -30px rgba(30, 64, 175, 0.35),
+        0 14px 30px -16px rgba(79, 70, 229, 0.2) !important;
+}
+
+/* ============================================================
+   Header — subtle top accent line + slightly deeper blur
+   ============================================================ */
+header.sticky {
+    box-shadow:
+        0 1px 0 rgba(148, 163, 184, 0.18),
+        0 10px 30px -18px rgba(15, 23, 42, 0.25);
+}
+
+header.sticky::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(99, 102, 241, 0.35) 30%,
+        rgba(139, 92, 246, 0.35) 70%,
+        transparent 100%);
+    pointer-events: none;
+}
+
+.backdrop-blur-lg {
+    backdrop-filter: blur(20px) saturate(1.25);
+    -webkit-backdrop-filter: blur(20px) saturate(1.25);
+}
+
+/* ============================================================
+   Tabs
+   ============================================================ */
 .tab-button {
     position: relative;
     overflow: hidden;
@@ -109,9 +273,11 @@ body {
     transform: scaleX(1);
 }
 
-/* Smooth page transitions */
+/* ============================================================
+   Page / element animations
+   ============================================================ */
 .page-transition {
-    animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.35s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -125,30 +291,10 @@ body {
     }
 }
 
-/* Enhanced button styles */
-.btn-primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-}
-
-/* Backdrop blur effects */
-.backdrop-blur-glass {
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-}
-
-/* Enhanced animations */
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(24px);
     }
     to {
         opacity: 1;
@@ -157,59 +303,120 @@ body {
 }
 
 .animate-fade-in-up {
-    animation: fadeInUp 0.6s ease-out;
+    animation: fadeInUp 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Improved focus states */
-button:focus-visible {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
+    background-size: 180% 180%;
+    background-position: 0% 0%;
+    transition: background-position 0.5s ease,
+                box-shadow 0.3s ease,
+                transform 0.2s ease;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.2) inset,
+        0 6px 18px -4px rgba(79, 70, 229, 0.5);
 }
 
-/* Enhanced scrollbar styling */
+.btn-primary:hover {
+    background-position: 100% 100%;
+    transform: translateY(-2px);
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.25) inset,
+        0 12px 28px -6px rgba(79, 70, 229, 0.55);
+}
+
+/* Enhance any gradient pill / primary button styled via Tailwind's
+   from-blue-600 to-indigo-600 pattern used throughout the app. */
+.bg-gradient-to-r.from-blue-600.to-indigo-600,
+.bg-gradient-to-br.from-blue-500.to-indigo-600,
+.bg-gradient-to-r.from-blue-500.to-indigo-600 {
+    background-image: linear-gradient(135deg, #3b82f6 0%, #6366f1 55%, #8b5cf6 100%) !important;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.22) inset,
+        0 10px 24px -8px rgba(79, 70, 229, 0.55);
+}
+
+.hover\:from-blue-700.hover\:to-indigo-700:hover,
+.bg-gradient-to-r.from-blue-600.to-indigo-600:hover,
+.bg-gradient-to-br.from-blue-500.to-indigo-600:hover {
+    background-image: linear-gradient(135deg, #2563eb 0%, #4f46e5 55%, #7c3aed 100%) !important;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.28) inset,
+        0 16px 34px -10px rgba(79, 70, 229, 0.6);
+}
+
+/* ============================================================
+   Backdrop / glass
+   ============================================================ */
+.backdrop-blur-glass {
+    backdrop-filter: blur(18px) saturate(1.3);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+}
+
+/* ============================================================
+   Focus rings
+   ============================================================ */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+/* ============================================================
+   Scrollbars — thinner, more elegant
+   ============================================================ */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(148, 163, 184, 0.1);
-    border-radius: 4px;
+    background: transparent;
+    border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.3);
-    border-radius: 4px;
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.35), rgba(139, 92, 246, 0.35));
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(148, 163, 184, 0.5);
-}
-
-.dark ::-webkit-scrollbar-track {
-    background: rgba(71, 85, 105, 0.1);
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.6), rgba(139, 92, 246, 0.6));
+    background-clip: padding-box;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-    background: rgba(71, 85, 105, 0.3);
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.45), rgba(139, 92, 246, 0.45));
+    background-clip: padding-box;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-    background: rgba(71, 85, 105, 0.5);
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.7), rgba(139, 92, 246, 0.7));
+    background-clip: padding-box;
 }
 
-/* Benefits table grid - 5 columns for sticky first column */
+/* ============================================================
+   Benefits table
+   ============================================================ */
 .benefits-table-grid {
     display: grid;
     grid-template-columns: minmax(200px, 2fr) minmax(120px, 1fr) minmax(90px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr);
 }
 
-/* Sticky Benefit column for horizontal scroll tables */
 .sticky-benefit-col {
     position: sticky;
     left: 0;
     z-index: 10;
     background: rgb(255 255 255);
-    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.08);
+    box-shadow: 2px 0 12px -4px rgba(15, 23, 42, 0.12);
 }
 
 tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
@@ -222,7 +429,7 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 
 .dark .sticky-benefit-col {
     background: rgb(30 41 59);
-    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 0 12px -4px rgba(0, 0, 0, 0.45);
 }
 
 .dark tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
@@ -238,43 +445,57 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
     left: 0;
     z-index: 20;
     background: rgb(248 250 252);
-    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.08);
+    box-shadow: 2px 0 12px -4px rgba(15, 23, 42, 0.12);
 }
 
 .dark .sticky-benefit-col-header {
     background: rgb(51 65 85);
-    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 0 12px -4px rgba(0, 0, 0, 0.45);
 }
 
-/* Contextual feedback form blocks */
+/* Subtle row separators and hover */
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+/* ============================================================
+   Feedback form blocks
+   ============================================================ */
 .feedback-card {
     border: 1px solid rgb(203 213 225 / 0.7);
-    background: rgb(255 255 255 / 0.88);
-    border-radius: 0.9rem;
-    padding: 1rem;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.85) 100%);
+    border-radius: 1rem;
+    padding: 1.1rem 1.15rem;
     text-align: left;
-    box-shadow: 0 8px 25px -18px rgba(15, 23, 42, 0.65);
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.9) inset,
+        0 12px 30px -22px rgba(15, 23, 42, 0.55);
 }
 
 .dark .feedback-card {
-    border-color: rgb(71 85 105 / 0.8);
-    background: rgb(30 41 59 / 0.82);
-    box-shadow: 0 10px 24px -18px rgba(2, 6, 23, 0.95);
+    border-color: rgb(71 85 105 / 0.7);
+    background:
+        linear-gradient(180deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.85) 100%);
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.05) inset,
+        0 14px 32px -22px rgba(2, 6, 23, 0.95);
 }
 
 .feedback-card-compact {
-    padding: 0.85rem 1rem;
+    padding: 0.95rem 1.1rem;
 }
 
 .feedback-card-header {
-    margin-bottom: 0.55rem;
+    margin-bottom: 0.6rem;
 }
 
 .feedback-card-title {
     margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.25rem;
+    font-size: 0.97rem;
+    line-height: 1.3rem;
     font-weight: 600;
+    letter-spacing: -0.01em;
     color: rgb(15 23 42);
 }
 
@@ -283,9 +504,9 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 }
 
 .feedback-card-prompt {
-    margin-top: 0.2rem;
+    margin-top: 0.25rem;
     margin-bottom: 0;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     color: rgb(71 85 105);
 }
 
@@ -296,45 +517,52 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 .feedback-cta-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
+    gap: 0.5rem;
 }
 
 .feedback-cta-button,
 .feedback-secondary-button,
 .feedback-primary-button {
-    border-radius: 0.6rem;
-    padding: 0.42rem 0.75rem;
-    font-size: 0.78rem;
+    border-radius: 0.65rem;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
+    letter-spacing: -0.005em;
     transition: all 0.2s ease;
 }
 
 .feedback-cta-button {
-    border: 1px solid rgb(148 163 184 / 0.65);
+    border: 1px solid rgb(148 163 184 / 0.55);
     color: rgb(30 41 59);
-    background: rgb(248 250 252 / 0.85);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 .feedback-cta-button:hover {
-    border-color: rgb(59 130 246 / 0.8);
-    color: rgb(30 64 175);
+    border-color: rgb(99 102 241 / 0.7);
+    color: rgb(67 56 202);
+    background: rgba(238, 242, 255, 0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px -3px rgba(79, 70, 229, 0.25);
 }
 
 .dark .feedback-cta-button {
-    border-color: rgb(100 116 139 / 0.9);
+    border-color: rgb(100 116 139 / 0.85);
     color: rgb(226 232 240);
-    background: rgb(51 65 85 / 0.8);
+    background: rgba(51, 65, 85, 0.8);
+    box-shadow: none;
 }
 
 .dark .feedback-cta-button:hover {
-    border-color: rgb(96 165 250 / 0.9);
-    color: rgb(191 219 254);
+    border-color: rgb(129 140 248 / 0.8);
+    color: rgb(199 210 254);
+    background: rgba(55, 48, 163, 0.35);
 }
 
 .feedback-form {
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.7rem;
 }
 
 .feedback-form-row {
@@ -344,8 +572,9 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 }
 
 .feedback-label {
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     font-weight: 600;
+    letter-spacing: -0.003em;
     color: rgb(51 65 85);
 }
 
@@ -355,11 +584,18 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 
 .feedback-input {
     border: 1px solid rgb(148 163 184 / 0.55);
-    background: rgb(255 255 255 / 0.95);
-    border-radius: 0.55rem;
-    padding: 0.5rem 0.6rem;
-    font-size: 0.82rem;
+    background: rgb(255 255 255 / 0.97);
+    border-radius: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.84rem;
     color: rgb(15 23 42);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-input:focus {
+    outline: none;
+    border-color: rgb(99 102 241 / 0.8);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
 }
 
 .dark .feedback-input {
@@ -368,9 +604,14 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
     color: rgb(241 245 249);
 }
 
+.dark .feedback-input:focus {
+    border-color: rgb(129 140 248 / 0.9);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.28);
+}
+
 .feedback-textarea {
     resize: vertical;
-    min-height: 4.5rem;
+    min-height: 4.8rem;
 }
 
 .feedback-form-actions {
@@ -383,17 +624,29 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 .feedback-secondary-button {
     border: 1px solid rgb(148 163 184 / 0.7);
     color: rgb(51 65 85);
-    background: rgb(248 250 252 / 0.9);
+    background: rgba(248, 250, 252, 0.95);
+}
+
+.feedback-secondary-button:hover {
+    background: rgba(241, 245, 249, 1);
+    transform: translateY(-1px);
 }
 
 .feedback-primary-button {
     border: 1px solid transparent;
     color: white;
-    background: linear-gradient(135deg, rgb(37 99 235) 0%, rgb(79 70 229) 100%);
+    background: linear-gradient(135deg, rgb(37 99 235) 0%, rgb(79 70 229) 50%, rgb(139 92 246) 100%);
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.25) inset,
+        0 10px 24px -8px rgba(79, 70, 229, 0.55);
 }
 
 .feedback-primary-button:hover:not(:disabled) {
+    transform: translateY(-1px);
     filter: brightness(1.05);
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.3) inset,
+        0 14px 32px -10px rgba(79, 70, 229, 0.65);
 }
 
 .feedback-primary-button:disabled {
@@ -407,10 +660,15 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
     background: rgb(51 65 85 / 0.85);
 }
 
+.dark .feedback-secondary-button:hover {
+    background: rgb(71 85 105 / 0.95);
+}
+
 .feedback-status {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.76rem;
     font-weight: 600;
+    letter-spacing: -0.005em;
 }
 
 .feedback-status-success {
@@ -430,11 +688,31 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 }
 
 .feedback-helper-text {
-    margin: 0.6rem 0 0 0;
-    font-size: 0.71rem;
+    margin: 0.65rem 0 0 0;
+    font-size: 0.73rem;
     color: rgb(100 116 139);
 }
 
 .dark .feedback-helper-text {
+    color: rgb(148 163 184);
+}
+
+/* ============================================================
+   Empty-state hero icon polish
+   ============================================================ */
+.bg-gradient-to-br.from-blue-500.to-indigo-600 {
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.22) inset,
+        0 16px 38px -10px rgba(79, 70, 229, 0.5),
+        0 0 0 1px rgba(99, 102, 241, 0.18);
+}
+
+/* ============================================================
+   Dark-mode text readability boost
+   ============================================================ */
+.dark .text-slate-600 {
+    color: rgb(148 163 184);
+}
+.dark .text-slate-400 {
     color: rgb(148 163 184);
 }
