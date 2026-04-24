@@ -125,32 +125,13 @@
         </div>
     </div>
 
+    <script type="text/babel" src="js/data.js"></script>
+    <script type="text/babel" src="js/utils.js"></script>
+    <script type="text/babel" src="js/cardfit-data.js"></script>
+    <script type="text/babel" src="js/cardfit-calculator.js"></script>
+
     <script type="text/babel">
-        // Import the same constants and functions from the main app
-        const BENEFIT_FREQUENCY = {
-            MONTHLY: 'monthly',
-            SEMI_ANNUAL: 'semi_annual',
-            ANNUAL: 'annual',
-            FOUR_YEAR: 'four_year',
-            ONE_TIME: 'one_time'
-        };
-
-        const BENEFIT_TYPE = {
-            CREDIT: 'credit',
-            SUBSCRIPTION: 'subscription',
-            FEATURE: 'feature',
-            ONE_TIME: 'one_time'
-        };
-
-        const BENEFIT_CATEGORY = {
-            TRAVEL: 'travel',
-            DINING: 'dining',
-            ENTERTAINMENT: 'entertainment',
-            SHOPPING: 'shopping',
-            RIDESHARE: 'rideshare',
-            LOUNGE: 'lounge',
-            INSURANCE: 'insurance'
-        };
+        // Shared enums + catalog: js/data.js | CardFit: cardfit-*.js
 
         // Test data
         const testCard = {
@@ -465,6 +446,163 @@
             );
         }
 
+        function mkProfile(over) {
+            return normalizeCardfitProfile({
+                schemaVersion: 2,
+                uiFlow: 'results',
+                spend: { dining: 0, groceries: 0, gas: 0, flights: 0, hotels: 0, travel: 0, transit: 0, online_shopping: 0, drugstores: 0, streaming: 0, mobile_phone: 0, rent: 0, general: 0, ...(over && over.spend ? over.spend : {}) },
+                spendMode: (over && over.spendMode) || 'annual',
+                currencyValues: { ...buildDefaultCurrencyValues(), ...((over && over.currencyValues) || {}) },
+                benefitValues: (over && over.benefitValues) || {},
+                baseline: (over && over.baseline) || { type: 'flat_rate', flatRate: 0.02, cardId: null, rates: {} },
+                selectedCards: (over && over.selectedCards) || [],
+                onlyOwned: (over && over.onlyOwned) || false,
+                signupBonusProbability: (over && over.signupBonusProbability) != null ? over.signupBonusProbability : 1
+            });
+        }
+
+        function testCardFitRewardsMath() {
+            const card = {
+                id: 't-fit-1', name: 'T', issuer: 'X', annualFee: 0, color: 'x', benefits: [],
+                rewardCurrency: 'chase_ur',
+                earnRates: [{ category: 'dining', multiplier: 3 }, { category: 'general', multiplier: 1 }],
+                signupBonus: { points: 0, spendRequirement: 0, months: 3 }
+            };
+            const profile = mkProfile({ spend: { dining: 6000 }, currencyValues: { chase_ur: 0.017 } });
+            const v = cardfitCalculateRewardsValue(card, profile);
+            logTestResult('CardFit rewards math', Math.abs(v - 306) < 0.01, 'expected 306, got ' + v);
+        }
+
+        function testCardFitCreditsWithOverride() {
+            const card = {
+                id: 't-fit-2', name: 'T2', issuer: 'X', annualFee: 0, color: 'x',
+                benefits: [
+                    { id: 'c1', name: 'Credit', category: BENEFIT_CATEGORY.TRAVEL, frequency: BENEFIT_FREQUENCY.ANNUAL, type: BENEFIT_TYPE.CREDIT, value: 100 }
+                ],
+                earnRates: [{ category: 'general', multiplier: 1 }],
+                rewardCurrency: 'chase_ur',
+                signupBonus: { points: 0, spendRequirement: 0, months: 3 }
+            };
+            const profile = mkProfile({ benefitValues: { c1: { utilization: 0.5, overrideValue: 80 } } });
+            const v = cardfitCalculateCreditsValue(card, profile);
+            logTestResult('CardFit credit override', v === 80, 'expected 80, got ' + v);
+        }
+
+        function testCardFitSoftBenefitDefaultsZero() {
+            const card = {
+                id: 't-fit-3', name: 'T3', issuer: 'X', annualFee: 0, color: 'x',
+                benefits: [
+                    { id: 'f1', name: 'Lounge', category: BENEFIT_CATEGORY.LOUNGE, frequency: BENEFIT_FREQUENCY.ANNUAL, type: BENEFIT_TYPE.FEATURE, value: 0, defaultValue: 0 }
+                ],
+                earnRates: [{ category: 'general', multiplier: 1 }],
+                rewardCurrency: 'chase_ur',
+                signupBonus: { points: 0, spendRequirement: 0, months: 3 }
+            };
+            const profile = mkProfile({ benefitValues: { f1: { utilization: 0.5, overrideValue: null } } });
+            const v = cardfitCalculateSoftBenefitsValue(card, profile);
+            logTestResult('CardFit soft feature 0*util', v === 0, 'expected 0, got ' + v);
+        }
+
+        function testCardFitBaselineFlatRate() {
+            const profile = mkProfile({ spend: { general: 30000 }, baseline: { type: 'flat_rate', flatRate: 0.02 } });
+            const b = cardfitCalculateBaselineValue(profile, {});
+            logTestResult('CardFit baseline flat', Math.abs(b - 600) < 0.01, 'expected 600, got ' + b);
+        }
+
+        function testCardFitBaselineCardOngoingOnly() {
+            const base = {
+                id: 'base1', name: 'Base', issuer: 'B', annualFee: 0, color: 'x',
+                rewardCurrency: 'cashback',
+                earnRates: [{ category: 'general', multiplier: 0.02 }],
+                benefits: [],
+                signupBonus: { points: 500, spendRequirement: 0, months: 3 }
+            };
+            const catalog = { base1: base };
+            const profile = mkProfile({ spend: { general: 10000 }, currencyValues: { cashback: 1 }, baseline: { type: 'card', cardId: 'base1' } });
+            const b = cardfitCalculateBaselineValue(profile, catalog);
+            const raw = cardfitCalculateOngoingValueRaw(base, profile);
+            logTestResult('CardFit baseline card ongoing', Math.abs(b - raw) < 0.01 && Math.abs(b - 200) < 0.01, 'expected 200, got b=' + b + ' raw=' + raw);
+        }
+
+        function testCardFitBaselineSelfGuard() {
+            const c = {
+                id: 'self1', name: 'S', issuer: 'X', annualFee: 0, color: 'x',
+                earnRates: [{ category: 'general', multiplier: 1 }],
+                rewardCurrency: 'chase_ur',
+                benefits: [],
+                signupBonus: { points: 0, spendRequirement: 0, months: 3 }
+            };
+            const catalog = { self1: c };
+            const profile = mkProfile({ spend: { general: 1000 }, currencyValues: { chase_ur: 0.01 }, baseline: { type: 'card', cardId: 'self1' } });
+            const r = cardfitCalculateCardNetValue(c, profile, catalog);
+            logTestResult('CardFit self baseline', r.incrementalOngoing === 0, 'inc=' + r.incrementalOngoing);
+        }
+
+        function testCardFitBaselineMissingCardFallback() {
+            const profile = mkProfile({ spend: { general: 20000 }, baseline: { type: 'card', cardId: 'missing' } });
+            const b = cardfitCalculateBaselineValue(profile, {});
+            logTestResult('CardFit missing baseline', Math.abs(b - 400) < 0.01, 'expected 400, got ' + b);
+        }
+
+        function testCardFitNetNegativeWithFee() {
+            const c = {
+                id: 'nf1', name: 'Fee', issuer: 'X', annualFee: 900, color: 'x',
+                earnRates: [{ category: 'general', multiplier: 1 }],
+                rewardCurrency: 'chase_ur',
+                benefits: [],
+                signupBonus: { points: 0, spendRequirement: 0, months: 3 }
+            };
+            const profile = mkProfile({ spend: { general: 100 }, currencyValues: { chase_ur: 0.01 } });
+            const r = cardfitCalculateCardNetValue(c, profile, { nf1: c });
+            logTestResult('CardFit net with fee', r.ongoingNet < 0, 'ongoing=' + r.ongoingNet);
+        }
+
+        function testCardFitSignupAnnualized() {
+            const c = {
+                id: 'su1', name: 'S', issuer: 'X', annualFee: 0, color: 'x',
+                earnRates: [{ category: 'general', multiplier: 1 }],
+                rewardCurrency: 'chase_ur',
+                benefits: [],
+                signupBonus: { points: 10000, spendRequirement: 0, months: 3 }
+            };
+            const profile = mkProfile({ spend: { general: 0 }, currencyValues: { chase_ur: 0.02 } });
+            const r = cardfitCalculateCardNetValue(c, profile, { su1: c });
+            const bonus = 10000 * 0.02;
+            logTestResult('CardFit signup', Math.abs(r.firstYearBonus - bonus) < 0.01 && Math.abs((r.ongoingNet + r.firstYearBonus) - (r.ongoingNet + bonus)) < 0.01, 'bonus ' + r.firstYearBonus);
+        }
+
+        function testCardFitSubscriptionAnnualized() {
+            const card = {
+                id: 'sub1', name: 'S', issuer: 'X', annualFee: 0, color: 'x',
+                benefits: [
+                    { id: 's1', name: 'U', category: BENEFIT_CATEGORY.SHOPPING, frequency: BENEFIT_FREQUENCY.MONTHLY, type: BENEFIT_TYPE.SUBSCRIPTION, value: 10, subscribed: false }
+                ],
+                earnRates: [{ category: 'general', multiplier: 1 }],
+                rewardCurrency: 'chase_ur',
+                signupBonus: { points: 0, spendRequirement: 0, months: 3 }
+            };
+            const p1 = mkProfile({ benefitValues: { s1: { utilization: 1, overrideValue: null } } });
+            const p2 = mkProfile({ benefitValues: { s1: { utilization: 0.25, overrideValue: null } } });
+            const a = cardfitCalculateCreditsValue(card, p1);
+            const b = cardfitCalculateCreditsValue(card, p2);
+            logTestResult('CardFit subscription util', a === 120 && b === 30, 'a=' + a + ' b=' + b);
+        }
+
+        function testCardFitBenefitKeyingUsesCatalogIds() {
+            const cat = {
+                id: 'key-test', name: 'K', issuer: 'T', annualFee: 0, color: 'x',
+                earnRates: [{ category: 'general', multiplier: 1 }],
+                rewardCurrency: 'chase_ur',
+                signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+                benefits: [
+                    { id: 'catalog-benefit-a', name: 'A', category: BENEFIT_CATEGORY.TRAVEL, frequency: BENEFIT_FREQUENCY.ANNUAL, type: BENEFIT_TYPE.CREDIT, value: 200 }
+                ]
+            };
+            const profile = mkProfile({ benefitValues: { 'catalog-benefit-a': { utilization: 0, overrideValue: 0 } } });
+            const v = cardfitCalculateCreditsValue(cat, profile);
+            logTestResult('CardFit benefit id is catalog id', v === 0, 'credits with 0 util+override 0, got ' + v);
+        }
+
         // Main test runner
         function runAllTests() {
             clearResults();
@@ -479,6 +617,17 @@
             testExpirationDateCalculation();
             testPeriodKeyGeneration();
             testUsageHistoryAppend();
+            testCardFitRewardsMath();
+            testCardFitCreditsWithOverride();
+            testCardFitSoftBenefitDefaultsZero();
+            testCardFitBaselineFlatRate();
+            testCardFitBaselineCardOngoingOnly();
+            testCardFitBaselineSelfGuard();
+            testCardFitBaselineMissingCardFallback();
+            testCardFitNetNegativeWithFee();
+            testCardFitSignupAnnualized();
+            testCardFitSubscriptionAnnualized();
+            testCardFitBenefitKeyingUsesCatalogIds();
             
             logTestInfo('All automated tests completed.');
             displayResults();

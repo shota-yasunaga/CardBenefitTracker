@@ -11,11 +11,14 @@
 ## Tech + Runtime Facts
 
 - Main page shell: `index.html`
-- Primary JS files loaded by `index.html`:
+- Primary JS files loaded by `index.html` (in order):
   - `js/data.js`
   - `js/utils.js`
-  - `js/components.js`
-  - `js/app.js`
+  - `js/cardfit-data.js` — CardFit spend/currency defaults + `normalizeCardfitProfile` (schema v2: `uiFlow` quick_start / results / advanced_tuning)
+  - `js/cardfit-calculator.js` — CardFit net-value math
+  - `js/cardfit-components.js` — `CardFitPage` UI
+  - `js/components.js` — benefit tracker UI
+  - `js/app.js` — `App` (tracker + `currentPage: cardfit` tab)
 - Styles: `css/styles.css`
 - Optional local server: `serve.py` (Python, serves on port 8000 and opens browser)
 - Dev tooling: `package.json`, `playwright.config.js`, `tests/test-suite.spec.js`, `.husky/pre-push`, `.github/workflows/ci.yml`
@@ -80,8 +83,8 @@
 
 ## Known Gotchas (Important)
 
-- `index.html` currently contains a very large inline `<script type="text/babel">` that duplicates app/data logic already present in `js/*`.
-- `js/main.js` is another legacy duplicate of app/data logic and is not loaded by `index.html`.
+- The runtime app is **only** the modular scripts in `index.html` (`js/data.js`, `js/utils.js`, `js/cardfit-data.js`, `js/cardfit-calculator.js`, `js/cardfit-components.js`, `js/components.js`, `js/app.js`). There is no second inline app block.
+- `js/main.js` is a legacy duplicate and is not loaded by `index.html`.
 - `README.md` references `js/main.js` as an entry point, but runtime loading is through `index.html` + `js/data.js`/`js/utils.js`/`js/components.js`/`js/app.js`.
 - `test-suite.html` duplicates constants instead of importing from app files; keep parity in mind when changing enums.
 - `js/utils.js` includes benefit-name-specific logic (example: StubHub credit handling), so benefit renames can affect computed behavior.

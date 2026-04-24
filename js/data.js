@@ -69,6 +69,14 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 795,
         color: 'card-gradient-chase',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'chase_ur',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'csr-travel-credit',
@@ -219,6 +227,14 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 895,
         color: 'card-gradient-amex',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'amex_mr',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'plat-airline-fee',
@@ -389,6 +405,14 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 325,
         color: 'card-gradient-amex',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'amex_mr',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'gold-dining-credit',
@@ -449,6 +473,14 @@ const availableCards = {
         issuer: 'Capital One',
         annualFee: 395,
         color: 'card-gradient-custom',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'capital_one_miles',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'vx-travel-credit',
@@ -509,6 +541,14 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 95,
         color: 'card-gradient-chase',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'chase_ur',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'csp-hotel-credit',
@@ -549,6 +589,14 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 350,
         color: 'card-gradient-united',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'united_miles',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'uquest-rhr-credit',
@@ -629,6 +677,14 @@ const availableCards = {
         issuer: 'Citi',
         annualFee: 95,
         color: 'card-gradient-united',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'citi_typ',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'citi-hotel-benefit',
@@ -649,6 +705,14 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 150,
         color: 'card-gradient-amex',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'amex_mr',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'green-clear',
@@ -669,6 +733,14 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 895,
         color: 'card-gradient-amex',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'amex_mr',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'bplat-airline-fee',
@@ -769,6 +841,14 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 550,
         color: 'card-gradient-amex',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'hilton',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'aspire-resort-janjun',
@@ -829,6 +909,14 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 650,
         color: 'card-gradient-amex',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'marriott',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'brilliant-dining',
@@ -889,6 +977,14 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 95,
         color: 'card-gradient-chase',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'hyatt',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'hyatt-free-night',
@@ -919,6 +1015,14 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 99,
         color: 'card-gradient-chase',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'ihg',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'ihg-free-night',
@@ -969,6 +1073,14 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 650,
         color: 'card-gradient-amex',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'delta',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'delta-reserve-rideshare',
@@ -1029,6 +1141,14 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 695,
         color: 'card-gradient-united',
+        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        rewardCurrency: 'united_miles',
+        earnRates: [
+            { category: 'dining', multiplier: 1 },
+            { category: 'travel', multiplier: 1 },
+            { category: 'general', multiplier: 1 }
+        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
+        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
         benefits: [
             {
                 id: 'uclub-membership',

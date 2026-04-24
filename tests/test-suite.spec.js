@@ -27,7 +27,7 @@ test.describe('Card Benefit Tracker test-suite.html', () => {
     const failed = Number(failedMatch && failedMatch[1]);
 
     expect(failed, `expected 0 failed tests, summary was: ${summaryText}`).toBe(0);
-    expect(total, `expected the harness to report at least 7 tests but got ${total}`).toBeGreaterThanOrEqual(7);
+    expect(total, `expected the harness to report at least 20 tests but got ${total}`).toBeGreaterThanOrEqual(20);
     expect(passed).toBe(total);
 
     const failureRows = await page.locator('.test-result.test-fail').count();
