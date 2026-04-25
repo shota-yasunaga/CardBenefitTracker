@@ -1321,15 +1321,14 @@
             const expirationDate = getExpirationDate(benefit.frequency);
             const daysLeft = daysUntilExpiration(expirationDate);
             const currentAmount = getCurrentBenefitAmount(benefit, benefit.frequency);
-            
-            let expirationColor = 'text-gray-600';
-            let expirationBg = 'bg-gray-100';
-            if (daysLeft <= 7) {
-                expirationColor = 'text-red-600';
-                expirationBg = 'bg-red-100';
+
+            let expirationVariant = 'badge-expiry-neutral';
+            if (daysLeft <= 0) {
+                expirationVariant = 'badge-expiry-expired';
+            } else if (daysLeft <= 7) {
+                expirationVariant = 'badge-expiry-danger';
             } else if (daysLeft <= 30) {
-                expirationColor = 'text-orange-600';
-                expirationBg = 'bg-orange-100';
+                expirationVariant = 'badge-expiry-warn';
             }
 
             const categoryIcons = {
@@ -1374,7 +1373,7 @@
                                         : 'bg-blue-600 text-white hover:bg-blue-700'
                                 }`}
                             >
-                                {benefit.subscribed ? 'Subscribed' : 'Mark subscribed'}
+                                {benefit.subscribed ? 'Subscribed' : 'Mark Subscribed'}
                             </button>
                             {isUndoableUsed && benefit.subscribed && (
                                 <button
@@ -1430,7 +1429,7 @@
                         </div>
                         <div className="py-3 px-6 text-sm font-medium text-slate-700 dark:text-slate-300">{cardName}</div>
                         <div className="py-3 px-6">
-                            <span className={`text-xs px-2 py-1 rounded-full ${expirationBg} ${expirationColor} font-medium`}>
+                            <span className={`badge-expiry ${expirationVariant}`}>
                                 {daysLeft > 0 ? `${daysLeft} days` : 'Expired'}
                             </span>
                         </div>
@@ -1462,7 +1461,7 @@
                     
                     <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
                         <div className="flex items-center gap-4">
-                            <span className={`text-xs px-3 py-1 rounded-full ${expirationBg} ${expirationColor} font-medium`}>
+                            <span className={`badge-expiry ${expirationVariant}`}>
                                 {daysLeft > 0 ? `${daysLeft} days left` : 'Expired'}
                             </span>
                             {benefit.type === BENEFIT_TYPE.CREDIT && benefit.frequency !== BENEFIT_FREQUENCY.FOUR_YEAR && (
@@ -1484,25 +1483,65 @@
         }
 
         function CreditCardSection({ card, onToggle, onRemove, onUndo, recentlyUsed, undoableUsed }) {
+            const activeCardBenefits = card.benefits.filter((b) => {
+                if (b.frequency === BENEFIT_FREQUENCY.SEMI_ANNUAL) {
+                    return getCurrentBenefitAmount(b, b.frequency) > 0;
+                }
+                return true;
+            });
+            const claimableBenefits = activeCardBenefits.filter((b) => b.type !== BENEFIT_TYPE.FEATURE);
+            const totalCardValue = claimableBenefits.reduce((sum, b) => {
+                const amount = b.frequency === BENEFIT_FREQUENCY.FOUR_YEAR
+                    ? b.value
+                    : getCurrentBenefitAmount(b, b.frequency) || b.value || 0;
+                return sum + (amount || 0);
+            }, 0);
+            const claimedCardValue = claimableBenefits
+                .filter((b) => b.used || b.subscribed)
+                .reduce((sum, b) => {
+                    const amount = b.frequency === BENEFIT_FREQUENCY.FOUR_YEAR
+                        ? b.value
+                        : getCurrentBenefitAmount(b, b.frequency) || b.value || 0;
+                    return sum + (amount || 0);
+                }, 0);
+            const cardClaimedPct = totalCardValue > 0 ? Math.round((claimedCardValue / totalCardValue) * 100) : 0;
+
             return (
                 <div className="mb-8">
                     <div className={`${card.color} text-white rounded-t-xl p-8 relative overflow-hidden`}>
                         <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent"></div>
-                        <div className="relative z-10 flex justify-between items-start">
-                            <div>
-                                <h2 className="text-3xl font-bold mb-2">{card.name}</h2>
+                        <div className="relative z-10 flex justify-between items-start gap-4">
+                            <div className="flex-1 min-w-0">
+                                <h2 className="text-3xl font-bold mb-2 truncate">{card.name}</h2>
                                 <p className="text-white/90 text-lg">{card.issuer}</p>
                                 <p className="text-white/80 text-sm mt-1">Annual Fee: {formatCurrency(card.annualFee)}</p>
                             </div>
+                            <div className="hidden sm:block text-right min-w-[180px]">
+                                <div className="text-xs uppercase tracking-wide text-white/70">Claimed</div>
+                                <div className="text-2xl font-bold">{formatCurrency(claimedCardValue)} <span className="text-sm font-medium text-white/80">/ {formatCurrency(totalCardValue)}</span></div>
+                                <div className="mt-2 progress-track" aria-hidden="true">
+                                    <div className="progress-fill" style={{ width: `${cardClaimedPct}%` }}></div>
+                                </div>
+                                <div className="text-xs text-white/80 mt-1">{cardClaimedPct}% of current value</div>
+                            </div>
                             <button
                                 onClick={() => onRemove(card.id)}
-                                className="text-white/80 hover:text-white transition-colors p-2 rounded-full hover:bg-white/20"
+                                className="text-white/80 hover:text-white transition-colors p-2 rounded-full hover:bg-white/20 flex-shrink-0"
                                 title="Remove card"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
+                        </div>
+                        <div className="sm:hidden mt-4 relative z-10">
+                            <div className="flex items-center justify-between text-sm">
+                                <span className="text-white/80">Claimed {formatCurrency(claimedCardValue)} / {formatCurrency(totalCardValue)}</span>
+                                <span className="text-white/80">{cardClaimedPct}%</span>
+                            </div>
+                            <div className="mt-1 progress-track" aria-hidden="true">
+                                <div className="progress-fill" style={{ width: `${cardClaimedPct}%` }}></div>
+                            </div>
                         </div>
                     </div>
                     
@@ -2348,6 +2387,106 @@
                 );
             };
 
+            // ----- Filtering, sorting, and summary helpers -----
+            const [searchQuery, setSearchQuery] = useState('');
+            const [filterCardId, setFilterCardId] = useState('all');
+            const [filterCategory, setFilterCategory] = useState('all');
+            const [sortBy, setSortBy] = useState('expires');
+
+            const isBenefitActive = (benefit) => {
+                if (benefit.frequency === BENEFIT_FREQUENCY.SEMI_ANNUAL) {
+                    return getCurrentBenefitAmount(benefit, benefit.frequency) > 0;
+                }
+                return true;
+            };
+
+            const applyFilters = (list) => {
+                const query = searchQuery.trim().toLowerCase();
+                const filtered = list.filter((benefit) => {
+                    if (!isBenefitActive(benefit)) return false;
+                    if (filterCardId !== 'all' && benefit.cardId !== filterCardId) return false;
+                    if (filterCategory !== 'all' && benefit.category !== filterCategory) return false;
+                    if (query) {
+                        const haystack = `${benefit.name || ''} ${benefit.description || ''} ${benefit.cardName || ''}`.toLowerCase();
+                        if (!haystack.includes(query)) return false;
+                    }
+                    return true;
+                });
+                const sortKey = sortBy;
+                const sorted = [...filtered].sort((a, b) => {
+                    if (sortKey === 'value_desc' || sortKey === 'value_asc') {
+                        const aValue = getCurrentBenefitAmount(a, a.frequency) || a.value || 0;
+                        const bValue = getCurrentBenefitAmount(b, b.frequency) || b.value || 0;
+                        return sortKey === 'value_desc' ? bValue - aValue : aValue - bValue;
+                    }
+                    if (sortKey === 'name') {
+                        return (a.name || '').localeCompare(b.name || '');
+                    }
+                    if (sortKey === 'card') {
+                        return (a.cardName || '').localeCompare(b.cardName || '');
+                    }
+                    // default: expires soonest first
+                    const aDays = daysUntilExpiration(getExpirationDate(a.frequency));
+                    const bDays = daysUntilExpiration(getExpirationDate(b.frequency));
+                    return aDays - bDays;
+                });
+                return sorted;
+            };
+
+            const unusedFilteredSorted = applyFilters(getUnusedBenefits());
+            const usedFilteredSorted = applyFilters(
+                getAllBenefits().filter((benefit) => (benefit.used || benefit.subscribed || benefit.activated) && !recentlyUsed.has(benefit.id))
+            );
+
+            // Dashboard KPIs (based on currently-active benefits only, no filters applied)
+            const activeBenefits = getAllBenefits().filter(isBenefitActive);
+            const totalValueAvailable = activeBenefits.reduce((sum, b) => {
+                if (b.type === BENEFIT_TYPE.FEATURE) return sum;
+                const amount = b.frequency === BENEFIT_FREQUENCY.FOUR_YEAR
+                    ? b.value
+                    : getCurrentBenefitAmount(b, b.frequency) || b.value || 0;
+                return sum + (amount || 0);
+            }, 0);
+            const claimedBenefits = activeBenefits.filter((b) => (b.used || b.subscribed) && b.type !== BENEFIT_TYPE.FEATURE);
+            const claimedValue = claimedBenefits.reduce((sum, b) => {
+                const amount = b.frequency === BENEFIT_FREQUENCY.FOUR_YEAR
+                    ? b.value
+                    : getCurrentBenefitAmount(b, b.frequency) || b.value || 0;
+                return sum + (amount || 0);
+            }, 0);
+            const unusedBenefitsForKpi = activeBenefits.filter((b) => !b.used && !b.subscribed && b.type !== BENEFIT_TYPE.FEATURE);
+            const unusedValue = unusedBenefitsForKpi.reduce((sum, b) => {
+                const amount = b.frequency === BENEFIT_FREQUENCY.FOUR_YEAR
+                    ? b.value
+                    : getCurrentBenefitAmount(b, b.frequency) || b.value || 0;
+                return sum + (amount || 0);
+            }, 0);
+            const expiringSoonCount = unusedBenefitsForKpi.filter((b) => {
+                const days = daysUntilExpiration(getExpirationDate(b.frequency));
+                return days > 0 && days <= 30;
+            }).length;
+            const claimedPct = totalValueAvailable > 0 ? Math.round((claimedValue / totalValueAvailable) * 100) : 0;
+
+            const categoryLabels = {
+                [BENEFIT_CATEGORY.TRAVEL]: '✈️ Travel',
+                [BENEFIT_CATEGORY.DINING]: '🍽️ Dining',
+                [BENEFIT_CATEGORY.ENTERTAINMENT]: '🎭 Entertainment',
+                [BENEFIT_CATEGORY.SHOPPING]: '🛍️ Shopping',
+                [BENEFIT_CATEGORY.RIDESHARE]: '🚗 Rideshare',
+                [BENEFIT_CATEGORY.LOUNGE]: '🛋️ Lounge',
+                [BENEFIT_CATEGORY.INSURANCE]: '🛡️ Insurance',
+                [BENEFIT_CATEGORY.CUSTOM]: '⭐ Custom'
+            };
+            const availableCategories = Array.from(new Set(getAllBenefits().map((b) => b.category))).filter(Boolean);
+
+            const hasActiveFilters = searchQuery.trim() !== '' || filterCardId !== 'all' || filterCategory !== 'all' || sortBy !== 'expires';
+            const clearFilters = () => {
+                setSearchQuery('');
+                setFilterCardId('all');
+                setFilterCategory('all');
+                setSortBy('expires');
+            };
+
             if (currentPage === 'add-cards') {
                 return (
                     <AddCardPage
@@ -2406,13 +2545,13 @@
                                     </div>
                                     
                                     {/* Enhanced Tab Navigation */}
-                                    <div className="flex bg-slate-100/60 dark:bg-slate-700/60 p-1 rounded-xl backdrop-blur-sm">
+                                    <div className="flex overflow-x-auto no-scrollbar bg-slate-100/60 dark:bg-slate-700/60 p-1 rounded-xl backdrop-blur-sm gap-1">
                                         <button
                                             onClick={() => {
                                                 setCurrentPage('dashboard');
                                                 setViewMode('unused');
                                             }}
-                                            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                            className={`flex-shrink-0 md:flex-1 whitespace-nowrap px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                                                 currentPage === 'dashboard' && viewMode === 'unused'
                                                     ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
                                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
@@ -2425,7 +2564,7 @@
                                                 setCurrentPage('dashboard');
                                                 setViewMode('card');
                                             }}
-                                            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                            className={`flex-shrink-0 md:flex-1 whitespace-nowrap px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                                                 currentPage === 'dashboard' && viewMode === 'card'
                                                     ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
                                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
@@ -2443,7 +2582,7 @@
                                                     });
                                                 }
                                             }}
-                                            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                            className={`flex-shrink-0 md:flex-1 whitespace-nowrap px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                                                 currentPage === 'add-cards'
                                                     ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
                                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
@@ -2461,7 +2600,7 @@
                                                     });
                                                 }
                                             }}
-                                            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                            className={`flex-shrink-0 md:flex-1 whitespace-nowrap px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                                                 currentPage === 'settings'
                                                     ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
                                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
@@ -2479,7 +2618,7 @@
                                                     });
                                                 }
                                             }}
-                                            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                                            className={`flex-shrink-0 md:flex-1 whitespace-nowrap px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                                                 currentPage === 'history'
                                                     ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
                                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
@@ -2536,11 +2675,102 @@
                         ))}
 
                         {viewMode === 'unused' && (
-                            <div className="space-y-8">
-                                <div className="text-center">
-                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Benefit Lists</h2>
+                            <div className="space-y-6">
+                                <div>
+                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">Benefit Lists</h2>
                                     <p className="text-slate-600 dark:text-slate-400">Track and manage all your credit card benefits</p>
                                 </div>
+
+                                {cards.length > 0 && (
+                                    <div className="kpi-grid">
+                                        <div className="kpi-card kpi-accent-blue">
+                                            <div className="kpi-label">Total value (active)</div>
+                                            <div className="kpi-value">{formatCurrency(totalValueAvailable)}</div>
+                                            <div className="kpi-sub">Across {activeBenefits.length} benefit{activeBenefits.length === 1 ? '' : 's'}</div>
+                                        </div>
+                                        <div className="kpi-card kpi-accent-green">
+                                            <div className="kpi-label">Claimed</div>
+                                            <div className="kpi-value">{formatCurrency(claimedValue)}</div>
+                                            <div className="mt-2 progress-track" aria-hidden="true">
+                                                <div className="progress-fill" style={{ width: `${claimedPct}%` }}></div>
+                                            </div>
+                                            <div className="kpi-sub">{claimedPct}% of active value</div>
+                                        </div>
+                                        <div className="kpi-card kpi-accent-amber">
+                                            <div className="kpi-label">Unused</div>
+                                            <div className="kpi-value">{formatCurrency(unusedValue)}</div>
+                                            <div className="kpi-sub">{unusedBenefitsForKpi.length} benefit{unusedBenefitsForKpi.length === 1 ? '' : 's'} left</div>
+                                        </div>
+                                        <div className="kpi-card kpi-accent-rose">
+                                            <div className="kpi-label">Expiring ≤ 30 days</div>
+                                            <div className="kpi-value">{expiringSoonCount}</div>
+                                            <div className="kpi-sub">Unused benefits at risk</div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {cards.length > 0 && (
+                                    <div className="toolbar">
+                                        <div className="flex flex-col md:flex-row md:items-center gap-2">
+                                            <div className="relative flex-1 min-w-0">
+                                                <svg aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                </svg>
+                                                <input
+                                                    type="search"
+                                                    value={searchQuery}
+                                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                                    placeholder="Search benefits by name, card, or description..."
+                                                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                />
+                                            </div>
+                                            <select
+                                                value={filterCardId}
+                                                onChange={(e) => setFilterCardId(e.target.value)}
+                                                className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm"
+                                                aria-label="Filter by card"
+                                            >
+                                                <option value="all">All cards</option>
+                                                {cards.map((card) => (
+                                                    <option key={card.id} value={card.id}>{card.name}</option>
+                                                ))}
+                                            </select>
+                                            <select
+                                                value={filterCategory}
+                                                onChange={(e) => setFilterCategory(e.target.value)}
+                                                className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm"
+                                                aria-label="Filter by category"
+                                            >
+                                                <option value="all">All categories</option>
+                                                {availableCategories.map((cat) => (
+                                                    <option key={cat} value={cat}>{categoryLabels[cat] || cat}</option>
+                                                ))}
+                                            </select>
+                                            <select
+                                                value={sortBy}
+                                                onChange={(e) => setSortBy(e.target.value)}
+                                                className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm"
+                                                aria-label="Sort benefits"
+                                            >
+                                                <option value="expires">Sort: Expiring soonest</option>
+                                                <option value="value_desc">Sort: Value (high to low)</option>
+                                                <option value="value_asc">Sort: Value (low to high)</option>
+                                                <option value="name">Sort: Name (A–Z)</option>
+                                                <option value="card">Sort: Card (A–Z)</option>
+                                            </select>
+                                            {hasActiveFilters && (
+                                                <button
+                                                    type="button"
+                                                    onClick={clearFilters}
+                                                    className="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap"
+                                                >
+                                                    Clear filters
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
                                 <ContextualFeedbackForm
                                     contextType="benefits-summary"
                                     title="Spot a benefit issue?"
@@ -2565,12 +2795,18 @@
                                     </div>
                                 ) : (
                                     <div className="space-y-6">
+                                        {hasActiveFilters && (
+                                            <div className="text-sm text-slate-600 dark:text-slate-400">
+                                                Showing {unusedFilteredSorted.length + usedFilteredSorted.length} of {activeBenefits.length} benefits matching filters.
+                                            </div>
+                                        )}
+
                                         {/* Unused Benefits Section */}
-                                        {getUnusedBenefits().length > 0 && (
+                                        {unusedFilteredSorted.length > 0 && (
                                             <div>
                                                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                                                     <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-                                                    Unused Benefits ({getUnusedBenefits().length})
+                                                    Unused Benefits ({unusedFilteredSorted.length})
                                                 </h3>
                                                 <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-x-auto">
                                                     <div className="grid benefits-table-grid min-w-[660px]">
@@ -2589,7 +2825,7 @@
                                                         <div className="px-6 py-4 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
                                                             Action
                                                         </div>
-                                                            {getUnusedBenefits().map((benefit) => (
+                                                            {unusedFilteredSorted.map((benefit) => (
                                                                 <BenefitCard
                                                                     key={`${benefit.cardId}-${benefit.id}`}
                                                                     benefit={benefit}
@@ -2608,11 +2844,11 @@
                                         )}
 
                                         {/* Used Benefits Section */}
-                                        {getAllBenefits().filter(benefit => (benefit.used || benefit.subscribed || benefit.activated) && !recentlyUsed.has(benefit.id)).length > 0 && (
+                                        {usedFilteredSorted.length > 0 && (
                                             <div>
                                                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                                                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                                                    Used Benefits ({getAllBenefits().filter(benefit => (benefit.used || benefit.subscribed || benefit.activated) && !recentlyUsed.has(benefit.id)).length})
+                                                    Used Benefits ({usedFilteredSorted.length})
                                                 </h3>
                                                 <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 max-h-96 overflow-auto">
                                                     <div className="grid benefits-table-grid min-w-[660px]">
@@ -2631,7 +2867,7 @@
                                                         <div className="px-6 py-4 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
                                                             Action
                                                         </div>
-                                                            {getAllBenefits().filter(benefit => (benefit.used || benefit.subscribed || benefit.activated) && !recentlyUsed.has(benefit.id)).map((benefit) => (
+                                                            {usedFilteredSorted.map((benefit) => (
                                                                 <BenefitCard
                                                                     key={`${benefit.cardId}-${benefit.id}`}
                                                                     benefit={benefit}
@@ -2646,6 +2882,20 @@
                                                             ))}
                                                     </div>
                                                 </div>
+                                            </div>
+                                        )}
+
+                                        {hasActiveFilters && unusedFilteredSorted.length === 0 && usedFilteredSorted.length === 0 && (
+                                            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-8 text-center">
+                                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">No benefits match these filters</h3>
+                                                <p className="text-slate-600 dark:text-slate-400 mb-4">Try widening your search or clearing filters.</p>
+                                                <button
+                                                    type="button"
+                                                    onClick={clearFilters}
+                                                    className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+                                                >
+                                                    Clear filters
+                                                </button>
                                             </div>
                                         )}
                                     </div>
