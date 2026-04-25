@@ -1,269 +1,618 @@
+/* ============================================================
+   Design tokens (light + dark)
+   A modern, neutral palette anchored on indigo-500 as the single
+   accent. Surfaces are mostly #fff/slate with crisp hairlines.
+   ============================================================ */
+:root {
+    --bg: #f7f8fa;
+    --bg-elev: #ffffff;
+    --bg-subtle: #f1f3f7;
+    --fg: #0b1020;
+    --fg-muted: #5b6478;
+    --fg-subtle: #8a93a6;
+    --line: rgba(15, 23, 42, 0.08);
+    --line-strong: rgba(15, 23, 42, 0.14);
+    --accent: #6366f1;
+    --accent-strong: #4f46e5;
+    --accent-soft: rgba(99, 102, 241, 0.10);
+    --ring: rgba(99, 102, 241, 0.35);
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05), 0 2px 6px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px -8px rgba(15, 23, 42, 0.12);
+    --shadow-lg: 0 1px 2px rgba(15, 23, 42, 0.06), 0 24px 48px -24px rgba(15, 23, 42, 0.25);
+}
+
+.dark {
+    --bg: #07090f;
+    --bg-elev: #0e121b;
+    --bg-subtle: #141826;
+    --fg: #eceef4;
+    --fg-muted: #98a0b3;
+    --fg-subtle: #6c7488;
+    --line: rgba(255, 255, 255, 0.06);
+    --line-strong: rgba(255, 255, 255, 0.1);
+    --accent: #818cf8;
+    --accent-strong: #6366f1;
+    --accent-soft: rgba(129, 140, 248, 0.14);
+    --ring: rgba(129, 140, 248, 0.4);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 24px -8px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 1px 2px rgba(0, 0, 0, 0.35), 0 30px 50px -24px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================================
+   Typography + base
+   ============================================================ */
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
 body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, rgb(248 250 252) 0%, rgb(239 246 255) 50%, rgb(224 231 255) 100%);
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv11", "ss01", "ss03", "cv02", "calt";
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.006em;
+    color: var(--fg);
+    background-color: var(--bg);
+    background-image:
+        radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: 0 0;
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
 .dark body {
-    background: linear-gradient(135deg, rgb(15 23 42) 0%, rgb(30 41 59) 50%, rgb(51 65 85) 100%);
+    background-image:
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
 }
 
-.card-gradient-chase {
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-    position: relative;
+h1, h2, h3, h4 {
+    letter-spacing: -0.022em;
+    font-feature-settings: "ss01", "cv11";
 }
 
-.card-gradient-chase::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    pointer-events: none;
+h1 {
+    letter-spacing: -0.032em;
+    font-weight: 700;
 }
 
-.card-gradient-united {
-    background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
-    position: relative;
+h2 { letter-spacing: -0.028em; font-weight: 700; }
+
+/* ============================================================
+   Page-level wrapper
+   The app paints `bg-gradient-to-br from-slate-50 via-blue-50
+   to-indigo-50` on full-screen wrappers. Replace with a clean
+   paint + the subtle dotted grid, so the feel is a modern
+   "canvas" rather than a candy gradient.
+   ============================================================ */
+.min-h-screen.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
+.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50.min-h-screen {
+    background-color: var(--bg) !important;
+    background-image:
+        radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px) !important;
+    background-size: 22px 22px !important;
+    background-position: 0 0 !important;
 }
 
-.card-gradient-united::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    pointer-events: none;
+.dark .min-h-screen.bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50,
+.dark .bg-gradient-to-br.from-slate-50.via-blue-50.to-indigo-50.min-h-screen {
+    background-color: var(--bg) !important;
+    background-image:
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+    background-size: 22px 22px !important;
 }
 
-.card-gradient-amex {
-    background: linear-gradient(135deg, #475569 0%, #64748b 100%);
-    position: relative;
+/* ============================================================
+   Header — sharp, minimal, true sticky bar
+   ============================================================ */
+header.sticky {
+    background: rgba(255, 255, 255, 0.78) !important;
+    border-bottom: 1px solid var(--line) !important;
+    box-shadow: none;
 }
 
-.card-gradient-amex::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    pointer-events: none;
+.dark header.sticky {
+    background: rgba(14, 18, 27, 0.78) !important;
+    border-bottom: 1px solid var(--line) !important;
 }
 
-.card-gradient-custom {
-    background: linear-gradient(135deg, #6b46c1 0%, #8b5cf6 100%);
-    position: relative;
+.backdrop-blur-lg {
+    backdrop-filter: saturate(1.3) blur(16px);
+    -webkit-backdrop-filter: saturate(1.3) blur(16px);
 }
 
-.card-gradient-custom::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-    pointer-events: none;
+/* Drop the built-in header bottom border in favor of our token one */
+header.sticky.border-b {
+    border-bottom-color: var(--line) !important;
 }
 
+/* ============================================================
+   Tab bar — crisp pill segmented control
+   ============================================================ */
+/* The app uses `.flex.bg-slate-100/60.p-1.rounded-xl` */
+.flex.bg-slate-100\/60.p-1.rounded-xl,
+.flex.bg-slate-100\/60.dark\:bg-slate-700\/60.p-1.rounded-xl {
+    background: var(--bg-subtle) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 14px !important;
+    padding: 5px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.dark .flex.bg-slate-100\/60.p-1.rounded-xl,
+.dark .flex.bg-slate-100\/60.dark\:bg-slate-700\/60.p-1.rounded-xl {
+    background: rgba(255, 255, 255, 0.04) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+/* Active tab button */
+.flex.bg-slate-100\/60 > button.bg-white,
+.flex.bg-slate-100\/60 > button.dark\:bg-slate-600 {
+    background: var(--bg-elev) !important;
+    color: var(--fg) !important;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.9) inset,
+        0 1px 2px rgba(15, 23, 42, 0.08),
+        0 2px 8px -2px rgba(15, 23, 42, 0.08) !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em;
+}
+
+.dark .flex.bg-slate-100\/60 > button.bg-white,
+.dark .flex.bg-slate-100\/60 > button.dark\:bg-slate-600 {
+    background: #1a1f2e !important;
+    color: var(--fg) !important;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Inactive tab button */
+.flex.bg-slate-100\/60 > button {
+    border-radius: 10px !important;
+    transition: color 0.15s ease, background 0.15s ease !important;
+    font-weight: 500;
+    color: var(--fg-muted) !important;
+}
+
+.flex.bg-slate-100\/60 > button:hover {
+    color: var(--fg) !important;
+}
+
+/* ============================================================
+   Surface polish — cards, panels, modals
+   Selectors target existing Tailwind combos already used in-app.
+   ============================================================ */
+/* Translucent panels */
+.bg-white\/80.rounded-2xl,
+.bg-white\/80.rounded-xl,
+.bg-white\/90.rounded-2xl,
+.bg-white\/90.rounded-xl {
+    background-color: var(--bg-elev) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.dark .bg-slate-800\/80.rounded-2xl,
+.dark .bg-slate-800\/80.rounded-xl {
+    background-color: var(--bg-elev) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* Solid white settings / data-management panel */
+main > .bg-white.shadow-lg.rounded-lg,
+main .bg-white.shadow-lg.rounded-lg {
+    background-color: var(--bg-elev) !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.dark main > .bg-white.shadow-lg.rounded-lg,
+.dark main .bg-white.shadow-lg.rounded-lg {
+    background-color: var(--bg-elev) !important;
+}
+
+/* Section sub-panels inside settings (thin ring, no heavy inset) */
+.border.border-slate-200.rounded-lg,
+.border.dark\:border-slate-700.rounded-lg {
+    border-color: var(--line) !important;
+    border-radius: 12px !important;
+    background: var(--bg-elev);
+}
+
+.dark .border.border-slate-200.rounded-lg,
+.dark .border.dark\:border-slate-700.rounded-lg {
+    background: rgba(255, 255, 255, 0.015);
+}
+
+/* Empty-state / generic "large card" panels used on dashboards */
+.bg-white\/80.backdrop-blur-sm.rounded-2xl {
+    background-color: var(--bg-elev) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* ============================================================
+   Benefit cards (Card View grid tiles)
+   ============================================================ */
 .benefit-card {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px !important;
+    transition:
+        transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 0.25s ease,
+        border-color 0.25s ease !important;
     transform: translateY(0);
+    background-color: var(--bg-elev) !important;
+    border: 1px solid var(--line) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: var(--shadow-xs) !important;
 }
 
 .benefit-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px) !important;
+    border-color: var(--line-strong) !important;
+    box-shadow: var(--shadow-md) !important;
 }
 
-.dark .benefit-card:hover {
-    box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1);
+.dark .benefit-card {
+    background-color: var(--bg-elev) !important;
 }
 
 .summary-card {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+                box-shadow 0.25s ease;
     transform: translateY(0);
+    box-shadow: var(--shadow-xs);
 }
 
 .summary-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
 }
 
-.dark .summary-card:hover {
-    box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1);
+/* ============================================================
+   Icon chip — monochrome modern replacement for the old
+   gradient emoji circle used throughout the app.
+   ============================================================ */
+.benefit-card .bg-gradient-to-br.from-blue-500.to-purple-600,
+.sticky.left-0 .bg-gradient-to-br.from-blue-500.to-purple-600,
+.grid.grid-cols-subgrid .bg-gradient-to-br.from-blue-500.to-purple-600 {
+    background-image: none !important;
+    background-color: var(--bg-subtle) !important;
+    color: var(--fg) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-/* Tab animation */
-.tab-button {
+.dark .benefit-card .bg-gradient-to-br.from-blue-500.to-purple-600,
+.dark .sticky.left-0 .bg-gradient-to-br.from-blue-500.to-purple-600,
+.dark .grid.grid-cols-subgrid .bg-gradient-to-br.from-blue-500.to-purple-600 {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Hero empty-state icon square: keep an accent wash */
+.mx-auto.w-24.h-24.bg-gradient-to-br.from-blue-500.to-indigo-600,
+.mx-auto.w-16.h-16.bg-gradient-to-br.from-blue-500.to-indigo-600 {
+    background-image: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 12px 28px -10px rgba(79, 70, 229, 0.5),
+        0 0 0 1px rgba(99, 102, 241, 0.18);
+}
+
+/* ============================================================
+   Credit-card hero (Card View section header)
+   The markup is `${card.color} text-white rounded-t-xl p-8 relative overflow-hidden`.
+   We turn it from a flat gradient band into a real "card" surface
+   with rounded corners, shine sweep, and drop-shadow.
+   ============================================================ */
+.card-gradient-chase,
+.card-gradient-united,
+.card-gradient-amex,
+.card-gradient-custom {
     position: relative;
     overflow: hidden;
+    border-radius: 20px !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+        0 22px 50px -20px rgba(15, 23, 42, 0.55);
 }
 
-.tab-button::before {
+/* When used as a section banner, preserve flat-bottom for the body
+   panel below to tuck against. */
+.card-gradient-chase.rounded-t-xl,
+.card-gradient-united.rounded-t-xl,
+.card-gradient-amex.rounded-t-xl,
+.card-gradient-custom.rounded-t-xl {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 12px 32px -16px rgba(15, 23, 42, 0.4);
+}
+
+/* Deeper, richer gradients */
+.card-gradient-chase {
+    background:
+        radial-gradient(120% 120% at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 45%),
+        linear-gradient(135deg, #0b1e4b 0%, #1e3a8a 40%, #2563eb 100%);
+}
+
+.card-gradient-united {
+    background:
+        radial-gradient(120% 120% at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 45%),
+        linear-gradient(135deg, #082f49 0%, #0c4a6e 45%, #0ea5e9 100%);
+}
+
+.card-gradient-amex {
+    background:
+        radial-gradient(120% 120% at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 45%),
+        linear-gradient(135deg, #1f2937 0%, #334155 50%, #64748b 100%);
+}
+
+.card-gradient-custom {
+    background:
+        radial-gradient(120% 120% at 100% 0%, rgba(255,255,255,0.2) 0%, transparent 45%),
+        linear-gradient(135deg, #2e1065 0%, #5b21b6 45%, #8b5cf6 100%);
+}
+
+/* Shine line sweep across hero */
+.card-gradient-chase::before,
+.card-gradient-united::before,
+.card-gradient-amex::before,
+.card-gradient-custom::before {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+    top: -40%;
+    left: -20%;
+    width: 140%;
+    height: 180%;
+    background: linear-gradient(
+        115deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.18) 48%,
+        rgba(255, 255, 255, 0.08) 52%,
+        transparent 65%
+    );
+    pointer-events: none;
+    transform: translateX(0);
 }
 
-.tab-button.active::before {
-    transform: scaleX(1);
+/* Fine grain overlay */
+.card-gradient-chase::after,
+.card-gradient-united::after,
+.card-gradient-amex::after,
+.card-gradient-custom::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 3px 3px;
+    opacity: 0.5;
+    pointer-events: none;
+    mix-blend-mode: overlay;
 }
 
-/* Smooth page transitions */
-.page-transition {
-    animation: fadeIn 0.3s ease-in-out;
+/* Body panel under the hero — tuck seamless */
+.bg-white.dark\:bg-slate-800.rounded-b-xl,
+.bg-white.rounded-b-xl {
+    background-color: var(--bg-elev) !important;
+    border: 1px solid var(--line) !important;
+    border-top: 0 !important;
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    box-shadow: var(--shadow-sm) !important;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.dark .bg-white.dark\:bg-slate-800.rounded-b-xl {
+    background-color: var(--bg-elev) !important;
 }
 
-/* Enhanced button styles */
-.btn-primary {
-    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+/* ============================================================
+   Buttons — flat, modern, no gradients
+   ============================================================ */
+/* Primary accent buttons (the app uses `bg-gradient-to-r from-blue-600 to-indigo-600` and variants) */
+.bg-gradient-to-r.from-blue-600.to-indigo-600,
+.bg-gradient-to-r.from-blue-500.to-indigo-600 {
+    background-image: none !important;
+    background-color: var(--accent-strong) !important;
+    color: #fff !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(79, 70, 229, 0.3),
+        0 6px 16px -6px rgba(79, 70, 229, 0.5) !important;
 }
 
-.btn-primary:hover {
-    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+.bg-gradient-to-r.from-blue-600.to-indigo-600:hover,
+.bg-gradient-to-r.from-blue-500.to-indigo-600:hover,
+.hover\:from-blue-700.hover\:to-indigo-700:hover {
+    background-image: none !important;
+    background-color: #4338ca !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.25) inset,
+        0 2px 4px rgba(79, 70, 229, 0.35),
+        0 12px 24px -8px rgba(79, 70, 229, 0.55) !important;
 }
 
-/* Backdrop blur effects */
-.backdrop-blur-glass {
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+/* "Mark Used" / "Mark Subscribed" pill buttons: keep as a clear
+   accent-filled pill. Targeting common combo used in BenefitCard. */
+button.bg-blue-600.text-white,
+button.bg-blue-600.hover\:bg-blue-700 {
+    background-color: var(--accent-strong) !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.005em;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(79, 70, 229, 0.25);
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-/* Enhanced animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+button.bg-blue-600.text-white:hover:not(:disabled) {
+    background-color: #4338ca !important;
+    transform: translateY(-1px);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.25) inset,
+        0 4px 12px -4px rgba(79, 70, 229, 0.45);
 }
 
-.animate-fade-in-up {
-    animation: fadeInUp 0.6s ease-out;
+/* Subscribed (green) success pill — tone down, keep modern */
+button.bg-green-600.text-white,
+button.bg-green-600.hover\:bg-green-700 {
+    background-color: #10b981 !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(16, 185, 129, 0.25);
 }
 
-/* Improved focus states */
-button:focus-visible {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
+button.bg-green-600.text-white:hover:not(:disabled) {
+    background-color: #059669 !important;
 }
 
-/* Enhanced scrollbar styling */
-::-webkit-scrollbar {
-    width: 8px;
+/* Used / disabled */
+button.bg-gray-200.text-gray-500.cursor-not-allowed {
+    background-color: var(--bg-subtle) !important;
+    color: var(--fg-subtle) !important;
+    border-radius: 10px !important;
+    box-shadow: inset 0 0 0 1px var(--line);
 }
 
-::-webkit-scrollbar-track {
-    background: rgba(148, 163, 184, 0.1);
-    border-radius: 4px;
+/* Reset Benefit Usage — warm amber accent, modern flat */
+button.bg-orange-600.text-white,
+button.bg-orange-600.hover\:bg-orange-700 {
+    background-color: #f97316 !important;
+    border-radius: 10px !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(234, 88, 12, 0.3);
 }
 
-::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.3);
-    border-radius: 4px;
+button.bg-orange-600.text-white:hover {
+    background-color: #ea580c !important;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(148, 163, 184, 0.5);
+/* Reset All Data — red, modern flat */
+button.bg-red-600.text-white,
+button.bg-red-600.hover\:bg-red-700 {
+    background-color: #ef4444 !important;
+    border-radius: 10px !important;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(220, 38, 38, 0.3);
 }
 
-.dark ::-webkit-scrollbar-track {
-    background: rgba(71, 85, 105, 0.1);
+button.bg-red-600.text-white:hover {
+    background-color: #dc2626 !important;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-    background: rgba(71, 85, 105, 0.3);
+/* Undo / neutral secondary */
+button.bg-gray-500.text-white,
+button.bg-gray-500.hover\:bg-gray-600 {
+    background-color: #475569 !important;
+    border-radius: 10px !important;
 }
 
-.dark ::-webkit-scrollbar-thumb:hover {
-    background: rgba(71, 85, 105, 0.5);
+.dark button.bg-gray-500.text-white {
+    background-color: #334155 !important;
 }
 
-/* Benefits table grid - 5 columns for sticky first column */
-.benefits-table-grid {
-    display: grid;
-    grid-template-columns: minmax(200px, 2fr) minmax(120px, 1fr) minmax(90px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr);
+/* ============================================================
+   Warning block background
+   ============================================================ */
+.border.border-red-200.bg-red-50,
+.border.dark\:border-red-700.bg-red-50 {
+    background: linear-gradient(180deg, rgba(254, 226, 226, 0.6) 0%, rgba(254, 226, 226, 0.25) 100%) !important;
+    border-color: rgba(248, 113, 113, 0.4) !important;
+    border-radius: 12px !important;
 }
 
-/* Sticky Benefit column for horizontal scroll tables */
-.sticky-benefit-col {
-    position: sticky;
-    left: 0;
-    z-index: 10;
-    background: rgb(255 255 255);
-    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.08);
+.dark .border.border-red-200.bg-red-50,
+.dark .border.dark\:border-red-700.bg-red-50 {
+    background: linear-gradient(180deg, rgba(127, 29, 29, 0.25) 0%, rgba(127, 29, 29, 0.08) 100%) !important;
+    border-color: rgba(248, 113, 113, 0.22) !important;
 }
 
-tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
-    background: rgb(248 250 252);
+/* ============================================================
+   Status pills (time-left, Active, etc.) — modern flat chips
+   ============================================================ */
+/* `bg-gray-100 text-gray-600` base pill */
+.rounded-full.bg-gray-100.text-gray-600 {
+    background-color: var(--bg-subtle) !important;
+    color: var(--fg-muted) !important;
+    border: 1px solid var(--line);
+    font-weight: 500;
 }
 
-.sticky-benefit-col.sticky-benefit-col-used {
-    background: rgb(248 250 252);
+.rounded-full.bg-orange-100.text-orange-600 {
+    background-color: rgba(249, 115, 22, 0.1) !important;
+    color: #c2410c !important;
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    font-weight: 500;
 }
 
-.dark .sticky-benefit-col {
-    background: rgb(30 41 59);
-    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.3);
+.rounded-full.bg-red-100.text-red-600 {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: #b91c1c !important;
+    border: 1px solid rgba(239, 68, 68, 0.22);
+    font-weight: 500;
 }
 
-.dark tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
-    background: rgb(51 65 85);
+.dark .rounded-full.bg-gray-100.text-gray-600 {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #c9cfdc !important;
+    border-color: var(--line);
 }
 
-.dark .sticky-benefit-col.sticky-benefit-col-used {
-    background: rgb(15 23 42);
+/* ============================================================
+   Section titles (Benefit Lists, Settings, etc.)
+   Drop the centered muted vibe in favor of a bolder anchor.
+   ============================================================ */
+main h2.text-2xl.font-bold {
+    letter-spacing: -0.028em;
+    font-weight: 700;
 }
 
-.sticky-benefit-col-header {
-    position: sticky;
-    left: 0;
-    z-index: 20;
-    background: rgb(248 250 252);
-    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.08);
-}
-
-.dark .sticky-benefit-col-header {
-    background: rgb(51 65 85);
-    box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.3);
-}
-
-/* Contextual feedback form blocks */
+/* ============================================================
+   Feedback card ("Spot a benefit issue?")
+   ============================================================ */
 .feedback-card {
-    border: 1px solid rgb(203 213 225 / 0.7);
-    background: rgb(255 255 255 / 0.88);
-    border-radius: 0.9rem;
-    padding: 1rem;
+    border: 1px solid var(--line);
+    background: var(--bg-elev);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
     text-align: left;
-    box-shadow: 0 8px 25px -18px rgba(15, 23, 42, 0.65);
+    box-shadow: var(--shadow-xs);
 }
 
 .dark .feedback-card {
-    border-color: rgb(71 85 105 / 0.8);
-    background: rgb(30 41 59 / 0.82);
-    box-shadow: 0 10px 24px -18px rgba(2, 6, 23, 0.95);
+    background: var(--bg-elev);
+    border-color: var(--line);
+    box-shadow: var(--shadow-xs);
 }
 
 .feedback-card-compact {
-    padding: 0.85rem 1rem;
+    padding: 0.9rem 1.05rem;
 }
 
 .feedback-card-header {
@@ -275,22 +624,15 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
     font-size: 0.95rem;
     line-height: 1.25rem;
     font-weight: 600;
-    color: rgb(15 23 42);
-}
-
-.dark .feedback-card-title {
-    color: rgb(248 250 252);
+    letter-spacing: -0.01em;
+    color: var(--fg);
 }
 
 .feedback-card-prompt {
-    margin-top: 0.2rem;
+    margin-top: 0.25rem;
     margin-bottom: 0;
-    font-size: 0.8rem;
-    color: rgb(71 85 105);
-}
-
-.dark .feedback-card-prompt {
-    color: rgb(148 163 184);
+    font-size: 0.82rem;
+    color: var(--fg-muted);
 }
 
 .feedback-cta-group {
@@ -302,39 +644,44 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 .feedback-cta-button,
 .feedback-secondary-button,
 .feedback-primary-button {
-    border-radius: 0.6rem;
-    padding: 0.42rem 0.75rem;
-    font-size: 0.78rem;
+    border-radius: 10px;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    transition: all 0.2s ease;
+    letter-spacing: -0.005em;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease, color 0.15s ease;
 }
 
 .feedback-cta-button {
-    border: 1px solid rgb(148 163 184 / 0.65);
-    color: rgb(30 41 59);
-    background: rgb(248 250 252 / 0.85);
+    border: 1px solid var(--line);
+    color: var(--fg);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow-xs);
 }
 
 .feedback-cta-button:hover {
-    border-color: rgb(59 130 246 / 0.8);
-    color: rgb(30 64 175);
+    border-color: var(--accent);
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    transform: translateY(-1px);
 }
 
 .dark .feedback-cta-button {
-    border-color: rgb(100 116 139 / 0.9);
-    color: rgb(226 232 240);
-    background: rgb(51 65 85 / 0.8);
+    border-color: var(--line);
+    color: var(--fg);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .dark .feedback-cta-button:hover {
-    border-color: rgb(96 165 250 / 0.9);
-    color: rgb(191 219 254);
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
 }
 
 .feedback-form {
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.7rem;
 }
 
 .feedback-form-row {
@@ -344,73 +691,90 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 }
 
 .feedback-label {
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     font-weight: 600;
-    color: rgb(51 65 85);
-}
-
-.dark .feedback-label {
-    color: rgb(203 213 225);
+    letter-spacing: -0.003em;
+    color: var(--fg-muted);
 }
 
 .feedback-input {
-    border: 1px solid rgb(148 163 184 / 0.55);
-    background: rgb(255 255 255 / 0.95);
-    border-radius: 0.55rem;
-    padding: 0.5rem 0.6rem;
-    font-size: 0.82rem;
-    color: rgb(15 23 42);
+    border: 1px solid var(--line-strong);
+    background: var(--bg-elev);
+    border-radius: 10px;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.86rem;
+    color: var(--fg);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.feedback-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--ring);
 }
 
 .dark .feedback-input {
-    border-color: rgb(100 116 139 / 0.85);
-    background: rgb(15 23 42 / 0.8);
-    color: rgb(241 245 249);
+    border-color: var(--line-strong);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--fg);
 }
 
 .feedback-textarea {
     resize: vertical;
-    min-height: 4.5rem;
+    min-height: 5rem;
 }
 
 .feedback-form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.55rem;
+    gap: 0.5rem;
     margin-top: 0.1rem;
 }
 
 .feedback-secondary-button {
-    border: 1px solid rgb(148 163 184 / 0.7);
-    color: rgb(51 65 85);
-    background: rgb(248 250 252 / 0.9);
+    border: 1px solid var(--line);
+    color: var(--fg);
+    background: var(--bg-elev);
+}
+
+.feedback-secondary-button:hover {
+    background: var(--bg-subtle);
 }
 
 .feedback-primary-button {
     border: 1px solid transparent;
-    color: white;
-    background: linear-gradient(135deg, rgb(37 99 235) 0%, rgb(79 70 229) 100%);
+    color: #fff;
+    background: var(--accent-strong);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.22) inset,
+        0 6px 14px -4px rgba(79, 70, 229, 0.5);
 }
 
 .feedback-primary-button:hover:not(:disabled) {
-    filter: brightness(1.05);
+    background: #4338ca;
+    transform: translateY(-1px);
 }
 
 .feedback-primary-button:disabled {
-    opacity: 0.65;
+    opacity: 0.6;
     cursor: wait;
 }
 
 .dark .feedback-secondary-button {
-    border-color: rgb(100 116 139 / 0.9);
-    color: rgb(226 232 240);
-    background: rgb(51 65 85 / 0.85);
+    border-color: var(--line);
+    color: var(--fg);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.dark .feedback-secondary-button:hover {
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .feedback-status {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.76rem;
     font-weight: 600;
+    letter-spacing: -0.005em;
 }
 
 .feedback-status-success {
@@ -430,11 +794,197 @@ tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
 }
 
 .feedback-helper-text {
-    margin: 0.6rem 0 0 0;
-    font-size: 0.71rem;
-    color: rgb(100 116 139);
+    margin: 0.65rem 0 0 0;
+    font-size: 0.73rem;
+    color: var(--fg-subtle);
 }
 
-.dark .feedback-helper-text {
-    color: rgb(148 163 184);
+/* ============================================================
+   Benefits-list tables (Card / Unused) — refined grid
+   ============================================================ */
+.benefits-table-grid {
+    display: grid;
+    grid-template-columns: minmax(200px, 2fr) minmax(120px, 1fr) minmax(90px, 1fr) minmax(80px, 1fr) minmax(100px, 1fr);
+}
+
+.sticky-benefit-col {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: var(--bg-elev);
+    box-shadow: 2px 0 12px -4px rgba(15, 23, 42, 0.08);
+}
+
+tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
+    background: var(--bg-subtle);
+}
+
+.sticky-benefit-col.sticky-benefit-col-used {
+    background: var(--bg-subtle);
+}
+
+.dark .sticky-benefit-col {
+    background: var(--bg-elev);
+    box-shadow: 2px 0 12px -4px rgba(0, 0, 0, 0.55);
+}
+
+.dark tr:hover .sticky-benefit-col:not(.sticky-benefit-col-used) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.dark .sticky-benefit-col.sticky-benefit-col-used {
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.sticky-benefit-col-header {
+    position: sticky;
+    left: 0;
+    z-index: 20;
+    background: var(--bg-subtle);
+    box-shadow: 2px 0 12px -4px rgba(15, 23, 42, 0.08);
+}
+
+.dark .sticky-benefit-col-header {
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 2px 0 12px -4px rgba(0, 0, 0, 0.55);
+}
+
+/* Column headers */
+.benefits-table-grid > div.uppercase {
+    letter-spacing: 0.04em;
+    font-size: 0.7rem !important;
+    font-weight: 600;
+    color: var(--fg-subtle) !important;
+    background: var(--bg-subtle) !important;
+    border-bottom: 1px solid var(--line);
+}
+
+.dark .benefits-table-grid > div.uppercase {
+    background: rgba(255, 255, 255, 0.03) !important;
+    color: var(--fg-subtle) !important;
+}
+
+/* Row hover in list view */
+.grid.grid-cols-subgrid.col-span-5 {
+    transition: background-color 0.15s ease;
+}
+
+/* ============================================================
+   Focus rings (keyboard)
+   ============================================================ */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+/* ============================================================
+   Scrollbar — thin, tinted
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.18);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(15, 23, 42, 0.32);
+    background-clip: padding-box;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.14);
+    background-clip: padding-box;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+    background-clip: padding-box;
+}
+
+/* ============================================================
+   Small utilities
+   ============================================================ */
+.page-transition {
+    animation: fadeIn 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Slightly increase readability of muted text on dark mode */
+.dark .text-slate-400 { color: #a2abbe; }
+.dark .text-slate-600 { color: #b4bccd; }
+
+/* Make numeric amounts sit nicely */
+.text-green-600, .text-green-400, .dark .text-green-400 {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+/* Old btn-primary + backdrop helpers for compatibility (unused now) */
+.btn-primary {
+    background: var(--accent-strong);
+    color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 6px 16px -6px rgba(79,70,229,0.5);
+}
+
+.btn-primary:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.backdrop-blur-glass {
+    backdrop-filter: blur(16px) saturate(1.25);
+    -webkit-backdrop-filter: blur(16px) saturate(1.25);
+}
+
+/* Tabs (legacy class from previous design, kept for parity) */
+.tab-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-button::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.tab-button.active::before {
+    transform: scaleX(1);
 }
