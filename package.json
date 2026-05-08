@@ -1,0 +1,17 @@
+{
+  "name": "card-benefit-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first credit card benefit tracker (static site).",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "serve": "http-server . -p 4173 -s -c-1",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.2",
+    "http-server": "^14.1.1",
+    "husky": "^9.1.6"
+  }
+}

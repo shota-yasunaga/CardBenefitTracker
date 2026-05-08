@@ -24,6 +24,40 @@ const BENEFIT_CATEGORY = {
     INSURANCE: 'insurance'
 };
 
+function DontCareButton({ label, onClick, className = "" }) {
+    return (
+        <button
+            onClick={onClick}
+            className={`px-2 py-1 rounded-md text-xs font-medium transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300 ${className}`}
+            title={label === "Don't Care" ? "Mark as don't care" : ""}
+        >
+            {label}
+        </button>
+    );
+}
+
+function DontCareStatus({ onUndo }) {
+    return (
+        <div className="flex gap-2">
+            <span className="text-sm text-gray-400 font-medium">
+                Don't Care
+            </span>
+            <DontCareButton
+                label="Undo"
+                onClick={onUndo}
+            />
+        </div>
+    );
+}
+
+function ActionButtonGroup({ children }) {
+    return (
+        <div className="flex gap-2">
+            {children}
+        </div>
+    );
+}
+
 // Available credit cards database
 const availableCards = {
     'chase-sapphire-reserve': {
@@ -650,7 +684,7 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
                                 : 'bg-blue-600 text-white hover:bg-blue-700'
                         }`}
                     >
-                        {benefit.subscribed ? 'Subscribed' : 'Subscribe'}
+                        {benefit.subscribed ? 'Subscribed' : 'Mark subscribed'}
                     </button>
                     <DontCareButton
                         label="Don't Care"
@@ -683,20 +717,18 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
         );
     };
 
-            if (viewMode === 'list') {
-            return (
-                <tr className={`border-b ${isUsed ? 'bg-gray-50' : isDontCare ? 'bg-yellow-50' : 'hover:bg-gray-50'}`}>
-                    <td className="py-3 px-4">
-                        <div className="flex items-center gap-2">
-                            <span className="text-lg">{categoryIcons[benefit.category]}</span>
-                            <div>
-                                <div className={`font-medium ${isDontCare ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
-                                    {benefit.name}
-                                </div>
-                                <div className="text-sm text-gray-600">{benefit.description}</div>
-                            </div>
+    if (viewMode === 'list') {
+        return (
+            <tr className={`border-b ${isUsed ? 'bg-gray-50' : isDontCare ? 'bg-yellow-50' : 'hover:bg-gray-50'}`}>
+                <td className="py-3 px-4">
+                    <div className="flex items-center gap-2">
+                        <span className="text-lg">{categoryIcons[benefit.category]}</span>
+                        <div>
+                            <div className={`font-medium ${isDontCare ? 'text-gray-500 line-through' : 'text-gray-900'}`}>{benefit.name}</div>
+                            <div className="text-sm text-gray-600">{benefit.description}</div>
                         </div>
-                    </td>
+                    </div>
+                </td>
                 <td className="py-3 px-4 text-sm font-medium text-gray-700">{cardName}</td>
                 <td className="py-3 px-4">
                     <span className={`text-xs px-2 py-1 rounded-full ${expirationBg} ${expirationColor} font-medium`}>
@@ -713,19 +745,17 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
         );
     }
 
-            return (
-            <div className={`benefit-card bg-white rounded-lg p-4 shadow-md border border-gray-200 ${isUsed ? 'opacity-60' : isDontCare ? 'opacity-40 bg-yellow-50' : ''}`}>
-                <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                            <span className="text-xl">{categoryIcons[benefit.category]}</span>
-                            <h4 className={`font-semibold ${isDontCare ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
-                                {benefit.name}
-                            </h4>
-                        </div>
-                        <p className="text-sm text-gray-600">{benefit.description}</p>
+    return (
+        <div className={`benefit-card bg-white rounded-lg p-4 shadow-md border border-gray-200 ${isUsed ? 'opacity-60' : isDontCare ? 'opacity-40 bg-yellow-50' : ''}`}>
+            <div className="flex items-start justify-between mb-3">
+                <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xl">{categoryIcons[benefit.category]}</span>
+                        <h4 className={`font-semibold ${isDontCare ? 'text-gray-500 line-through' : 'text-gray-900'}`}>{benefit.name}</h4>
                     </div>
+                    <p className="text-sm text-gray-600">{benefit.description}</p>
                 </div>
+            </div>
             
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -911,7 +941,7 @@ function App() {
                 ))}
 
                 {viewMode === 'list' && (
-                    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
                         <table className="min-w-full">
                             <thead className="bg-gray-50">
                                 <tr>
@@ -956,7 +986,7 @@ function App() {
                                 <p className="text-gray-600">No unused benefits found. Great job using your benefits!</p>
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
                                 <table className="min-w-full">
                                     <thead className="bg-gray-50">
                                         <tr>
