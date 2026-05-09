@@ -55,7 +55,7 @@ function App() {
         setUsageHistory(prev => [event, ...prev].slice(0, HISTORY_MAX_ENTRIES));
     };
 
-    const handleToggle = (cardId, benefitId) => {
+    const handleToggle = (cardId, benefitId, action = 'default') => {
         setCards(prevCards => {
             return prevCards.map(card => {
                 if (card.id === cardId) {
@@ -63,7 +63,11 @@ function App() {
                         ...card,
                         benefits: card.benefits.map(benefit => {
                             if (benefit.id === benefitId) {
-                                if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                                if (action === 'dontcare') {
+                                    return { ...benefit, dontCare: true };
+                                } else if (action === 'undontcare') {
+                                    return { ...benefit, dontCare: false };
+                                } else if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
                                     appendUsageEvent({
                                         action: benefit.subscribed ? 'unsubscribed' : 'subscribed',
                                         cardId: card.id,
@@ -142,6 +146,7 @@ function App() {
                     if (benefit.type === BENEFIT_TYPE.FEATURE) {
                         resetBenefit.activated = true; // Features are typically active by default
                     }
+                    resetBenefit.dontCare = false;
                     return resetBenefit;
                 })
             }));
@@ -160,7 +165,7 @@ function App() {
 
     const getUnusedBenefits = () => {
         return getAllBenefits().filter(benefit => 
-            !benefit.used && !benefit.subscribed && benefit.type !== BENEFIT_TYPE.FEATURE
+            !benefit.used && !benefit.subscribed && !benefit.dontCare && benefit.type !== BENEFIT_TYPE.FEATURE
         );
     };
 

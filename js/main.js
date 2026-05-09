@@ -24,6 +24,40 @@ const BENEFIT_CATEGORY = {
     INSURANCE: 'insurance'
 };
 
+function DontCareButton({ label, onClick, className = "" }) {
+    return (
+        <button
+            onClick={onClick}
+            className={`px-2 py-1 rounded-md text-xs font-medium transition-colors bg-gray-200 text-gray-600 hover:bg-gray-300 ${className}`}
+            title={label === "Don't Care" ? "Mark as don't care" : ""}
+        >
+            {label}
+        </button>
+    );
+}
+
+function DontCareStatus({ onUndo }) {
+    return (
+        <div className="flex gap-2">
+            <span className="text-sm text-gray-400 font-medium">
+                Don't Care
+            </span>
+            <DontCareButton
+                label="Undo"
+                onClick={onUndo}
+            />
+        </div>
+    );
+}
+
+function ActionButtonGroup({ children }) {
+    return (
+        <div className="flex gap-2">
+            {children}
+        </div>
+    );
+}
+
 // Available credit cards database
 const availableCards = {
     'chase-sapphire-reserve': {
@@ -610,9 +644,10 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
     };
 
     const isUsed = benefit.used || benefit.subscribed || benefit.activated;
+    const isDontCare = benefit.dontCare || false;
 
-    // Don't show in unused view if it's used or if it's a feature that's always active
-    if (viewMode === 'unused' && (isUsed || benefit.type === BENEFIT_TYPE.FEATURE)) {
+    // Don't show in unused view if it's used, ignored, or if it's a feature that's always active
+    if (viewMode === 'unused' && (isUsed || isDontCare || benefit.type === BENEFIT_TYPE.FEATURE)) {
         return null;
     }
 
@@ -630,44 +665,66 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
             );
         }
 
+        if (isDontCare) {
+            return (
+                <DontCareStatus
+                    onUndo={() => onToggle(cardId, benefit.id, 'undontcare')}
+                />
+            );
+        }
+
         if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
             return (
-                <button
-                    onClick={() => onToggle(cardId, benefit.id)}
-                    className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                        benefit.subscribed
-                            ? 'bg-green-600 text-white hover:bg-green-700'
-                            : 'bg-blue-600 text-white hover:bg-blue-700'
-                    }`}
-                >
-                    {benefit.subscribed ? 'Subscribed' : 'Mark subscribed'}
-                </button>
+                <ActionButtonGroup>
+                    <button
+                        onClick={() => onToggle(cardId, benefit.id)}
+                        className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                            benefit.subscribed
+                                ? 'bg-green-600 text-white hover:bg-green-700'
+                                : 'bg-blue-600 text-white hover:bg-blue-700'
+                        }`}
+                    >
+                        {benefit.subscribed ? 'Subscribed' : 'Mark subscribed'}
+                    </button>
+                    <DontCareButton
+                        label="Don't Care"
+                        onClick={() => onToggle(cardId, benefit.id, 'dontcare')}
+                    />
+                </ActionButtonGroup>
             );
         }
 
         return (
-            <button
-                onClick={() => onToggle(cardId, benefit.id)}
-                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                    benefit.used
-                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                        : 'bg-blue-600 text-white hover:bg-blue-700'
-                }`}
-                disabled={benefit.used}
-            >
-                {benefit.used ? 'Used' : 'Mark Used'}
-            </button>
+            <ActionButtonGroup>
+                <button
+                    onClick={() => onToggle(cardId, benefit.id)}
+                    className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                        benefit.used
+                            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }`}
+                    disabled={benefit.used}
+                >
+                    {benefit.used ? 'Used' : 'Mark Used'}
+                </button>
+                {!benefit.used && (
+                    <DontCareButton
+                        label="Don't Care"
+                        onClick={() => onToggle(cardId, benefit.id, 'dontcare')}
+                    />
+                )}
+            </ActionButtonGroup>
         );
     };
 
     if (viewMode === 'list') {
         return (
-            <tr className={`border-b ${isUsed ? 'bg-gray-50' : 'hover:bg-gray-50'}`}>
+            <tr className={`border-b ${isUsed ? 'bg-gray-50' : isDontCare ? 'bg-yellow-50' : 'hover:bg-gray-50'}`}>
                 <td className="py-3 px-4">
                     <div className="flex items-center gap-2">
                         <span className="text-lg">{categoryIcons[benefit.category]}</span>
                         <div>
-                            <div className="font-medium text-gray-900">{benefit.name}</div>
+                            <div className={`font-medium ${isDontCare ? 'text-gray-500 line-through' : 'text-gray-900'}`}>{benefit.name}</div>
                             <div className="text-sm text-gray-600">{benefit.description}</div>
                         </div>
                     </div>
@@ -689,12 +746,12 @@ function BenefitCard({ benefit, cardId, cardName, onToggle, viewMode = 'card' })
     }
 
     return (
-        <div className={`benefit-card bg-white rounded-lg p-4 shadow-md border border-gray-200 ${isUsed ? 'opacity-60' : ''}`}>
+        <div className={`benefit-card bg-white rounded-lg p-4 shadow-md border border-gray-200 ${isUsed ? 'opacity-60' : isDontCare ? 'opacity-40 bg-yellow-50' : ''}`}>
             <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                         <span className="text-xl">{categoryIcons[benefit.category]}</span>
-                        <h4 className="font-semibold text-gray-900">{benefit.name}</h4>
+                        <h4 className={`font-semibold ${isDontCare ? 'text-gray-500 line-through' : 'text-gray-900'}`}>{benefit.name}</h4>
                     </div>
                     <p className="text-sm text-gray-600">{benefit.description}</p>
                 </div>
@@ -774,7 +831,7 @@ function App() {
         localStorage.setItem('creditCardBenefits', JSON.stringify(cards));
     }, [cards]);
 
-    const handleToggle = (cardId, benefitId) => {
+    const handleToggle = (cardId, benefitId, action = 'default') => {
         setCards(prevCards => {
             return prevCards.map(card => {
                 if (card.id === cardId) {
@@ -782,7 +839,11 @@ function App() {
                         ...card,
                         benefits: card.benefits.map(benefit => {
                             if (benefit.id === benefitId) {
-                                if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
+                                if (action === 'dontcare') {
+                                    return { ...benefit, dontCare: true };
+                                } else if (action === 'undontcare') {
+                                    return { ...benefit, dontCare: false };
+                                } else if (benefit.type === BENEFIT_TYPE.SUBSCRIPTION) {
                                     return { ...benefit, subscribed: !benefit.subscribed };
                                 } else if (benefit.type === BENEFIT_TYPE.CREDIT || benefit.type === BENEFIT_TYPE.ONE_TIME) {
                                     return { ...benefit, used: true };
@@ -825,7 +886,7 @@ function App() {
 
     const getUnusedBenefits = () => {
         return getAllBenefits().filter(benefit => 
-            !benefit.used && !benefit.subscribed && benefit.type !== BENEFIT_TYPE.FEATURE
+            !benefit.used && !benefit.subscribed && !benefit.dontCare && benefit.type !== BENEFIT_TYPE.FEATURE
         );
     };
 
