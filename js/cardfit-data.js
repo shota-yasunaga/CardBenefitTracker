@@ -5,7 +5,7 @@ const CARDFIT_SCHEMA_VERSION = 2;
 
 /**
  * CardFit UI flow (stored on profile, persisted in localStorage)
- * - quick_start: optional spend level, then CTA to results (no required fields)
+ * - quick_start: modal steps (spend → point value → benefits), all skippable; then results
  * - results: ranked comparison, CTA to advanced tuning
  * - advanced_tuning: full spend / cpp / benefits / baseline editors
  */
@@ -51,7 +51,7 @@ const REWARD_CURRENCIES = [
     { id: 'hyatt', label: 'World of Hyatt', defaultCpp: 0.017, isCashback: false },
     { id: 'ihg', label: 'IHG One Rewards', defaultCpp: 0.005, isCashback: false },
     { id: 'delta', label: 'Delta SkyMiles', defaultCpp: 0.012, isCashback: false },
-    { id: 'united_miles', label: 'United MileagePlus', defaultCpp: 0.012, isCashback: false }
+    { id: 'united_miles', label: 'United MileagePlus', defaultCpp: 0.013, isCashback: false }
 ];
 
 const SPEND_PRESETS = {

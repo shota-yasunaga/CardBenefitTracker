@@ -1,3 +1,167 @@
+function getOpenBenefitCount(card) {
+    return (card.benefits || []).filter((benefit) => (
+        benefit.type !== BENEFIT_TYPE.FEATURE &&
+        !benefit.used &&
+        !benefit.subscribed
+    )).length;
+}
+
+function hasUrgentOpenBenefits(cards) {
+    return cards.some((card) => (card.benefits || []).some((benefit) => {
+        if (benefit.type === BENEFIT_TYPE.FEATURE || benefit.used || benefit.subscribed) return false;
+        const amount = getCurrentBenefitAmount(benefit, benefit.frequency);
+        const daysLeft = daysUntilExpiration(getExpirationDate(benefit.frequency));
+        const isCurrentPeriod = benefit.frequency !== BENEFIT_FREQUENCY.SEMI_ANNUAL || amount > 0;
+        return isCurrentPeriod && daysLeft >= 0 && daysLeft <= BENEFIT_URGENCY_DAYS;
+    }));
+}
+
+function Sidebar({
+    cards,
+    currentPage,
+    viewMode,
+    selectedCardId,
+    onNavigate,
+    onSelectCard,
+    onAddCard
+}) {
+    const unusedBenefitCount = cards.reduce((total, card) => total + getOpenBenefitCount(card), 0);
+    const hasUrgentBenefits = hasUrgentOpenBenefits(cards);
+    const navItems = [
+        {
+            label: 'Today',
+            isActive: currentPage === 'dashboard' && viewMode === 'unused',
+            onClick: () => onNavigate('dashboard', 'unused'),
+            count: unusedBenefitCount
+        },
+        {
+            label: 'All benefits',
+            isActive: currentPage === 'dashboard' && viewMode === 'list',
+            onClick: () => onNavigate('dashboard', 'list')
+        },
+        {
+            label: 'Log',
+            isActive: currentPage === 'history',
+            onClick: () => onNavigate('history')
+        },
+        {
+            label: 'Setup',
+            isActive: currentPage === 'settings',
+            onClick: () => onNavigate('settings')
+        },
+        {
+            label: 'CardFit',
+            isActive: currentPage === 'cardfit',
+            onClick: () => onNavigate('cardfit')
+        }
+    ];
+
+    return (
+        <aside className="w-[250px] shrink-0 h-screen sticky top-0 overflow-y-auto bg-paper-rail border-r border-line p-[26px_18px] flex flex-col">
+            <div className="px-3 mb-7">
+                <h1 className="text-[17px] font-semibold tracking-[-.02em] text-ink leading-tight">
+                    Benefits
+                </h1>
+                <div className="mt-1 font-mono text-[9.5px] tracking-[.16em] text-ink-muted">
+                    TRACKER
+                </div>
+            </div>
+
+            <nav className="flex flex-col gap-[2px]" aria-label="Primary">
+                {navItems.map((item) => (
+                    <button
+                        key={item.label}
+                        type="button"
+                        onClick={item.onClick}
+                        className={`w-full flex items-center justify-between px-3 py-[9px] rounded-[9px] text-[14px] font-medium tracking-[-.01em] text-left ${
+                            item.isActive ? 'bg-ink text-night-text' : 'text-ink-3'
+                        }`}
+                    >
+                        <span>{item.label}</span>
+                        {typeof item.count === 'number' && (
+                            <span className={`font-mono text-[10.5px] ${
+                                hasUrgentBenefits
+                                    ? item.isActive ? 'text-rust-night' : 'text-rust'
+                                    : item.isActive ? 'text-night-muted' : 'text-ink-muted'
+                            }`}>
+                                {item.count}
+                            </span>
+                        )}
+                    </button>
+                ))}
+            </nav>
+
+            <div className="px-3 pt-[30px] pb-[10px] font-mono text-[9.5px] tracking-[.14em] text-ink-muted">
+                YOUR CARDS
+            </div>
+
+            <div>
+                {cards.map((card) => {
+                    const isSelected = currentPage === 'card' && selectedCardId === card.id;
+                    const image = window.getCardImage(card);
+                    return (
+                        <button
+                            key={card.id}
+                            type="button"
+                            onClick={() => onSelectCard(card.id)}
+                            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-[9px] border border-line-card mb-[7px] text-left ${
+                                isSelected ? 'bg-ink' : 'bg-paper-raised'
+                            }`}
+                        >
+                            {image ? (
+                                <img
+                                    src={image}
+                                    alt=""
+                                    className="w-9 h-[23px] shrink-0 rounded-[3px] object-cover"
+                                />
+                            ) : (
+                                <span
+                                    aria-hidden="true"
+                                    className={`w-9 h-[23px] shrink-0 rounded-[3px] ${card.color || 'card-gradient-custom'}`}
+                                />
+                            )}
+                            <span className="min-w-0 flex-1">
+                                <span className={`block truncate text-[13.5px] font-medium leading-tight ${
+                                    isSelected ? 'text-night-text' : 'text-ink'
+                                }`}>
+                                    {card.name}
+                                </span>
+                                <span className="block truncate mt-0.5 font-mono text-[9px] tracking-[.1em] text-ink-muted">
+                                    {card.issuer}
+                                </span>
+                            </span>
+                            <span className={`shrink-0 font-mono text-[10.5px] ${isSelected ? 'text-night-muted' : 'text-ink-muted'}`}>
+                                {getOpenBenefitCount(card)}
+                            </span>
+                        </button>
+                    );
+                })}
+            </div>
+
+            <div className="flex-1 min-h-5" />
+
+            <button
+                type="button"
+                onClick={onAddCard}
+                className="w-full border border-dashed border-dash rounded-[9px] p-2.5 text-center text-[13px] font-medium text-ink-4"
+            >
+                + Add card
+            </button>
+        </aside>
+    );
+}
+
+function AppShell({ children, ...sidebarProps }) {
+    return (
+        <div className="flex min-h-screen bg-paper">
+            <Sidebar {...sidebarProps} />
+            <main className="flex-1 min-w-0 px-[34px] py-[30px] overflow-hidden">
+                {children}
+            </main>
+        </div>
+    );
+}
+
 function App() {
     const [cards, setCards] = useState(() => {
         const saved = localStorage.getItem('creditCardBenefits');
@@ -6,8 +170,10 @@ function App() {
         }
         return [];
     });
-    const [viewMode, setViewMode] = useState('unused'); // 'card', 'list', 'unused'
-    const [currentPage, setCurrentPage] = useState('dashboard'); // 'dashboard', 'add-cards', 'settings', 'history'
+    const [viewMode, setViewMode] = useState('unused'); // 'unused' | 'list'
+    const [currentPage, setCurrentPage] = useState('dashboard');
+    const [selectedCardId, setSelectedCardId] = useState(null);
+    const [showAddCardModal, setShowAddCardModal] = useState(false);
     const [usageHistory, setUsageHistory] = useState(() => {
         const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
         if (!saved) return [];
@@ -20,16 +186,9 @@ function App() {
         }
     });
 
-    // Add dark mode state
-    const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
-
     // Add state for recently used benefits
     const [recentlyUsed, setRecentlyUsed] = useState(new Set());
     const [undoableUsed, setUndoableUsed] = useState(new Set());
-
-    useEffect(() => {
-        localStorage.setItem('darkMode', isDarkMode);
-    }, [isDarkMode]);
 
     // Add timer effect for recently used benefits
     useEffect(() => {
@@ -193,6 +352,7 @@ function App() {
 
     const handleAddCard = (cardId) => {
         const newCard = JSON.parse(JSON.stringify(availableCards[cardId])); // Deep clone
+        newCard.addedAt = new Date().toISOString();
         // Generate unique IDs for benefits to avoid conflicts
         newCard.benefits = newCard.benefits.map(benefit => ({
             ...benefit,
@@ -212,30 +372,32 @@ function App() {
     };
 
     const handleAddCustomCard = (customCard) => {
-        setCards((prevCards) => [...prevCards, customCard]);
+        const newCustomCard = {
+            ...customCard,
+            addedAt: customCard.addedAt || new Date().toISOString()
+        };
+        setCards((prevCards) => [...prevCards, newCustomCard]);
         if (typeof gtag !== 'undefined') {
             gtag('event', 'card_added', {
-                card_name: customCard.name,
-                card_issuer: customCard.issuer,
-                annual_fee: customCard.annualFee,
-                benefits_count: customCard.benefits?.length || 0,
+                card_name: newCustomCard.name,
+                card_issuer: newCustomCard.issuer,
+                annual_fee: newCustomCard.annualFee,
+                benefits_count: newCustomCard.benefits?.length || 0,
                 custom: true
             });
         }
     };
 
     const handleRemoveCard = (cardId) => {
-        if (window.confirm('Are you sure you want to remove this card?')) {
-            const cardToRemove = cards.find(card => card.id === cardId);
-            setCards(prevCards => prevCards.filter(card => card.id !== cardId));
-            
-            // Track card removal
-            if (typeof gtag !== 'undefined' && cardToRemove) {
-                gtag('event', 'card_removed', {
-                    card_name: cardToRemove.name,
-                    card_issuer: cardToRemove.issuer
-                });
-            }
+        const cardToRemove = cards.find(card => card.id === cardId);
+        setCards(prevCards => prevCards.filter(card => card.id !== cardId));
+
+        // Track card removal
+        if (typeof gtag !== 'undefined' && cardToRemove) {
+            gtag('event', 'card_removed', {
+                card_name: cardToRemove.name,
+                card_issuer: cardToRemove.issuer
+            });
         }
     };
 
@@ -312,359 +474,143 @@ function App() {
         );
     };
 
-    if (currentPage === 'cardfit') {
-        return <CardFitPage userCards={cards} onBackToTracker={() => setCurrentPage('dashboard')} />;
-    }
+    useEffect(() => {
+        if (currentPage === 'card' && !cards.some((card) => card.id === selectedCardId)) {
+            setSelectedCardId(null);
+            setCurrentPage('dashboard');
+            setViewMode('unused');
+        }
+    }, [cards, currentPage, selectedCardId]);
 
-    if (currentPage === 'add-cards') {
-        return (
-            <AddCardPage
-                onAddCard={handleAddCard}
-                onAddCustom={handleAddCustomCard}
-                onBack={() => setCurrentPage('dashboard')}
-                existingCardIds={cards.map(card => card.id)}
+    const handleNavigate = (page, nextViewMode) => {
+        setCurrentPage(page);
+        setSelectedCardId(null);
+        if (nextViewMode === 'unused' || nextViewMode === 'list') {
+            setViewMode(nextViewMode);
+        }
+        if (typeof gtag !== 'undefined' && page !== 'dashboard') {
+            gtag('event', 'page_view', {
+                page_title: page === 'history' ? 'Usage History' : page === 'settings' ? 'Settings' : 'CardFit',
+                page_location: page
+            });
+        }
+    };
+
+    const handleSelectCard = (cardId) => {
+        setSelectedCardId(cardId);
+        setCurrentPage('card');
+    };
+
+    const openAddCardModal = () => {
+        setShowAddCardModal(true);
+        if (typeof gtag !== 'undefined') {
+            gtag('event', cards.length === 0 ? 'first_card_intent' : 'page_view', {
+                page_title: 'Add Cards',
+                page_location: 'add-card-modal'
+            });
+        }
+    };
+
+    const addCardModal = showAddCardModal ? (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center p-6">
+            <button
+                type="button"
+                className="absolute inset-0 w-full h-full cursor-default modal-scrim"
+                onClick={() => setShowAddCardModal(false)}
+                aria-label="Close add card modal"
             />
+            <div
+                className="relative flex w-[840px] max-w-[calc(100vw-48px)] max-h-[726px] overflow-hidden rounded-[20px] bg-paper modal-shadow"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="add-card-title"
+            >
+                <AddCardPage
+                    onAddCard={handleAddCard}
+                    onAddCustom={handleAddCustomCard}
+                    onBack={() => setShowAddCardModal(false)}
+                    existingCardIds={cards.map(card => card.id)}
+                />
+            </div>
+        </div>
+    ) : null;
+
+    if (cards.length === 0) {
+        return (
+            <>
+                <FirstRunPage onAddCard={openAddCardModal} />
+                {addCardModal}
+            </>
         );
     }
 
-    if (currentPage === 'settings') {
-        return (
+    const selectedCard = cards.find((card) => card.id === selectedCardId);
+    let pageBody;
+
+    if (currentPage === 'cardfit') {
+        pageBody = (
+            <CardFitPage
+                userCards={cards}
+                onBackToTracker={() => {
+                    setCurrentPage('dashboard');
+                    setSelectedCardId(null);
+                }}
+            />
+        );
+    } else if (currentPage === 'settings') {
+        pageBody = (
             <SettingsPage
-                onBack={() => setCurrentPage('dashboard')}
                 onResetAll={handleResetAll}
                 onResetBenefitUsage={handleResetBenefitUsage}
             />
         );
-    }
-
-    if (currentPage === 'history') {
-        return (
-            <UsageHistoryPage
-                historyEvents={usageHistory}
+    } else if (currentPage === 'history') {
+        pageBody = <UsageHistoryPage historyEvents={usageHistory} cards={cards} />;
+    } else if (currentPage === 'card' && selectedCard) {
+        pageBody = (
+            <CreditCardSection
+                card={selectedCard}
+                onToggle={handleToggle}
+                onRemove={handleRemoveCard}
+                onUndo={handleUndo}
+                recentlyUsed={recentlyUsed}
+                undoableUsed={undoableUsed}
+            />
+        );
+    } else {
+        const allBenefits = getAllBenefits();
+        pageBody = viewMode === 'list' ? (
+            <AllBenefitsDashboard
                 cards={cards}
-                onBack={() => setCurrentPage('dashboard')}
+                benefits={allBenefits}
+                recentlyUsed={recentlyUsed}
+                onToggle={handleToggle}
+                onUndo={handleUndo}
+            />
+        ) : (
+            <TodayDashboard
+                benefits={allBenefits}
+                recentlyUsed={recentlyUsed}
+                onToggle={handleToggle}
+                onUndo={handleUndo}
+                onShowAll={() => setViewMode('list')}
             />
         );
     }
 
     return (
-        <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
-            <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 min-h-screen">
-                <header className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg border-b border-gray-200/50 dark:border-slate-700/50 sticky top-0 z-50">
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                        <div className="flex flex-col gap-6">
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Credit Card Benefits</h1>
-                                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Track and maximize your card rewards</p>
-                                </div>
-                                <button
-                                    onClick={() => setIsDarkMode(!isDarkMode)}
-                                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-all duration-200"
-                                >
-                                    {isDarkMode ? (
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                    ) : (
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                                        </svg>
-                                    )}
-                                </button>
-                            </div>
-                            
-                            {/* Enhanced Tab Navigation */}
-                            <div className="flex bg-slate-100/60 dark:bg-slate-700/60 p-1 rounded-xl backdrop-blur-sm">
-                                <button
-                                    onClick={() => {
-                                        setCurrentPage('dashboard');
-                                        setViewMode('unused');
-                                    }}
-                                    className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                                        currentPage === 'dashboard' && viewMode === 'unused'
-                                            ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
-                                    }`}
-                                >
-                                    Benefit Lists
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setCurrentPage('dashboard');
-                                        setViewMode('card');
-                                    }}
-                                    className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                                        currentPage === 'dashboard' && viewMode === 'card'
-                                            ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
-                                    }`}
-                                >
-                                    Card View
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setCurrentPage('add-cards');
-                                        if (typeof gtag !== 'undefined') {
-                                            gtag('event', 'page_view', {
-                                                page_title: 'Add Cards',
-                                                page_location: 'add-cards'
-                                            });
-                                        }
-                                    }}
-                                    className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                                        currentPage === 'add-cards'
-                                            ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
-                                    }`}
-                                >
-                                    Add Cards
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setCurrentPage('cardfit');
-                                        if (typeof gtag !== 'undefined') {
-                                            gtag('event', 'page_view', { page_title: 'CardFit', page_location: 'cardfit' });
-                                        }
-                                    }}
-                                    className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                                        currentPage === 'cardfit'
-                                            ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
-                                    }`}
-                                >
-                                    CardFit
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setCurrentPage('settings');
-                                        if (typeof gtag !== 'undefined') {
-                                            gtag('event', 'page_view', {
-                                                page_title: 'Settings',
-                                                page_location: 'settings'
-                                            });
-                                        }
-                                    }}
-                                    className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                                        currentPage === 'settings'
-                                            ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
-                                    }`}
-                                >
-                                    Settings
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setCurrentPage('history');
-                                        if (typeof gtag !== 'undefined') {
-                                            gtag('event', 'page_view', {
-                                                page_title: 'Usage History',
-                                                page_location: 'history'
-                                            });
-                                        }
-                                    }}
-                                    className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                                        currentPage === 'history'
-                                            ? 'bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-600/50'
-                                    }`}
-                                >
-                                    History
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
-                <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {cards.length === 0 && (
-                    <div className="text-center py-20">
-                        <div className="mx-auto w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6">
-                            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                            </svg>
-                        </div>
-                        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-3">No credit cards added yet</h2>
-                        <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-md mx-auto">Get started by adding your credit cards to track and maximize your benefits</p>
-                        <button
-                            onClick={() => {
-                                setCurrentPage('add-cards');
-                                // Track first card addition intent
-                                if (typeof gtag !== 'undefined') {
-                                    gtag('event', 'first_card_intent', {
-                                        page_title: 'Add Cards',
-                                        page_location: 'add-cards'
-                                    });
-                                }
-                            }}
-                            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                        >
-                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                            Add Your First Card
-                        </button>
-                    </div>
-                )}
-
-                {viewMode === 'card' && cards.map(card => (
-                    <CreditCardSection
-                        key={card.id}
-                        card={card}
-                        onToggle={handleToggle}
-                        onRemove={handleRemoveCard}
-                        onUndo={handleUndo}
-                        recentlyUsed={recentlyUsed}
-                        undoableUsed={undoableUsed}
-                    />
-                ))}
-
-                {viewMode === 'unused' && (
-                    <div className="space-y-8">
-                        <div className="text-center">
-                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Benefit Lists</h2>
-                            <p className="text-slate-600 dark:text-slate-400">Track and manage all your credit card benefits</p>
-                        </div>
-                        <ContextualFeedbackForm
-                            contextType="benefits-summary"
-                            title="Spot a benefit issue?"
-                            prompt="Report a missing benefit, incorrect amount, or stale details."
-                            defaultIssueType="missing_benefit"
-                            pageMeta={`dashboard-${viewMode}`}
-                            quickActions={[
-                                { label: 'Report missing benefit', issueType: 'missing_benefit' },
-                                { label: 'Report wrong benefit', issueType: 'incorrect_benefit' }
-                            ]}
-                        />
-                        
-                        {getAllBenefits().length === 0 ? (
-                            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-12 text-center">
-                                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4">
-                                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">No benefits to track</h3>
-                                <p className="text-slate-600 dark:text-slate-400">Add some credit cards to start tracking benefits</p>
-                            </div>
-                        ) : (
-                            <div className="space-y-6">
-                                {/* Unused Benefits Section */}
-                                {getUnusedBenefits().length > 0 && (
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                                            <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-                                            Unused Benefits ({getUnusedBenefits().length})
-                                        </h3>
-                                        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-x-auto">
-                                            <div className="grid benefits-table-grid min-w-[660px]">
-                                                <div className="sticky left-0 z-20 px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700 shadow-[2px_0_8px_-2px_rgba(0,0,0,0.08)] dark:shadow-[2px_0_8px_-2px_rgba(0,0,0,0.3)]">
-                                                    Benefit
-                                                </div>
-                                                <div className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
-                                                    Card
-                                                </div>
-                                                <div className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
-                                                    Expires
-                                                </div>
-                                                <div className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
-                                                    Value
-                                                </div>
-                                                <div className="px-6 py-4 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
-                                                    Action
-                                                </div>
-                                                    {getUnusedBenefits().map((benefit) => (
-                                                        <BenefitCard
-                                                            key={`${benefit.cardId}-${benefit.id}`}
-                                                            benefit={benefit}
-                                                            cardId={benefit.cardId}
-                                                            cardName={benefit.cardName}
-                                                            onToggle={handleToggle}
-                                                            onUndo={handleUndo}
-                                                            isRecentlyUsed={recentlyUsed.has(benefit.id)}
-                                                            isUndoableUsed={undoableUsed.has(benefit.id)}
-                                                            viewMode="list"
-                                                        />
-                                                    ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Used Benefits Section */}
-                                {getAllBenefits().filter(benefit => (benefit.used || benefit.subscribed || benefit.activated) && !recentlyUsed.has(benefit.id)).length > 0 && (
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                                            Used Benefits ({getAllBenefits().filter(benefit => (benefit.used || benefit.subscribed || benefit.activated) && !recentlyUsed.has(benefit.id)).length})
-                                        </h3>
-                                        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 max-h-96 overflow-auto">
-                                            <div className="grid benefits-table-grid min-w-[660px]">
-                                                <div className="sticky left-0 z-20 px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700 shadow-[2px_0_8px_-2px_rgba(0,0,0,0.08)] dark:shadow-[2px_0_8px_-2px_rgba(0,0,0,0.3)]">
-                                                    Benefit
-                                                </div>
-                                                <div className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
-                                                    Card
-                                                </div>
-                                                <div className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
-                                                    Expires
-                                                </div>
-                                                <div className="px-6 py-4 text-left text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
-                                                    Value
-                                                </div>
-                                                <div className="px-6 py-4 text-right text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider bg-slate-50 dark:bg-slate-700">
-                                                    Action
-                                                </div>
-                                                    {getAllBenefits().filter(benefit => (benefit.used || benefit.subscribed || benefit.activated) && !recentlyUsed.has(benefit.id)).map((benefit) => (
-                                                        <BenefitCard
-                                                            key={`${benefit.cardId}-${benefit.id}`}
-                                                            benefit={benefit}
-                                                            cardId={benefit.cardId}
-                                                            cardName={benefit.cardName}
-                                                            onToggle={handleToggle}
-                                                            onUndo={handleUndo}
-                                                            isRecentlyUsed={recentlyUsed.has(benefit.id)}
-                                                            isUndoableUsed={undoableUsed.has(benefit.id)}
-                                                            viewMode="list"
-                                                        />
-                                                    ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )}
-                </main>
-
-                <footer className="bg-slate-800/80 dark:bg-slate-900/80 backdrop-blur-lg border-t border-slate-700/50 text-white py-8 mt-16">
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <p className="text-sm text-slate-300">
-                            Track your credit card benefits and maximize your rewards.
-                        </p>
-                        <p className="text-xs mt-2 text-slate-400">
-                            Data is stored locally in your browser. No information is sent to any server.
-                        </p>
-                        <div className="mt-4 max-w-2xl mx-auto">
-                            <ContextualFeedbackForm
-                                contextType="footer-support"
-                                title="Support and feature requests"
-                                prompt="Send us bug reports or ideas directly from the app."
-                                compact={true}
-                                defaultIssueType="other"
-                                pageMeta={`footer-${currentPage}-${viewMode}`}
-                                quickActions={[
-                                    { label: 'Send feedback', issueType: 'other' },
-                                    { label: 'Feature request', issueType: 'feature_request' }
-                                ]}
-                            />
-                        </div>
-                    </div>
-                </footer>
-            </div>
-        </div>
+        <AppShell
+            cards={cards}
+            currentPage={currentPage}
+            viewMode={viewMode}
+            selectedCardId={selectedCardId}
+            onNavigate={handleNavigate}
+            onSelectCard={handleSelectCard}
+            onAddCard={openAddCardModal}
+        >
+            {pageBody}
+            {addCardModal}
+        </AppShell>
     );
 }
 

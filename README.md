@@ -148,11 +148,13 @@ CardBenefitTracker/
 ├── css/
 │   └── styles.css      # Custom styles and animations
 ├── js/
-│   ├── app.js          # Main React application
-│   ├── components.js   # React components
-│   ├── data.js         # Credit card data definitions
-│   ├── main.js         # Entry point
-│   └── utils.js        # Utility functions
+│   ├── data.js                 # 1. Card data definitions
+│   ├── utils.js                # 2. Shared utilities
+│   ├── cardfit-data.js         # 3. CardFit profile data
+│   ├── cardfit-calculator.js   # 4. CardFit calculations
+│   ├── cardfit-components.js   # 5. CardFit UI
+│   ├── components.js           # 6. Tracker UI
+│   └── app.js                  # 7. App shell and entry point
 ├── test.html           # Testing instructions
 ├── test-suite.html     # Test suite
 └── README.md           # This file
@@ -206,4 +208,4 @@ This project is open source and available under the MIT License.
 
 ---
 
-**Note**: This application is for personal finance management only. Always verify benefit details with your card issuer, as terms and conditions may change. 
+**Note**: This application is for personal finance management only. Always verify benefit details with your card issuer, as terms and conditions may change.

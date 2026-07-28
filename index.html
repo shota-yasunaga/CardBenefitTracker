@@ -22,19 +22,72 @@
     <!-- Add Tailwind config -->
     <script>
       tailwind.config = {
-        darkMode: 'class',
         theme: {
           extend: {
             colors: {
-              chase: '#1e40af',
-              united: '#0369a1',
-              amex: '#4b5563',
-            }
+              paper: {
+                DEFAULT: '#FAF8F4',
+                rail: '#F4F0E9',
+                raised: '#FFFDFA',
+              },
+              ink: {
+                DEFAULT: '#17150F',
+                2: '#403B33',
+                3: '#5F594E',
+                4: '#6B6459',
+                muted: '#8C8478',
+                faint: '#A29A8D',
+                fainter: '#BAB2A4',
+              },
+              rust: {
+                DEFAULT: '#A8452C',
+                hover: '#7E3220',
+                night: '#E4886C',
+                tint: {
+                  bg: '#FBF2EF',
+                  border: '#E3C9C0',
+                  text: '#8B5C4C',
+                },
+              },
+              rule: {
+                DEFAULT: '#EBE5DB',
+                soft: '#EFEAE1',
+              },
+              line: {
+                DEFAULT: '#E7E1D6',
+                card: '#ECE6DC',
+                soft: '#F2EDE4',
+                strong: '#E0DACF',
+                chrome: '#E2DCD1',
+              },
+              dash: '#D6CFC2',
+              circle: {
+                open: '#C9C1B4',
+                calm: '#DCD5C9',
+              },
+              pill: {
+                bg: '#EFEAE1',
+              },
+              // Surfaces for the first-run page only. Not a theme -- see Agent.md.
+              night: {
+                bg: '#17150F',
+                panel: '#1F1C16',
+                border: '#332E27',
+                rule: '#2C2822',
+                body: '#9C948A',
+                muted: '#7D766D',
+                text: '#FAF8F4',
+              },
+            },
+            fontFamily: {
+              sans: ['Instrument Sans', 'system-ui', 'sans-serif'],
+              mono: ['IBM Plex Mono', 'ui-monospace', 'monospace'],
+            },
           }
         }
       }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <!-- Remove inline styles -->
     <!-- <style> ... </style> -->
@@ -46,14 +99,14 @@
 <body>
     <div id="root"></div>
 
-    <!-- Include separate JavaScript files -->
-    <script type="text/babel" src="js/data.js"></script>
-    <script type="text/babel" src="js/utils.js"></script>
-    <script type="text/babel" src="js/cardfit-data.js"></script>
-    <script type="text/babel" src="js/cardfit-calculator.js"></script>
-    <script type="text/babel" src="js/cardfit-components.js"></script>
-    <script type="text/babel" src="js/components.js"></script>
-    <script type="text/babel" src="js/app.js"></script>
+    <!-- Include separate JavaScript files (?v= bumps cache when any app script changes) -->
+    <script type="text/babel" src="js/data.js?v=5"></script>
+    <script type="text/babel" src="js/utils.js?v=5"></script>
+    <script type="text/babel" src="js/cardfit-data.js?v=5"></script>
+    <script type="text/babel" src="js/cardfit-calculator.js?v=5"></script>
+    <script type="text/babel" src="js/cardfit-components.js?v=5"></script>
+    <script type="text/babel" src="js/components.js?v=5"></script>
+    <script type="text/babel" src="js/app.js?v=5"></script>
 
 </body>
 </html>

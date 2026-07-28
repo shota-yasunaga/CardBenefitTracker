@@ -41,6 +41,7 @@ function createCustomCard(cardData) {
         issuer: cardData.issuer || 'Custom',
         annualFee: cardData.annualFee || 0,
         color: cardData.color || 'card-gradient-custom',
+        image: cardData.image || null,
         isCustom: true,
         benefits: cardData.benefits || []
     };
@@ -69,14 +70,16 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 795,
         color: 'card-gradient-chase',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/chase-sapphire-reserve.png',
+        // CardFit earn/SUB: verified 2026-04-24 (chase.com Sapphire Reserve; see project_docs/deep-research-report.md)
         rewardCurrency: 'chase_ur',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'flights', multiplier: 4 },
+            { category: 'hotels', multiplier: 4 },
+            { category: 'dining', multiplier: 3 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ], // 8X on Chase Travel; credit-covered spend may not earn — TODO(cardfit-caps)
+        signupBonus: { points: 125000, spendRequirement: 6000, months: 3 },
         benefits: [
             {
                 id: 'csr-travel-credit',
@@ -227,14 +230,15 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 895,
         color: 'card-gradient-amex',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/amex-platinum.jpg',
+        // CardFit earn/SUB: verified 2026-04-24; public consumer SUB often variable ("as high as")
         rewardCurrency: 'amex_mr',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'flights', multiplier: 5 },
+            { category: 'hotels', multiplier: 5 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ], // 5X flights to $500K/yr; 5X hotels prepaid via AmexTravel.com — TODO(cardfit-caps)
+        signupBonus: { points: 0, spendRequirement: 12000, months: 6 },
         benefits: [
             {
                 id: 'plat-airline-fee',
@@ -405,14 +409,18 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 325,
         color: 'card-gradient-amex',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/amex-gold.jpg',
+        // CardFit earn/SUB: verified 2026-04-24; public SUB often variable
         rewardCurrency: 'amex_mr',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'dining', multiplier: 4 },
+            { category: 'groceries', multiplier: 4 },
+            { category: 'flights', multiplier: 3 },
+            { category: 'hotels', multiplier: 2 },
+            { category: 'travel', multiplier: 2 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ], // caps on dining/groceries; 2X hotels/travel via Amex Travel — TODO(cardfit-caps)
+        signupBonus: { points: 0, spendRequirement: 6000, months: 6 },
         benefits: [
             {
                 id: 'gold-dining-credit',
@@ -473,14 +481,16 @@ const availableCards = {
         issuer: 'Capital One',
         annualFee: 395,
         color: 'card-gradient-custom',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/capital-one-venture-x.jpg',
+        // CardFit earn/SUB: verified 2026-04-24 (capitalone.com Venture X)
         rewardCurrency: 'capital_one_miles',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
-            { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+            { category: 'hotels', multiplier: 10 },
+            { category: 'flights', multiplier: 5 },
+            { category: 'travel', multiplier: 5 },
+            { category: 'general', multiplier: 2 }
+        ], // elevated rates via Capital One Travel — TODO(cardfit-caps)
+        signupBonus: { points: 75000, spendRequirement: 4000, months: 3 },
         benefits: [
             {
                 id: 'vx-travel-credit',
@@ -541,14 +551,17 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 95,
         color: 'card-gradient-chase',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/chase-sapphire-preferred.jpg',
+        // CardFit earn/SUB: verified 2026-04-24 (chase.com Sapphire Preferred)
         rewardCurrency: 'chase_ur',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'dining', multiplier: 3 },
+            { category: 'groceries', multiplier: 3 },
+            { category: 'streaming', multiplier: 3 },
+            { category: 'travel', multiplier: 2 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ], // 5X Chase Travel; issuer "groceries" = online grocery — TODO(cardfit-caps)
+        signupBonus: { points: 75000, spendRequirement: 5000, months: 3 },
         benefits: [
             {
                 id: 'csp-hotel-credit',
@@ -589,14 +602,19 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 350,
         color: 'card-gradient-united',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/united-quest.png',
+        // CardFit earn/SUB: verified 2026-04-24 (chase.com United Quest)
         rewardCurrency: 'united_miles',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'flights', multiplier: 4 },
+            { category: 'hotels', multiplier: 5 },
+            { category: 'travel', multiplier: 2 },
+            { category: 'transit', multiplier: 2 },
+            { category: 'dining', multiplier: 2 },
+            { category: 'streaming', multiplier: 2 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ], // United flights; 5X hotels = prepaid Renowned Hotels — TODO(cardfit-caps)
+        signupBonus: { points: 90000, spendRequirement: 4000, months: 3 },
         benefits: [
             {
                 id: 'uquest-rhr-credit',
@@ -677,14 +695,19 @@ const availableCards = {
         issuer: 'Citi',
         annualFee: 95,
         color: 'card-gradient-united',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/citi-premier.jpg',
+        // CardFit earn: verified 2026-04-24; fixed public SUB not in retrieved issuer view
         rewardCurrency: 'citi_typ',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'flights', multiplier: 3 },
+            { category: 'hotels', multiplier: 3 },
+            { category: 'travel', multiplier: 3 },
+            { category: 'dining', multiplier: 3 },
+            { category: 'groceries', multiplier: 3 },
+            { category: 'gas', multiplier: 3 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ], // 10X CitiTravel on select travel — TODO(cardfit-caps)
+        signupBonus: { points: 0, spendRequirement: 0, months: 0 },
         benefits: [
             {
                 id: 'citi-hotel-benefit',
@@ -705,14 +728,16 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 150,
         color: 'card-gradient-amex',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/amex-green.jpg',
+        // CardFit earn/SUB: verified 2026-04-24; public SUB often variable
         rewardCurrency: 'amex_mr',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'dining', multiplier: 3 },
+            { category: 'travel', multiplier: 3 },
+            { category: 'transit', multiplier: 3 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ],
+        signupBonus: { points: 0, spendRequirement: 6000, months: 6 },
         benefits: [
             {
                 id: 'green-clear',
@@ -733,14 +758,15 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 895,
         color: 'card-gradient-amex',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/amex-business-platinum.jpg',
+        // CardFit earn/SUB: verified 2026-04-24 (amex.com Business Platinum)
         rewardCurrency: 'amex_mr',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'flights', multiplier: 5 },
+            { category: 'hotels', multiplier: 5 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ], // 2X key business categories not modeled in buckets — TODO(cardfit-caps)
+        signupBonus: { points: 300000, spendRequirement: 20000, months: 3 },
         benefits: [
             {
                 id: 'bplat-airline-fee',
@@ -841,14 +867,17 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 550,
         color: 'card-gradient-amex',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/amex-hilton-aspire.jpg',
+        // CardFit earn/SUB: verified 2026-04-24 (amex.com Hilton Honors Aspire)
         rewardCurrency: 'hilton',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
-            { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+            { category: 'hotels', multiplier: 14 },
+            { category: 'flights', multiplier: 7 },
+            { category: 'dining', multiplier: 7 },
+            { category: 'travel', multiplier: 7 },
+            { category: 'general', multiplier: 3 }
+        ],
+        signupBonus: { points: 150000, spendRequirement: 6000, months: 6 },
         benefits: [
             {
                 id: 'aspire-resort-janjun',
@@ -909,14 +938,16 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 650,
         color: 'card-gradient-amex',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/amex-marriott-brilliant.jpg',
+        // CardFit earn: verified 2026-04-24; fixed public SUB not in retrieved issuer view
         rewardCurrency: 'marriott',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
-            { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+            { category: 'hotels', multiplier: 6 },
+            { category: 'flights', multiplier: 3 },
+            { category: 'dining', multiplier: 3 },
+            { category: 'general', multiplier: 2 }
+        ],
+        signupBonus: { points: 0, spendRequirement: 6000, months: 6 },
         benefits: [
             {
                 id: 'brilliant-dining',
@@ -977,14 +1008,17 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 95,
         color: 'card-gradient-chase',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/world-of-hyatt.jpg',
+        // CardFit earn/SUB: verified 2026-04-24 (chase.com World of Hyatt)
         rewardCurrency: 'hyatt',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'hotels', multiplier: 4 },
+            { category: 'dining', multiplier: 2 },
+            { category: 'flights', multiplier: 2 },
+            { category: 'transit', multiplier: 2 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ], // +accelerator 1X→2X first 6 mo not modeled
+        signupBonus: { points: 30000, spendRequirement: 3000, months: 3 },
         benefits: [
             {
                 id: 'hyatt-free-night',
@@ -1015,14 +1049,17 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 99,
         color: 'card-gradient-chase',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/ihg-one-rewards.jpg',
+        // CardFit earn/SUB: verified 2026-04-24 (chase.com IHG Premier)
         rewardCurrency: 'ihg',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
-            { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+            { category: 'hotels', multiplier: 10 },
+            { category: 'travel', multiplier: 5 },
+            { category: 'dining', multiplier: 5 },
+            { category: 'gas', multiplier: 5 },
+            { category: 'general', multiplier: 3 }
+        ],
+        signupBonus: { points: 140000, spendRequirement: 3000, months: 3 },
         benefits: [
             {
                 id: 'ihg-free-night',
@@ -1073,14 +1110,14 @@ const availableCards = {
         issuer: 'American Express',
         annualFee: 650,
         color: 'card-gradient-amex',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: 'assets/cards/amex-delta-reserve.jpg',
+        // CardFit earn/SUB: verified 2026-04-24; public SUB often variable
         rewardCurrency: 'delta',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'flights', multiplier: 3 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ],
+        signupBonus: { points: 0, spendRequirement: 5000, months: 6 },
         benefits: [
             {
                 id: 'delta-reserve-rideshare',
@@ -1141,14 +1178,17 @@ const availableCards = {
         issuer: 'Chase',
         annualFee: 695,
         color: 'card-gradient-united',
-        // CardFit: replace placeholders (see prompts/research-cardfit-earn-rates.md)
+        image: null,
+        // CardFit earn/SUB: verified 2026-04-24 (chase.com United Club Infinite)
         rewardCurrency: 'united_miles',
         earnRates: [
-            { category: 'dining', multiplier: 1 },
-            { category: 'travel', multiplier: 1 },
+            { category: 'flights', multiplier: 5 },
+            { category: 'hotels', multiplier: 5 },
+            { category: 'travel', multiplier: 2 },
+            { category: 'dining', multiplier: 2 },
             { category: 'general', multiplier: 1 }
-        ], // TODO(cardfit-caps) TODO(cardfit-rotating)
-        signupBonus: { points: 0, spendRequirement: 0, months: 3 },
+        ],
+        signupBonus: { points: 100000, spendRequirement: 5000, months: 3 },
         benefits: [
             {
                 id: 'uclub-membership',

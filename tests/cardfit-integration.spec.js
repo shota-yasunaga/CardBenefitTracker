@@ -2,9 +2,25 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('CardFit + index.html integration', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('creditCardBenefits')) {
+        localStorage.setItem('creditCardBenefits', JSON.stringify([{
+          id: 'chase-sapphire-reserve',
+          name: 'Chase Sapphire Reserve',
+          issuer: 'Chase',
+          annualFee: 795,
+          color: 'card-gradient-chase',
+          image: 'assets/cards/chase-sapphire-reserve.png',
+          benefits: []
+        }]));
+      }
+    });
+  });
+
   test('exposes CardFit globals after load', async ({ page }) => {
     await page.goto('/index.html');
-    await expect(page.getByRole('heading', { name: 'Credit Card Benefits' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Benefits' })).toBeVisible();
     const hasCards = await page.evaluate(() => typeof window.availableCards === 'object' && window.availableCards !== null);
     const hasSpend = await page.evaluate(() => Array.isArray(window.SPEND_CATEGORIES));
     const hasCur = await page.evaluate(() => Array.isArray(window.REWARD_CURRENCIES));
@@ -25,21 +41,21 @@ test.describe('CardFit + index.html integration', () => {
   test('persists CardFit profile across reload', async ({ page }) => {
     await page.goto('/index.html');
     await page.getByRole('button', { name: 'CardFit' }).click();
-    await page.getByRole('button', { name: 'Show recommendations' }).click();
+    await page.getByRole('button', { name: 'Skip to recommendations' }).click();
     await page.getByRole('button', { name: 'Refine assumptions' }).click();
-    await page.locator('input[type="number"]').first().fill('4242');
+    await page.locator('[data-testid="cardfit-spend-input"]').first().fill('4242');
     await page.reload();
     await page.getByRole('button', { name: 'CardFit' }).click();
     // Profile restores advanced_tuning; no "Refine" step on this screen
-    const val = await page.locator('input[type="number"]').first().inputValue();
+    const val = await page.locator('[data-testid="cardfit-spend-input"]').first().inputValue();
     expect(val).toBe('4242');
   });
 
   test('reaches recommendations without required input and persists uiFlow', async ({ page }) => {
     await page.goto('/index.html');
     await page.getByRole('button', { name: 'CardFit' }).click();
-    await expect(page.getByRole('heading', { name: 'Find cards that fit you' })).toBeVisible();
-    await page.getByRole('button', { name: 'Show recommendations' }).click();
+    await expect(page.getByRole('heading', { name: 'Set up your comparison' })).toBeVisible();
+    await page.getByRole('button', { name: 'Skip to recommendations' }).click();
     await expect(page.getByRole('heading', { name: 'Your comparison' })).toBeVisible();
     const flow = await page.evaluate(() => {
       try {
@@ -55,9 +71,9 @@ test.describe('CardFit + index.html integration', () => {
   test('advanced tuning updates comparison', async ({ page }) => {
     await page.goto('/index.html');
     await page.getByRole('button', { name: 'CardFit' }).click();
-    await page.getByRole('button', { name: 'Show recommendations' }).click();
+    await page.getByRole('button', { name: 'Skip to recommendations' }).click();
     await page.getByRole('button', { name: 'Refine assumptions' }).click();
-    const first = page.locator('.grid.grid-cols-1 input[type="number"]').first();
+    const first = page.locator('[data-testid="cardfit-spend-input"]').first();
     await first.fill('5000');
     await first.blur();
     const val = await first.inputValue();
@@ -70,7 +86,7 @@ test.describe('CardFit + index.html integration', () => {
       localStorage.setItem('cardfit_profile', '{ not json }');
     });
     await page.reload();
-    await expect(page.getByRole('heading', { name: 'Credit Card Benefits' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Benefits' })).toBeVisible();
     await page.getByRole('button', { name: 'CardFit' }).click();
     await expect(page.getByRole('heading', { name: 'CardFit' })).toBeVisible();
   });

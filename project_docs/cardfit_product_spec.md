@@ -661,3 +661,20 @@ For later:
 Your static-site idea is the right move.
 
 A lot of people sabotage products like this by starting with account sync, auth, and financial integrations. That is backwards. The valuable core is the **valuation engine** and **clear UX for honest assumptions**. Nail that first.
+
+---
+
+## 21. Card catalog data (research-backed)
+
+The live card entries in `js/data.js` (earn rates, reward currency, signup bonus fields used by CardFit) are maintained against issuer marketing and terms, with a verification log in `project_docs/deep-research-report.md` (e.g. last pass **2026-04-24**).
+
+**Default cents-per-point** in `js/cardfit-data.js` (`REWARD_CURRENCIES`) are **heuristics for the app**, not issuer valuations.
+
+**Known modeling gaps (called out in code comments and the research report):**
+
+- **Variable SUBs:** Some issuers (notably Amex consumer cards) often show “as high as” or non-fixed welcome offers. Where no stable public number was used, `signupBonus.points` is `0` but spend/months may still reflect a typical offer window.
+- **Portal-only multiples:** Extra earnings through Chase Travel, Capital One Travel, Citi Travel, or Amex Travel are approximated with the closest category bucket; the UI still assumes uncapped category earn until `TODO(cardfit-caps)` is implemented.
+- **Co-brand “total miles” marketing:** Airline and hotel pages sometimes blend card-earned points with program base points; the catalog prefers **card-only** multipliers when the source separates them.
+- **Manual spot-check:** Citi Strata Premier and Marriott Bonvoy Brilliant may need a fresh browser check if you need a non-zero `signupBonus.points` in data.
+
+When product behavior catches up, Phase 2 items (caps, portal flags, first-year vs ongoing) should narrow the gap between marketing copy and calculator output.
